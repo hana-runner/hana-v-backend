@@ -1,3 +1,7 @@
 spring:
   application:
     name: hana-v
+logging:
+  level:
+    root: ${LOGGING_LEVEL}
+  config: classpath:log4j2.xml

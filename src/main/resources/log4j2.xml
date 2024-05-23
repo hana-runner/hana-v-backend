@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration name="log4j2" status="INFO">
+    <Appenders>
+        <Console name="Console_Appender" target="SYSTEM_OUT">
+            <PatternLayout charset="UTF-8" pattern="%style{%d{yyyy-MM-dd HH:mm:ss.SSS}}{blue} %highlight{[%p]} %style{%logger{10}}{magenta} %msg%n" disableAnsi="false"/>
+        </Console>
+        <RollingFile name="RollingFile_Appender" fileName="./logs/hana_v_log.log" filePattern="logs/archive/hana_v_log.log.%d{yyyy-MM-dd-hh-mm}.gz">
+            <PatternLayout charset="UTF-8" pattern="%style{%d{yyyy-MM-dd HH:mm:ss.SSS}}{blue} %highlight{[%p]} %style{%logger{10}}{magenta} %msg%n"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="1MB"/>
+                <TimeBasedTriggeringPolicy interval="1"/>
+            </Policies>
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <Root level="INFO">
+            <AppenderRef ref="Console_Appender"/>
+            <AppenderRef ref="RollingFile_Appender"/>
+        </Root>
+        <Logger name="org.springframework" additivity="false" level="INFO">
+            <AppenderRef ref="Console_Appender"/>
+            <AppenderRef ref="RollingFile_Appender"/>
+        </Logger>
+    </Loggers>
+</Configuration>
