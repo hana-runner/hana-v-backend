@@ -10,9 +10,11 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @TypeInfo(name = "ExampleClass", description = "예시 클래스")
 class ExampleClass {}
 
+@TypeInfo(name = "TypeInfoTest", description = "TypeInfo 어노테이션 테스트")
 @SpringBootTest
 public class TypeInfoTest {
 
+    @MethodInfo(name = "testTypeInfo", description = "TypeInfo 어노테이션을 테스트합니다.")
     @Test
     public void testTypeInfoAnnotation() throws NoSuchMethodException {
         Class<?> clazz = ExampleClass.class;

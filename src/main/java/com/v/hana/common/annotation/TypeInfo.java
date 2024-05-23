@@ -4,6 +4,7 @@ import java.lang.annotation.*;
 import org.springframework.core.annotation.AliasFor;
 import org.springframework.stereotype.Component;
 
+@TypeInfo(name = "TypeInfo", description = "TypeInfo 어노테이션 인터페이스")
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
