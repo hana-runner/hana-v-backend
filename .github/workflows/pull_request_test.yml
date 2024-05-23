@@ -10,6 +10,9 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    env:
+      SPRING_PROFILES_ACTIVE: test
+
     steps:
       - name: 코드 체크아웃
         uses: actions/checkout@v3
@@ -33,6 +36,9 @@ jobs:
 
       - name: Gradle 빌드
         run: ./gradlew build
+
+      - name: 포맷팅 검사
+        run: ./gradlew spotlessCheck
 
       - name: 테스트 실행
         run: ./gradlew test

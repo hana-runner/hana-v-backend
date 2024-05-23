@@ -1,0 +1,82 @@
+buildscript {
+	ext {
+		springBootVersion = '3.2.5'
+	}
+}
+
+plugins {
+	id 'java'
+	id 'java-library'
+	id 'org.springframework.boot' version "${springBootVersion}"
+	id 'io.spring.dependency-management' version '1.1.4'
+	id 'com.diffplug.spotless' version '6.25.0'
+}
+
+wrapper {
+	gradleVersion = '8.7'
+	distributionUrl = distributionUrl.replace("bin", "all")
+}
+
+group = 'com.v.hana'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	sourceCompatibility = '17'
+}
+
+repositories {
+	mavenCentral()
+}
+
+ext {
+	lombokVersion = '1.18.32'
+}
+
+apply from: "$rootDir/spotless.gradle"
+
+dependencies {
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter', version: springBootVersion
+	testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: springBootVersion
+	testRuntimeOnly group: 'org.junit.platform', name: 'junit-platform-launcher', version: '1.10.2'
+	compileOnly group: 'org.projectlombok', name: 'lombok', version: lombokVersion
+	annotationProcessor group: 'org.projectlombok', name: 'lombok', version: lombokVersion
+	testCompileOnly group: 'org.projectlombok', name: 'lombok', version: lombokVersion
+	testAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: lombokVersion
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+tasks.register('preCommitHook') {
+	doLast {
+		def gitHooksDirectory = new File("$project.rootDir/.git/hooks/")
+		if (!gitHooksDirectory.exists()) {
+			gitHooksDirectory.mkdirs()
+		}
+		new File("$project.rootDir/.git/hooks", "pre-commit").text =
+				"""#!/bin/bash
+echo "테스트를 실행합니다."
+./gradlew test
+TEST_RESULT=\$?
+if [ \$TEST_RESULT -eq 0 ]
+then
+	echo "테스트가 성공하였습니다."
+	echo "코드를 포맷팅합니다."
+	./gradlew spotlessApply
+	STYLE_RESULT=\$?
+	if [ \$STYLE_RESULT -eq 0 ]
+	then
+		echo "코드 포맷팅이 완료되었습니다."
+	else
+		echo "코드 포맷팅에 실패하였습니다." >&2
+		exit 1
+	fi
+else
+	echo "테스트가 실패하였습니다." >&2
+	exit 1
+fi
+"""
+		"chmod +x .git/hooks/pre-commit".execute()
+	}
+}
