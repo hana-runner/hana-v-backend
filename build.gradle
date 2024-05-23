@@ -1,0 +1,57 @@
+buildscript {
+	ext {
+		springBootVersion = '3.2.5'
+	}
+}
+
+plugins {
+	id 'java'
+	id 'java-library'
+	id 'org.springframework.boot' version "${springBootVersion}"
+	id 'io.spring.dependency-management' version '1.1.4'
+}
+
+wrapper {
+	gradleVersion = '8.7'
+	distributionUrl = distributionUrl.replace("bin", "all")
+}
+
+group = 'com.v.hana'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	sourceCompatibility = '17'
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter', version: springBootVersion
+	testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: springBootVersion
+	testRuntimeOnly group: 'org.junit.platform', name: 'junit-platform-launcher', version: '1.10.2'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+tasks.register('preCommitHook') {
+    def gitHooksDirectory = new File("$project.rootDir/.git/hooks/")
+    if (!gitHooksDirectory.exists()) {
+        gitHooksDirectory.mkdirs()
+    }
+    new File("$project.rootDir/.git/hooks", "pre-commit").text =
+            """#!/bin/bash
+./gradlew test
+if [ \$? -eq 0 ]
+then
+    echo "테스트가 성공하였습니다."
+else
+    echo "테스트가 실패하였습니다." >&2
+    exit 1
+fi
+"""
+    "chmod +x .git/hooks/pre-commit".execute()
+}
