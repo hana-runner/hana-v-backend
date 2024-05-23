@@ -12,9 +12,11 @@ class ExampleClassWithMethod {
     public void ExampleMethod() {}
 }
 
+@TypeInfo(name = "MethodInfoTest", description = "MethodInfo 어노테이션 테스트")
 @SpringBootTest
 public class MethodInfoTest {
 
+    @MethodInfo(name = "testMethodInfo", description = "MethodInfo 어노테이션을 테스트합니다.")
     @Test
     public void testMethodInfoAnnotation() throws NoSuchMethodException {
         Method method = ExampleClassWithMethod.class.getMethod("ExampleMethod");
