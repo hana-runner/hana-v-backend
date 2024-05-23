@@ -28,12 +28,20 @@ repositories {
 	mavenCentral()
 }
 
+ext {
+	lombokVersion = '1.18.32'
+}
+
 apply from: "$rootDir/spotless.gradle"
 
 dependencies {
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter', version: springBootVersion
 	testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: springBootVersion
 	testRuntimeOnly group: 'org.junit.platform', name: 'junit-platform-launcher', version: '1.10.2'
+	compileOnly group: 'org.projectlombok', name: 'lombok', version: lombokVersion
+	annotationProcessor group: 'org.projectlombok', name: 'lombok', version: lombokVersion
+	testCompileOnly group: 'org.projectlombok', name: 'lombok', version: lombokVersion
+	testAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: lombokVersion
 }
 
 tasks.named('test') {
