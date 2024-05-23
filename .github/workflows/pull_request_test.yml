@@ -37,5 +37,8 @@ jobs:
       - name: Gradle 빌드
         run: ./gradlew build
 
+      - name: 포맷팅 검사
+        run: ./gradlew spotlessCheck
+
       - name: 테스트 실행
         run: ./gradlew test

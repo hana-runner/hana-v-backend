@@ -1,0 +1,20 @@
+spotless {
+	version = "6.25.0"
+
+	java {
+		target("**/*.java")
+		targetExclude ("$buildDir/**/*.java", "bin/**/*.java")
+		importOrder()
+		removeUnusedImports()
+		googleJavaFormat().aosp()
+		trimTrailingWhitespace()
+		endWithNewline()
+	}
+
+	format 'misc', {
+		target "*.gradle"
+		trimTrailingWhitespace()
+		indentWithTabs()
+		endWithNewline()
+	}
+}
