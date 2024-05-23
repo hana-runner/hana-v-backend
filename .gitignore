@@ -1,0 +1,427 @@
+### Git ###
+
+# Git 백업 파일 제외
+*.orig
+
+# Git 병합 도구를 사용할 때 생성되는 파일 제외
+*.BACKUP.*
+*.BASE.*
+*.LOCAL.*
+*.REMOTE.*
+*_BACKUP_*.txt
+*_BASE_*.txt
+*_LOCAL_*.txt
+*_REMOTE_*.txt
+
+### Diff ###
+
+# 차이 비교 파일 제외
+*.patch
+*.diff
+
+### macOS ###
+
+# macOS 시스템 파일 제외
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# 아이콘 파일 제외
+Icon
+Icon?
+
+# 썸네일 파일 제외
+._*
+
+# 볼륨 루트에 나타날 수 있는 파일 및 디렉토리 제외
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# AFP 공유에서 생성될 수 있는 디렉토리 제외
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# iCloud에서 생성된 파일 제외
+*.icloud
+
+### Java ###
+
+# 컴파일된 클래스 파일 제외
+*.class
+
+# 로그 파일 제외
+*.log
+*.log.*
+*.access
+*.trace
+*.out
+
+# BlueJ 파일 제외
+*.ctxt
+
+# 패키지 파일 제외
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# 가상 머신 크래시 로그 제외
+hs_err_pid*
+replay_pid*
+
+### IntelliJ IDEA ###
+
+# IntelliJ IDEA 설정 파일 제외
+.idea
+*.iml
+*.ipr
+*.iws
+
+# IntelliJ IDEA 빌드 디렉토리 제외
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+# IntelliJ IDEA JIRA 플러그인 설정 파일 제외
+atlassian-ide-plugin.xml
+
+### VS Code ###
+
+# Visual Studio Code 설정 디렉토리 제외
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/snippets/*
+!.vscode/keybindings.json
+
+# Visual Studio Code 플러그인 디렉토리 제외
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.user
+*.vspscc
+*.vssscc
+.bowerrc
+bower.json
+npm-debug.log
+
+### NetBeans ###
+
+# NetBeans 설정 파일 및 빌드 디렉토리 제외
+/nbproject/private/
+**/nbproject/private/
+**/nbproject/Makefile-*.mk
+**/nbproject/Package-*.bash
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### STS ###
+
+# STS(Spring Tool Suite) 설정 파일 및 빌드 디렉토리 제외
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+### gradle ###
+
+# Gradle 관련 디렉토리 및 파일 제외
+.gradle
+
+# build 디렉토리를 제외하되, src 디렉토리 아래의 build 디렉토리는 예외로 처리
+build/
+!**/src/**/build/
+
+# Gradle GUI 설정 파일 제외
+gradle-app.setting
+
+# Gradle wrapper jar 관련 파일을 제외하지 않도록 설정
+!gradle-wrapper.jar
+!gradle/wrapper/gradle-wrapper.jar
+
+# Gradle wrapper properties 파일을 제외하지 않도록 설정
+!gradle-wrapper.properties
+
+# Gradle 프로젝트의 캐시 파일 제외
+.gradletasknamecache
+
+# Java heap dump 파일 제외
+*.hprof
+
+### Data ###
+
+# 데이터 파일 제외
+*.csv
+*.dat
+*.efx
+*.gbr
+*.key
+*.pps
+*.ppt
+*.pptx
+*.sdf
+*.tax2010
+*.vcf
+*.xml
+
+# 테스트 결과 파일은 예외로 처리
+!log4j2-test.xml
+
+### Database ###
+
+# 데이터베이스 파일 제외
+*.accdb
+*.db
+*.dbf
+*.mdb
+*.pdb
+*.sqlite3
+*.db-shm
+*.db-wal
+
+### Redis ###
+
+# Redis 데이터 파일 제외
+*.rdb
+
+### Batch ###
+
+# 배치 파일 제외
+*.bat
+*.cmd
+*.btm
+
+### SonarQube ###
+
+# SonarQube 및 SonarLint 작업 디렉토리 및 설정 파일 제외
+.sonar/
+.sonarqube/
+.scannerwork/
+.sonarlint/
+
+### Dotenv ###
+
+# 환경 변수 파일 제외
+*.env
+
+### draw.io ###
+
+# draw.io 캐시 파일 제외
+.*drawio.bkp
+.*drawio.dtmp
+
+### Node.js ###
+
+# Node.js 로그 파일 제외
+logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+dist-ssr
+*.local
+
+# Node.js 진단 보고서 파일 제외
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# Node.js 런타임 데이터 파일 제외
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# jscoverage/JSCover에 의해 생성된 계기화된 라이브러리 디렉토리 제외
+lib-cov
+
+# istanbul 등의 도구에 의해 사용되는 커버리지 디렉토리 제외
+coverage
+*.lcov
+
+# nyc 테스트 커버리지 결과 디렉토리 제외
+.nyc_output
+
+# Grunt 중간 저장소 디렉토리 제외
+.grunt
+
+# Bower 종속성 디렉토리 제외
+bower_components
+
+# node-waf 구성 파일 제외
+.lock-wscript
+
+# Node.js 컴파일된 이진 애드온 디렉토리 제외
+build/Release
+
+# Node.js 종속성 디렉토리 제외
+node_modules/
+jspm_packages/
+
+# Snowpack 종속성 디렉토리 제외
+web_modules/
+
+# 선택적 npm 캐시 디렉토리 제외
+.npm
+
+# 선택적 eslint 캐시 디렉토리 제외
+.eslintcache
+
+# 선택적 stylelint 캐시 디렉토리 제외
+.stylelintcache
+
+# Microbundle 캐시 디렉토리 제외
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+
+# 선택적 REPL 히스토리 파일 제외
+.node_repl_history
+
+# 'npm pack'의 출력 디렉토리 제외
+*.tgz
+
+# Yarn 무결성 파일 제외
+.yarn-integrity
+
+# dotenv 환경 변수 파일 제외
+.env
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
+
+# parcel-bundler 캐시 디렉토리 제외
+.cache
+.parcel-cache
+
+# Nuxt.js 빌드 / 생성 출력 디렉토리 제외
+.nuxt
+dist
+
+# Gatsby 파일 제외
+.cache/
+
+# vuepress 빌드 출력 디렉토리 제외
+.vuepress/dist
+
+# vuepress v2.x 임시 및 캐시 디렉토리 제외
+.temp
+
+# Docusaurus 캐시 및 생성된 파일 제외
+.docusaurus
+
+# Serverless 디렉토리 제외
+.serverless/
+
+# FuseBox 캐시 디렉토리 제외
+.fusebox/
+
+# DynamoDB Local 파일 제외
+.dynamodb/
+
+# TernJS 포트 파일 제외
+.tern-port
+
+# VSCode 확장 프로그램 테스트에 사용된 VSCode 버전 저장소 제외
+.vscode-test
+
+# yarn v2 빌드 / 생성 출력 디렉토리 제외
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+.pnp.*
+
+# Serverless Webpack 디렉토리 제외
+.webpack/
+
+# SvelteKit 빌드 / 생성 출력 디렉토리 제외
+.svelte-kit
+
+# esbuild 빌드 / 생성 출력 디렉토리 제외
+.esbuild
+
+# Snowpack 빌드 / 생성 출력 디렉토리 제외
+.snowpack
+
+# Rollup 빌드 / 생성 출력 디렉토리 제외
+.rollup.cache
+.rollup-plugins-cache
+.rollup.vite
+
+# Storybook 빌드 / 생성 출력 디렉토리 제외
+.storybook-out
+*storybook.log
+
+# nuxt-typo3 빌드 / 생성 출력 디렉토리 제외
+.typo3
+
+### react ###
+
+# react 빌드 / 생성 출력 디렉토리 제외
+.DS_*
+**/*.backup.*
+**/*.back.*
+node_modules
+*.sublime*
+psd
+thumb
+sketch
+*.sketch
+*.psd
+*.ai
+*.eps
+
+### NextJS ###
+
+# next.js 빌드 / 생성 출력 디렉토리 제외
+.next
+/node_modules
+/.pnp
+.pnp.js
+/coverage
+/.next/
+/out/
+/build
+
+# next.js 로컬 환경 변수 파일 제외
+*.pem
+
+# NextJS 로컬 환경 변수 파일 제외
+.env*.local
+
+# Vercel 빌드 / 생성 출력 디렉토리 제외
+.vercel
+
+# TypeScript 캐시 디렉토리 제외
+*.tsbuildinfo
+next-env.d.ts
+
+### Docker ###
+
+# 도커 컨테이너 불륨 디렉토리 제외
+docker
