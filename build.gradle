@@ -10,6 +10,8 @@ plugins {
 	id 'org.springframework.boot' version "${springBootVersion}"
 	id 'io.spring.dependency-management' version '1.1.4'
 	id 'com.diffplug.spotless' version '6.25.0'
+	id 'jacoco'
+	id 'org.sonarqube' version "5.0.0.4638"
 }
 
 wrapper {
@@ -39,6 +41,8 @@ ext {
 }
 
 apply from: "$rootDir/spotless.gradle"
+apply from: "$rootDir/jacoco.gradle"
+apply from: "$rootDir/sonarqube.gradle"
 
 dependencies {
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter', version: springBootVersion
