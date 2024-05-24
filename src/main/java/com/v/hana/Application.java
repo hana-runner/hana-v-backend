@@ -11,11 +11,6 @@ public class Application {
 
     @MethodInfo(name = "main", description = "어플리케이션을 실행합니다.")
     public static void main(String[] args) {
-        String activeProfile = System.getenv("SPRING_PROFILES_ACTIVE");
-
-        SpringApplication springApplication = new SpringApplication(Application.class);
-        springApplication.setAdditionalProfiles(activeProfile);
-
-        springApplication.run(args);
+        SpringApplication.run(Application.class, args);
     }
 }
