@@ -28,6 +28,12 @@ repositories {
 	mavenCentral()
 }
 
+configurations {
+	all{
+		exclude module: 'spring-boot-starter-logging'
+	}
+}
+
 ext {
 	lombokVersion = '1.18.32'
 }
@@ -37,6 +43,8 @@ apply from: "$rootDir/spotless.gradle"
 dependencies {
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter', version: springBootVersion
 	testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: springBootVersion
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-log4j2', version: springBootVersion
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version: springBootVersion
 	testRuntimeOnly group: 'org.junit.platform', name: 'junit-platform-launcher', version: '1.10.2'
 	compileOnly group: 'org.projectlombok', name: 'lombok', version: lombokVersion
 	annotationProcessor group: 'org.projectlombok', name: 'lombok', version: lombokVersion
@@ -46,6 +54,11 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
+
+	testLogging {
+		events 'PASSED', 'FAILED', 'SKIPPED'
+		showStandardStreams = true
+	}
 }
 
 tasks.register('preCommitHook') {
