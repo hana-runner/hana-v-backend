@@ -1,0 +1,48 @@
+jacoco {
+	toolVersion = '0.8.11'
+}
+
+test {
+	finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+	dependsOn test
+
+	reports {
+		html.required.set(true)
+		csv.required.set(true)
+		xml.required.set(true)
+	}
+
+	def Qdomains = []
+
+	for (qPattern in '*.QA'..'*.QZ') {
+		Qdomains.add(qPattern + '*')
+	}
+
+	afterEvaluate {
+		classDirectories.setFrom(
+				files(classDirectories.files.collect {
+					fileTree(dir: it, excludes: [] + Qdomains)
+				})
+		)
+	}
+
+	finalizedBy 'jacocoTestCoverageVerification'
+}
+
+jacocoTestCoverageVerification {
+	def Qdomains = []
+
+	for (qPattern in '*.QA'..'*.QZ') {
+		Qdomains.add(qPattern + '*')
+	}
+
+	violationRules {
+		rule {
+			enabled = true
+			excludes = [] + Qdomains
+		}
+	}
+}

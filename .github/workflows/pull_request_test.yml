@@ -37,8 +37,12 @@ jobs:
       - name: Gradle 빌드
         run: ./gradlew build
 
-      - name: 포맷팅 검사
-        run: ./gradlew spotlessCheck
-
-      - name: 테스트 실행
-        run: ./gradlew test
+      - name: PR에 테스트 커버리지 리포트 작성
+        id: jacoco
+        uses: madrapps/jacoco-report@v1.2
+        with:
+          title: 📝 테스트 커버리지 리포트
+          paths: ${{ github.workspace }}/build/jacoco/index.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          min-coverage-overall: 50
+          min-coverage-changed-files: 50
