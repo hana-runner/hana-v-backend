@@ -4,6 +4,7 @@ jacoco {
 
 test {
 	finalizedBy jacocoTestReport
+	useJUnitPlatform()
 }
 
 jacocoTestReport {
