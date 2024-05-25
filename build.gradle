@@ -1,6 +1,7 @@
 buildscript {
 	ext {
 		springBootVersion = '3.2.5'
+		restdocsApiSpecVersion = '0.17.1'
 	}
 }
 
@@ -12,6 +13,7 @@ plugins {
 	id 'com.diffplug.spotless' version '6.25.0'
 	id 'jacoco'
 	id 'org.sonarqube' version "5.0.0.4638"
+	id 'com.epages.restdocs-api-spec' version "${restdocsApiSpecVersion}"
 }
 
 wrapper {
@@ -55,6 +57,21 @@ dependencies {
 	annotationProcessor group: 'org.projectlombok', name: 'lombok', version: lombokVersion
 	testCompileOnly group: 'org.projectlombok', name: 'lombok', version: lombokVersion
 	testAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: lombokVersion
+	testImplementation group: 'org.springframework.restdocs', name: 'spring-restdocs-mockmvc'
+	testImplementation group: 'com.epages', name: 'restdocs-api-spec-mockmvc' , version: restdocsApiSpecVersion
+}
+
+openapi3 {
+	server {
+		url = 'http://localhost:8080'
+	}
+	title = 'Hana V API'
+	description = 'Hana V API 서버에서 제공하는 API 명세서입니다.'
+	version = '1.0.0'
+	outputFileNamePrefix = 'hana-v-api'
+	format = 'json'
+
+	outputDirectory = 'build/resources/main/static/docs'
 }
 
 tasks.named('test') {
