@@ -3,7 +3,7 @@ name: PR 테스트
 on:
   pull_request:
     branches:
-      - '**'
+      - 'dev'
 
 jobs:
   build:
