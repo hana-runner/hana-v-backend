@@ -1,7 +1,6 @@
 package com.v.hana.common.response;
 
 import java.time.LocalDateTime;
-
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
