@@ -1,6 +1,13 @@
+server:
+  port: ${SERVER_PORT:8080}
 spring:
   application:
     name: hana-v
+springdoc:
+  default-consumes-media-type: application/json;charset=UTF-8
+  default-produces-media-type: application/json;charset=UTF-8
+  swagger-ui:
+    url: /docs/hana-v-api.json
 logging:
   level:
     root: ${LOGGING_LEVEL}

@@ -1,6 +1,7 @@
 buildscript {
 	ext {
 		springBootVersion = '3.2.5'
+		restdocsApiSpecVersion = '0.17.1'
 	}
 }
 
@@ -12,6 +13,8 @@ plugins {
 	id 'com.diffplug.spotless' version '6.25.0'
 	id 'jacoco'
 	id 'org.sonarqube' version "5.0.0.4638"
+	id 'com.epages.restdocs-api-spec' version "${restdocsApiSpecVersion}"
+	id 'org.hidetake.swagger.generator' version '2.18.2'
 }
 
 wrapper {
@@ -49,11 +52,32 @@ dependencies {
 	testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: springBootVersion
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-log4j2', version: springBootVersion
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version: springBootVersion
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: springBootVersion
+	implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.0.2'
 	testRuntimeOnly group: 'org.junit.platform', name: 'junit-platform-launcher', version: '1.10.2'
 	compileOnly group: 'org.projectlombok', name: 'lombok', version: lombokVersion
 	annotationProcessor group: 'org.projectlombok', name: 'lombok', version: lombokVersion
 	testCompileOnly group: 'org.projectlombok', name: 'lombok', version: lombokVersion
 	testAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: lombokVersion
+	testImplementation group: 'org.springframework.restdocs', name: 'spring-restdocs-mockmvc'
+	testImplementation group: 'com.epages', name: 'restdocs-api-spec-mockmvc' , version: restdocsApiSpecVersion
+}
+
+openapi3 {
+	server {
+		url = 'http://localhost:8080'
+	}
+	title = 'Hana V API'
+	description = 'Hana V API 서버에서 제공하는 API 명세서입니다.'
+	version = '1.0.0'
+	outputFileNamePrefix = 'hana-v-api'
+	format = 'json'
+
+	outputDirectory = 'build/resources/main/static/docs'
+}
+
+tasks.named('bootRun') {
+	dependsOn 'openapi3'
 }
 
 tasks.named('test') {
@@ -96,4 +120,17 @@ fi
 """
 		"chmod +x .git/hooks/pre-commit".execute()
 	}
+}
+
+tasks.withType(GenerateSwaggerUI) {
+	dependsOn 'openapi3'
+
+	copy {
+		from 'build/resources/main/static/docs'
+		into 'src/main/resources/static/docs/'
+	}
+}
+
+tasks.withType(JavaCompile) {
+	options.compilerArgs << "-parameters"
 }
