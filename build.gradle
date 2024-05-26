@@ -14,6 +14,7 @@ plugins {
 	id 'jacoco'
 	id 'org.sonarqube' version "5.0.0.4638"
 	id 'com.epages.restdocs-api-spec' version "${restdocsApiSpecVersion}"
+	id 'org.hidetake.swagger.generator' version '2.18.2'
 }
 
 wrapper {
@@ -52,6 +53,7 @@ dependencies {
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-log4j2', version: springBootVersion
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version: springBootVersion
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: springBootVersion
+	implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.0.2'
 	testRuntimeOnly group: 'org.junit.platform', name: 'junit-platform-launcher', version: '1.10.2'
 	compileOnly group: 'org.projectlombok', name: 'lombok', version: lombokVersion
 	annotationProcessor group: 'org.projectlombok', name: 'lombok', version: lombokVersion
@@ -72,6 +74,10 @@ openapi3 {
 	format = 'json'
 
 	outputDirectory = 'build/resources/main/static/docs'
+}
+
+tasks.named('bootRun') {
+	dependsOn 'openapi3'
 }
 
 tasks.named('test') {
@@ -114,4 +120,17 @@ fi
 """
 		"chmod +x .git/hooks/pre-commit".execute()
 	}
+}
+
+tasks.withType(GenerateSwaggerUI) {
+	dependsOn 'openapi3'
+
+	copy {
+		from 'build/resources/main/static/docs'
+		into 'src/main/resources/static/docs/'
+	}
+}
+
+tasks.withType(JavaCompile) {
+	options.compilerArgs << "-parameters"
 }
