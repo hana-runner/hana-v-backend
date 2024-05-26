@@ -7,9 +7,12 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.snippet.Attributes.key;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
+import com.epages.restdocs.apispec.SimpleType;
+import com.v.hana.command.example.ExampleCommand;
 import com.v.hana.common.annotation.MethodInfo;
 import com.v.hana.common.annotation.TypeInfo;
 import com.v.hana.controller.example.ExampleController;
@@ -29,16 +32,16 @@ public class ExampleControllerTest extends RestDocsTest {
         return new ExampleController(exampleService);
     }
 
-    @MethodInfo(name = "exampleGET", description = "예시 API를 테스트합니다.")
+    @MethodInfo(name = "exampleSuccessGET", description = "예시 API 성공을 테스트합니다.")
     @Test
-    public void exampleGET() throws Exception {
+    public void exampleSuccessGET() throws Exception {
         // Given
-        given(exampleService.example("test")).willReturn("test");
+        given(exampleService.example(ExampleCommand.builder().request(23).build())).willReturn(23);
 
         // When & Then
         mockMvc.perform(
                         RestDocumentationRequestBuilders.get("/v1/api/example")
-                                .param("request", "test"))
+                                .param("request", "23"))
                 .andExpect(status().isOk())
                 .andDo(
                         document(
@@ -49,28 +52,35 @@ public class ExampleControllerTest extends RestDocsTest {
                                         ResourceSnippetParameters.builder()
                                                 .tag("example")
                                                 .summary("예시 API")
-                                                .description("예시 API 입니다.")
+                                                .description(
+                                                        "예시 API 입니다. 요청 데이터를 받아 응답 데이터를 반환합니다. 0을 넣으면 Exception이 발생합니다.")
                                                 .queryParameters(
                                                         parameterWithName("request")
-                                                                .description("요청 데이터"))
+                                                                .description("요청 데이터")
+                                                                .type(SimpleType.NUMBER))
                                                 .responseFields(
+                                                        fieldWithPath("status")
+                                                                .description("상태 코드")
+                                                                .type(JsonFieldType.NUMBER),
                                                         fieldWithPath("success")
                                                                 .description("성공 여부")
                                                                 .type(JsonFieldType.BOOLEAN),
                                                         fieldWithPath("timestamp")
                                                                 .description("응답 시간")
-                                                                .type(JsonFieldType.STRING),
-                                                        fieldWithPath("status")
-                                                                .description("상태 코드")
-                                                                .type(JsonFieldType.NUMBER),
+                                                                .type(JsonFieldType.STRING)
+                                                                .attributes(
+                                                                        key("format")
+                                                                                .value(
+                                                                                        "yyyy-MM-dd HH:mm:ss")),
                                                         fieldWithPath("code")
                                                                 .description("응답 코드")
                                                                 .type(JsonFieldType.STRING),
                                                         fieldWithPath("message")
-                                                                .description("메시지")
+                                                                .description("응답 메시지")
                                                                 .type(JsonFieldType.STRING),
-                                                        fieldWithPath("data.response")
-                                                                .description("응답 데이터"))
+                                                        fieldWithPath("response")
+                                                                .description("응답 데이터")
+                                                                .type(JsonFieldType.NUMBER))
                                                 .build())));
     }
 }
