@@ -46,6 +46,9 @@ jobs:
           
           echo "ENV SPRING_PROFILES_ACTIVE=${{ secrets.SPRING_PROFILES_ACTIVE }}" >> dockerfile.temp
           echo "ENV LOGGING_LEVEL=${{ secrets.LOGGING_LEVEL }}" >> dockerfile.temp
+          echo "ENV DATABASE_JDBC_URL=${{ secrets.DATABASE_JDBC_URL }}" >> dockerfile.temp
+          echo "ENV MYSQL_USERNAME=${{ secrets.MYSQL_USERNAME }}" >> dockerfile.temp
+          echo "ENV MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }}" >> dockerfile.temp
           
           mv dockerfile.temp dockerfile
 
