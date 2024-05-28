@@ -12,6 +12,9 @@ jobs:
 
     env:
       SPRING_PROFILES_ACTIVE: test
+      DATABASE_JDBC_URL: ${{ secrets.DATABASE_JDBC_URL }}
+      MYSQL_USERNAME: ${{ secrets.MYSQL_USERNAME }}
+      MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
 
     steps:
       - name: 코드 체크아웃
