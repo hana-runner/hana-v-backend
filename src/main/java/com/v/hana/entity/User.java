@@ -2,19 +2,17 @@ package com.v.hana.entity;
 
 import com.v.hana.constant.Gender;
 import jakarta.persistence.*;
+import java.sql.Timestamp;
+import java.time.LocalDate;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.sql.Timestamp;
-import java.time.LocalDate; // LocalDateTime 대신 LocalDate를 임포트합니다.
-import java.time.LocalDateTime;
-
 @Entity
 @Table(name = "users")
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED) //Entity e = new Entity()
+@NoArgsConstructor(access = AccessLevel.PROTECTED) // Entity e = new Entity()
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,7 +33,7 @@ public class User {
 
     @Column(name = "birthday", nullable = false)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate birthday; // LocalDateTime 대신 LocalDate로 변경합니다.
+    private LocalDate birthday;
 
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "gender", nullable = false, columnDefinition = "INT")
@@ -59,7 +57,13 @@ public class User {
     private boolean isReceiveAlarm = true;
 
     @Builder
-    public User(String username, String pw, String email, String name, Gender gender, LocalDate birthday) { // LocalDateTime 대신 LocalDate로 변경합니다.
+    public User(
+            String username,
+            String pw,
+            String email,
+            String name,
+            Gender gender,
+            LocalDate birthday) {
         this.username = username;
         this.pw = pw;
         this.email = email;
