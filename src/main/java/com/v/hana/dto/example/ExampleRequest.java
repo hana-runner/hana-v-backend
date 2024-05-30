@@ -1,20 +1,18 @@
 package com.v.hana.dto.example;
 
-import com.v.hana.common.dto.SelfValidating;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 @Getter
-@EqualsAndHashCode(callSuper = false)
-public class ExampleRequest extends SelfValidating<ExampleRequest> {
-    @NotNull(message = "request는 빈 값일 수 없습니다.")
+public class ExampleRequest {
+    @Min(value = 1, message = "request는 1 이상이어야 합니다.")
+    @Max(value = 100, message = "request는 100 이하이어야 합니다.")
     private final int request;
 
     @Builder
     public ExampleRequest(int request) {
         this.request = request;
-        this.validateSelf();
     }
 }

@@ -1,6 +1,15 @@
+FROM gradle:latest AS builder
+
+WORKDIR /app
+
+COPY . .
+
+RUN ./gradlew openapi3
+
 FROM openjdk:17-alpine
 
-EXPOSE 8080
+WORKDIR /app
 
-COPY ./build/libs/*.jar app.jar
-ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
+COPY --from=builder /app /app
+
+CMD ["java", "-jar", "/app/build/libs/your-app.jar"]

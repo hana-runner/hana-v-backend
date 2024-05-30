@@ -6,6 +6,7 @@ import com.v.hana.common.annotation.TypeInfo;
 import com.v.hana.dto.example.ExampleRequest;
 import com.v.hana.dto.example.ExampleResponse;
 import com.v.hana.service.example.ExampleService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +20,7 @@ public class ExampleController {
 
     @MethodInfo(name = "example", description = "예시 컨트롤러의 예시 메소드를 실행합니다.")
     @GetMapping("/example")
-    public ResponseEntity<ExampleResponse> exampleGET(ExampleRequest exampleRequest) {
+    public ResponseEntity<ExampleResponse> exampleGET(@Valid ExampleRequest exampleRequest) {
         return ResponseEntity.ok(
                 ExampleResponse.builder()
                         .response(
