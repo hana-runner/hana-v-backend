@@ -1,9 +1,11 @@
-package com.v.hana.entity;
+package com.v.hana.entity.user;
 
 import com.v.hana.constant.Gender;
 import jakarta.persistence.*;
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -70,5 +72,7 @@ public class User {
         this.name = name;
         this.gender = gender;
         this.birthday = birthday;
+        this.createdAt = Timestamp.valueOf(LocalDateTime.now());
+        this.updatedAt = Timestamp.valueOf(LocalDateTime.now());
     }
 }

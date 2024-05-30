@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.v.hana.constant.Gender;
 import com.v.hana.entity.User;
-import com.v.hana.repository.UserRepository;
+import com.v.hana.repository.user.UserRepository;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
