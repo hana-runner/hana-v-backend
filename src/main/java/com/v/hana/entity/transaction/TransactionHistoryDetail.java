@@ -44,8 +44,7 @@ public class TransactionHistoryDetail {
             User user,
             Interest interest,
             String description,
-            Long amount
-    ) {
+            Long amount) {
         this.transactionHistory = transactionHistory;
         this.user = user;
         this.interest = interest;
