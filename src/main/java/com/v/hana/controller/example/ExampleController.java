@@ -5,7 +5,7 @@ import com.v.hana.common.annotation.MethodInfo;
 import com.v.hana.common.annotation.TypeInfo;
 import com.v.hana.dto.example.ExampleRequest;
 import com.v.hana.dto.example.ExampleResponse;
-import com.v.hana.service.example.ExampleService;
+import com.v.hana.usecase.example.ExampleUseCase;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("v1/api")
 public class ExampleController {
-    private final ExampleService exampleService;
+    private final ExampleUseCase exampleUseCase;
 
     @MethodInfo(name = "example", description = "예시 컨트롤러의 예시 메소드를 실행합니다.")
     @GetMapping("/example")
@@ -24,14 +24,14 @@ public class ExampleController {
         return ResponseEntity.ok(
                 ExampleResponse.builder()
                         .response(
-                                exampleService.example(
+                                exampleUseCase.example(
                                         ExampleCommand.builder()
                                                 .request(exampleRequest.getRequest())
                                                 .build()))
                         .build());
     }
 
-    public ExampleController(ExampleService exampleService) {
-        this.exampleService = exampleService;
+    public ExampleController(ExampleUseCase exampleUseCase) {
+        this.exampleUseCase = exampleUseCase;
     }
 }
