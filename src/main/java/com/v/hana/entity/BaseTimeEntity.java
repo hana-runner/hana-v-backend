@@ -4,6 +4,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -16,12 +18,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 public abstract class BaseTimeEntity {
 
     @CreatedDate
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "created_at")
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
 
     @LastModifiedDate
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "updated_at")
-    private LocalDate updatedAt;
+    private LocalDateTime updatedAt;
 }
