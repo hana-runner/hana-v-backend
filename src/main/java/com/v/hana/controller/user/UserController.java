@@ -14,19 +14,20 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @TypeInfo(name = "UserController", description = "유저 컨트롤러 클래스")
 @RestController
-@RequestMapping("v1/api")
+@RequestMapping("v1/api/users")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
 
     @MethodInfo(name = "user join", description = "유저 컨트롤러의 회원 가입 메소드를 실행합니다.")
-    @PostMapping("/users")
-    public ResponseEntity<?> join(@Valid UserJoinRequest userJoinRequest) {
+    @PostMapping("/")
+    public ResponseEntity<?> join(@Valid @RequestBody UserJoinRequest userJoinRequest) {
         try {
             userService.join(
                     userJoinRequest.getUsername(),
