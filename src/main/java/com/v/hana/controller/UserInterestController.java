@@ -4,9 +4,7 @@ import com.v.hana.common.annotation.MethodInfo;
 import com.v.hana.common.annotation.TypeInfo;
 import com.v.hana.dto.UserInterestResponse;
 import com.v.hana.service.UserInterestService;
-
 import java.util.ArrayList;
-import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +16,8 @@ public class UserInterestController {
 
     @MethodInfo(name = "getUserInterests", description = "사용자 관심사 목록 가져오기")
     @GetMapping("/user-interests/{userId}")
-    public ResponseEntity<ArrayList<UserInterestResponse>> getUserInterests(@PathVariable Long userId) {
+    public ResponseEntity<ArrayList<UserInterestResponse>> getUserInterests(
+            @PathVariable Long userId) {
         ArrayList<UserInterestResponse> interests = userInterestService.getUserInterests(userId);
         return ResponseEntity.ok(interests);
     }

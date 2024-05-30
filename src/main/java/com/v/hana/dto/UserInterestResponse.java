@@ -4,8 +4,6 @@ import com.v.hana.common.response.BaseResponse;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.util.List;
-
 @Getter
 public class UserInterestResponse extends BaseResponse {
     private final String title, subtitle, imageUrl, color;

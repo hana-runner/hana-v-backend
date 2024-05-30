@@ -2,9 +2,7 @@ package com.v.hana.repository;
 
 import com.v.hana.common.annotation.TypeInfo;
 import com.v.hana.entity.UserInterest;
-
 import java.util.ArrayList;
-import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
