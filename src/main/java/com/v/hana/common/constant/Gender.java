@@ -1,4 +1,4 @@
-package com.v.hana.constant;
+package com.v.hana.common.constant;
 
 public enum Gender {
     MALE,
