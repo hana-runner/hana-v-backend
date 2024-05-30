@@ -5,11 +5,10 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class BaseCodeException extends RuntimeException {
+public abstract class BaseCodeException extends RuntimeException {
     private final BaseHttpCode baseHttpCode;
 
-    @Builder
-    public BaseCodeException(BaseHttpCode baseHttpCode) {
+    protected BaseCodeException(BaseHttpCode baseHttpCode) {
         super(baseHttpCode.getHttpReason().getMessage());
         this.baseHttpCode = baseHttpCode;
     }
