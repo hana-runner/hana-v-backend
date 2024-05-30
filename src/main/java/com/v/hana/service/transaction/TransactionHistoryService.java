@@ -1,6 +1,7 @@
 package com.v.hana.service.transaction;
 
 import com.v.hana.command.transaction.ReadTransactionHistoryByIdCommend;
+import com.v.hana.command.transaction.UpdateTransactionHistoryCommand;
 import com.v.hana.common.annotation.MethodInfo;
 import com.v.hana.common.annotation.TypeInfo;
 import com.v.hana.entity.transaction.TransactionHistory;
@@ -22,6 +23,28 @@ public class TransactionHistoryService implements TransactionHistoryUseCase {
         return transactionHistoryRepository
                 .findById(command.getId())
                 .orElseThrow(TransactionIdNotFoundException::new);
+    }
+
+    @MethodInfo(name = "updateTransactionHistory", description = "거래내역 상세를 수정합니다.")
+    @Override
+    public TransactionHistory updateTransactionHistory(UpdateTransactionHistoryCommand command) {
+        TransactionHistory transactionHistory =
+                transactionHistoryRepository
+                        .findById(command.getId())
+                        .orElseThrow(TransactionIdNotFoundException::new);
+
+        return transactionHistoryRepository.save(
+                TransactionHistory.builder()
+                        .user(transactionHistory.getUser())
+                        .account(transactionHistory.getAccount())
+                        .category(command.getCategory())
+                        .approvalNumber(transactionHistory.getApprovalNumber())
+                        .type(transactionHistory.getType())
+                        .description(transactionHistory.getDescription())
+                        .action(transactionHistory.getAction())
+                        .amount(transactionHistory.getAmount())
+                        .balance(transactionHistory.getBalance())
+                        .build());
     }
 
     public TransactionHistoryService(TransactionHistoryRepository transactionHistoryRepository) {
