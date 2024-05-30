@@ -27,6 +27,8 @@ CREATE TABLE `accounts` (
                             `registered_at`	datetime	NOT NULL,
                             `is_deleted`	boolean	NULL,
                             `bank_name`	varchar(50)	NOT NULL,
+                            `account_name`	varchar(50)	NOT NULL,
+                            `account_type`	varchar(50)	NOT NULL,
                             CONSTRAINT fk_users_to_accounts FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
