@@ -2,8 +2,8 @@ package com.v.hana;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.v.hana.constant.Gender;
-import com.v.hana.entity.User;
+import com.v.hana.common.constant.Gender;
+import com.v.hana.entity.user.User;
 import com.v.hana.repository.user.UserRepository;
 import java.time.LocalDate;
 import java.time.LocalDateTime;

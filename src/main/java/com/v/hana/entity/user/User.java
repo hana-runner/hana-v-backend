@@ -1,21 +1,17 @@
 package com.v.hana.entity.user;
 
-import com.v.hana.constant.Gender;
+import com.v.hana.common.constant.Gender;
+import com.v.hana.entity.BaseTimeEntity;
 import jakarta.persistence.*;
-import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "users")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED) // Entity e = new Entity()
-public class User {
+public class User extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -41,14 +37,6 @@ public class User {
     @Column(name = "gender", nullable = false, columnDefinition = "INT")
     private Gender gender;
 
-    @Column(name = "created_at")
-    @CreatedDate
-    private Timestamp createdAt;
-
-    @Column(name = "updated_at")
-    @LastModifiedDate
-    private Timestamp updatedAt;
-
     @Column(name = "is_deleted")
     private boolean isDeleted = false;
 
@@ -72,7 +60,5 @@ public class User {
         this.name = name;
         this.gender = gender;
         this.birthday = birthday;
-        this.createdAt = Timestamp.valueOf(LocalDateTime.now());
-        this.updatedAt = Timestamp.valueOf(LocalDateTime.now());
     }
 }

@@ -1,10 +1,11 @@
 package com.v.hana.service.user;
 
-import com.sun.jdi.request.DuplicateRequestException;
 import com.v.hana.common.annotation.MethodInfo;
 import com.v.hana.common.annotation.TypeInfo;
-import com.v.hana.constant.Gender;
+import com.v.hana.common.constant.Gender;
 import com.v.hana.entity.user.User;
+import com.v.hana.exception.user.UserEmailDuplicateException;
+import com.v.hana.exception.user.UserNameDuplicateException;
 import com.v.hana.repository.user.UserRepository;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -21,9 +22,9 @@ public class UserService {
     public void join(String username, String name, String pw, String email, int gender) {
         // 회원 가입 정보 중복 확인
         if (userRepository.findByEmail(email).isPresent()) {
-            throw new DuplicateRequestException("이미 존재하는 이메일입니다.");
+            throw new UserEmailDuplicateException();
         } else if (userRepository.findByUsername(username).isPresent()) {
-            throw new DuplicateRequestException("이미 존재하는 아이디입니다.");
+            throw new UserNameDuplicateException();
         }
         // 회원 가입 진행
         userRepository.save(
