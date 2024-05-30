@@ -31,7 +31,8 @@ public class Interest {
     private String color;
 
     @Builder
-    public Interest(String title, String description, String baseImageUrl, String color) {
+    public Interest(Long id, String title, String description, String baseImageUrl, String color) {
+        this.id = id;
         this.title = title;
         this.description = description;
         this.baseImageUrl = baseImageUrl;
