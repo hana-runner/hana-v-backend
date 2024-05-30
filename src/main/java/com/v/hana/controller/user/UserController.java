@@ -20,13 +20,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @TypeInfo(name = "UserController", description = "유저 컨트롤러 클래스")
 @RestController
-@RequestMapping("v1/api/users")
+@RequestMapping("v1/api")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
 
     @MethodInfo(name = "user join", description = "유저 컨트롤러의 회원 가입 메소드를 실행합니다.")
-    @PostMapping("/")
+    @PostMapping("/users")
     public ResponseEntity<?> join(@Valid @RequestBody UserJoinRequest userJoinRequest) {
         try {
             userService.join(
