@@ -49,6 +49,16 @@ jobs:
           echo "ENV DATABASE_JDBC_URL=${{ secrets.DATABASE_JDBC_URL }}" >> dockerfile.temp
           echo "ENV MYSQL_USERNAME=${{ secrets.MYSQL_USERNAME }}" >> dockerfile.temp
           echo "ENV MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }}" >> dockerfile.temp
+          echo "ENV EMAIL_HOST=${{ secrets.EMAIL_HOST }}" >> dockerfile.temp
+          echo "ENV EMAIL_PORT=${{ secrets.EMAIL_PORT }}" >> dockerfile.temp
+          echo "ENV EMAIL_USERNAME=${{ secrets.EMAIL_USERNAME }}" >> dockerfile.temp
+          echo "ENV EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }}" >> dockerfile.temp
+          echo "ENV REDIS_VERSION=${{ secrets.REDIS_HOST }}" >> dockerfile.temp
+          echo "ENV REDIS_HOST=${{ secrets.REDIS_HOST }}" >> dockerfile.temp
+          echo "ENV REDIS_PORT=${{ secrets.REDIS_PORT }}" >> dockerfile.temp
+          echo "ENV REDIS_VOLUME=${{ secrets.REDIS_VOLUNE }}" >> dockerfile.temp
+          echo "ENV REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}" >> dockerfile.temp
+          
           
           mv dockerfile.temp dockerfile
 

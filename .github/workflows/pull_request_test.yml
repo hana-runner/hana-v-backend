@@ -19,6 +19,11 @@ jobs:
       EMAIL_PORT: ${{ secretes.EMAIL_PORT }}
       EMAIL_USERNAME: ${{ secretes.EMAIL_USERNAME }}
       EMAIL_PASSWORD: ${{ secretes.EMAIL_PASSWORD }}
+      REDIS_VERSION: ${{ secretes.REDIS_VERSION }}
+      REDIS_HOST: ${{ secretes.REDIS_HOST }}
+      REDIS_PORT: ${{ secretes.REDIS_PORT }}
+      REDIS_PASSWORD: ${{ secretes.REDIS_PASSWORD }}
+      REDIS_VOLUME: ${{ secrets.REDIS_VOLUME }}
 
     steps:
       - name: 코드 체크아웃
