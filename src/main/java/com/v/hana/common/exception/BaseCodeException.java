@@ -1,7 +1,6 @@
 package com.v.hana.common.exception;
 
 import com.v.hana.common.response.BaseHttpCode;
-import lombok.Builder;
 import lombok.Getter;
 
 @Getter

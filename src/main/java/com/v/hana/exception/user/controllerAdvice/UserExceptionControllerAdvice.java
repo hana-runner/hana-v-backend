@@ -14,9 +14,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @TypeInfo(name = "UserExceptionControllerAdvice", description = "유저관리 예외 처리 컨트롤러 어드바이스 클래스")
 @RestControllerAdvice(basePackageClasses = User.class)
 public class UserExceptionControllerAdvice {
-    @MethodInfo(
-            name = "handleUserEmailDuplicateException",
-            description = "회원가입 아이디 중복 예외를 처리합니다.")
+    @MethodInfo(name = "handleUserEmailDuplicateException", description = "회원가입 아이디 중복 예외를 처리합니다.")
     @ExceptionHandler(UserEmailDuplicateException.class)
     public ResponseEntity<BaseExceptionResponse> handleMethodArgumentNotValidException(
             UserEmailDuplicateException exception) {
