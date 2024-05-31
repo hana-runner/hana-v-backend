@@ -20,11 +20,7 @@ CREATE TABLE `users` (
 
 drop table if exists accounts;
 CREATE TABLE `accounts` (
-<<<<<<< Updated upstream
                             `id` bigint PRIMARY KEY AUTO_INCREMENT COMMENT '계좌 ID',
-=======
-                            `id` bigint PRIMARY KEY AUTO_INCREMENT COMMENT '계정 ID',
->>>>>>> Stashed changes
                             `user_id` bigint NOT NULL COMMENT '유저 ID',
                             `account_number` varchar(255) NOT NULL unique COMMENT '계좌 번호',
                             `balance` bigint NOT NULL COMMENT '잔액',
@@ -34,11 +30,7 @@ CREATE TABLE `accounts` (
                             `account_name` varchar(50) NOT NULL COMMENT '계좌 이름',
                             `account_type` varchar(50) NOT NULL COMMENT '계좌 유형',
                             CONSTRAINT fk_users_to_accounts FOREIGN KEY (user_id) REFERENCES users(id)
-<<<<<<< Updated upstream
 ) COMMENT '계좌 테이블';
-=======
-) COMMENT '계정 테이블';
->>>>>>> Stashed changes
 
 drop table if exists categories;
 CREATE TABLE `categories` (
@@ -104,11 +96,7 @@ CREATE TABLE `transaction_histories` (
                             `description` varchar(255) NOT NULL COMMENT '설명',
                             `action` varchar(10) NOT NULL COMMENT '행동',
                             `amount` bigint NOT NULL COMMENT '금액',
-<<<<<<< Updated upstream
                             `balance` bigint NOT NULL COMMENT '잔액',
-=======
-                            `balance` int NOT NULL COMMENT '잔액',
->>>>>>> Stashed changes
                             `created_at` datetime NOT NULL COMMENT '생성 일시',
                             `updated_at` datetime NOT NULL COMMENT '수정 일시',
                             CONSTRAINT fk_users_to_th FOREIGN KEY (user_id) REFERENCES users(id),
