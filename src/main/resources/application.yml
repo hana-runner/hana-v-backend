@@ -16,6 +16,19 @@ spring:
     hibernate:
       ddl-auto: validate
     show-sql: true
+  data:
+    redis:
+      version: ${REDIS_VERSION}
+      volume: ${REDIS_VOLUME}
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      password: ${REDIS_PASSWORD}
+  mail:
+    host: ${EMAIL_HOST}
+    port: ${EMAIL_PORT}
+    username: ${EMAIL_USERNAME}
+    password: ${EMAIL_PASSWORD}
+    auth-code-expiration-millis: 300000  # 5분
 springdoc:
   default-consumes-media-type: application/json;charset=UTF-8
   default-produces-media-type: application/json;charset=UTF-8
