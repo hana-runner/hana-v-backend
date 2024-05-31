@@ -15,6 +15,10 @@ jobs:
       DATABASE_JDBC_URL: ${{ secrets.DATABASE_JDBC_URL }}
       MYSQL_USERNAME: ${{ secrets.MYSQL_USERNAME }}
       MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+      EMAIL_HOST: ${{ secretes.EMAIL_HOST }}
+      EMAIL_PORT: ${{ secretes.EMAIL_PORT }}
+      EMAIL_USERNAME: ${{ secretes.EMAIL_USERNAME }}
+      EMAIL_PASSWORD: ${{ secretes.EMAIL_PASSWORD }}
 
     steps:
       - name: 코드 체크아웃
