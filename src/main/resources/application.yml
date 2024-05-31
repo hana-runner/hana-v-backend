@@ -16,8 +16,6 @@ spring:
     hibernate:
       ddl-auto: validate
     show-sql: true
-  config:
-    import: optional:file:.env[.properties]
 springdoc:
   default-consumes-media-type: application/json;charset=UTF-8
   default-produces-media-type: application/json;charset=UTF-8
