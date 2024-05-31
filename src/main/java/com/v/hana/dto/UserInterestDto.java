@@ -1,6 +1,5 @@
 package com.v.hana.dto;
 
-import com.v.hana.common.response.BaseResponse;
 import lombok.Builder;
 import lombok.Getter;
 
