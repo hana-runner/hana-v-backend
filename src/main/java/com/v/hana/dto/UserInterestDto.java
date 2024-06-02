@@ -1,16 +1,14 @@
-package com.v.hana.dto.interest;
+package com.v.hana.dto;
 
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 public class UserInterestDto {
-    private final Long interestId;
     private final String title, subtitle, imageUrl, color;
 
     @Builder
-    public UserInterestDto(Long interestId, String title, String subtitle, String imageUrl, String color) {
-        this.interestId = interestId;
+    public UserInterestDto(String title, String subtitle, String imageUrl, String color) {
         this.title = title;
         this.subtitle = subtitle;
         this.imageUrl = imageUrl;
