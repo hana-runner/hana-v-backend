@@ -1,4 +1,4 @@
-package com.v.hana.dto;
+package com.v.hana.dto.interest;
 
 import com.v.hana.common.response.BaseResponse;
 import java.util.ArrayList;
