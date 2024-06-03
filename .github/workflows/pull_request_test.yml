@@ -24,6 +24,9 @@ jobs:
       REDIS_PORT: ${{ secretes.REDIS_PORT }}
       REDIS_PASSWORD: ${{ secretes.REDIS_PASSWORD }}
       REDIS_VOLUME: ${{ secrets.REDIS_VOLUME }}
+      JWT_SECRET_KEY: ${{ secerts.JWT_SECRET_KEY }}
+      ACCESS_TOKEN_EXPIRATION: ${{ secrets.ACCESS_TOKEN_EXPIRATION }}
+      REFRESH_TOKEN_EXPIRATION: ${{ secrets.REFRESH_TOKEN_EXPIRATION }}
 
     steps:
       - name: 코드 체크아웃

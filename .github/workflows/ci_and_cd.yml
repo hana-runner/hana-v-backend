@@ -58,6 +58,9 @@ jobs:
           echo "ENV REDIS_PORT=${{ secrets.REDIS_PORT }}" >> dockerfile.temp
           echo "ENV REDIS_VOLUME=${{ secrets.REDIS_VOLUNE }}" >> dockerfile.temp
           echo "ENV REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}" >> dockerfile.temp
+          echo "ENV JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}" >> dockerfile.temp
+          echo "ENV REFRESH_TOKEN_EXPIRATION=${{ secrets.REFRESH_TOKEN_EXPIRATION }}" >> dockerfile.temp
+          echo "ENV ACCESS_TOKEN_EXPIRATION=${{ secrets.ACCESS_TOKEN_EXPIRATION }}" >> dockerfile.temp
           
           
           mv dockerfile.temp dockerfile
