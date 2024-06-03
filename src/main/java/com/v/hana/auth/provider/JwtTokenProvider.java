@@ -17,23 +17,30 @@ import org.springframework.stereotype.Component;
 @Component
 public class JwtTokenProvider {
     private final Key key;
+    private final int accessTokenExpiration;
+    private final int refreshTokenExpiration;
     private final UserRepository userRepository;
 
     public JwtTokenProvider(
-            @Value("${jwt.secret}") String secretKey, UserRepository userRepository) {
+            @Value("${jwt.secret}") String secretKey,
+            @Value("${jwt.access-token-expiration}") int accessTokenExpiration,
+            @Value("${jwt.refresh-token-expiration}") int refreshTokenExpiration,
+            UserRepository userRepository) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
+        this.accessTokenExpiration = accessTokenExpiration;
+        this.refreshTokenExpiration = refreshTokenExpiration;
         this.userRepository = userRepository;
     }
 
-    // refresh access 인증 토큰 발급
+    // refresh & access 인증 토큰 발급
     public JwtToken generateToken(User user) {
 
         Claims claims = Jwts.claims();
         claims.put("username", user.getUsername());
 
         long now = (new Date()).getTime();
-        Date refreshTokenExpiresIn = new Date(now + 86400000); // 24시간 후 만료
+        Date refreshTokenExpiresIn = new Date(now + refreshTokenExpiration); // 24시간 후 만료
 
         String refreshToken =
                 Jwts.builder()
@@ -52,7 +59,7 @@ public class JwtTokenProvider {
         Claims claims = Jwts.claims();
         claims.put("username", user.getUsername());
         long now = (new Date()).getTime();
-        Date accessTokenExpiresIn = new Date(now + 900000); // 15분 후 만료
+        Date accessTokenExpiresIn = new Date(now + accessTokenExpiration); // 15분 후 만료
 
         String newAccessToken =
                 Jwts.builder()

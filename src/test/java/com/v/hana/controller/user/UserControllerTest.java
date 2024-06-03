@@ -11,10 +11,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.v.hana.auth.provider.JwtTokenProvider;
 import com.v.hana.common.annotation.MethodInfo;
 import com.v.hana.common.annotation.TypeInfo;
 import com.v.hana.docs.RestDocsTest;
 import com.v.hana.dto.user.UserJoinRequest;
+import com.v.hana.repository.user.UserRepository;
 import com.v.hana.service.user.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -22,14 +24,16 @@ import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.ResultActions;
 
-@TypeInfo(name = "ExampleControllerTest", description = "예시 컨트롤러 테스트 클래스")
+@TypeInfo(name = "UserControllerTest", description = "예시 컨트롤러 테스트 클래스")
 public class UserControllerTest extends RestDocsTest {
 
     private final UserService userService = mock(UserService.class);
+    private final UserRepository userRepository = mock(UserRepository.class);
+    private final JwtTokenProvider jwtTokenProvider = mock(JwtTokenProvider.class);
 
     @Override
     protected Object initializeController() {
-        return new UserController(userService);
+        return new UserController(userService, jwtTokenProvider, userRepository);
     }
 
     @MethodInfo(name = "userJoinSuccessPOST", description = "회원 가입 API 성공을 테스트합니다.")
