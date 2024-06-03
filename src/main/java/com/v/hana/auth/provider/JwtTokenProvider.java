@@ -71,17 +71,17 @@ public class JwtTokenProvider {
 
     // 인증 토큰으로 유저 정보 불러오기
     public User getUser(String token) {
-            this.validateToken(token);
-            Claims claims =
-                    Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
-            if (claims.get("username") == null) {
-                throw new RuntimeException("유저 정보가 없는 토큰입니다.");
-            }
-            Optional<User> user = userRepository.findByUsername((String) claims.get("username"));
-            if (user.isPresent()) {
-                return user.get();
-            }
-            throw new RuntimeException("해당 아이디의 유저가 존재하지 않습니다.");
+        this.validateToken(token);
+        Claims claims =
+                Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+        if (claims.get("username") == null) {
+            throw new RuntimeException("유저 정보가 없는 토큰입니다.");
+        }
+        Optional<User> user = userRepository.findByUsername((String) claims.get("username"));
+        if (user.isPresent()) {
+            return user.get();
+        }
+        throw new RuntimeException("해당 아이디의 유저가 존재하지 않습니다.");
     }
 
     // 인증 토큰 유효성 검사

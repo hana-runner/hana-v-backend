@@ -5,14 +5,16 @@ import com.v.hana.auth.dto.JwtToken;
 import com.v.hana.auth.provider.JwtTokenProvider;
 import com.v.hana.common.annotation.MethodInfo;
 import com.v.hana.common.annotation.TypeInfo;
+import com.v.hana.common.response.DeleteSuccessResponse;
+import com.v.hana.common.response.GetSuccessResponse;
 import com.v.hana.common.response.PostSuccessResponse;
-import com.v.hana.dto.user.UserJoinRequest;
-import com.v.hana.dto.user.UserJwtTokenGetResponse;
-import com.v.hana.dto.user.UserLoginRequest;
+import com.v.hana.dto.user.*;
 import com.v.hana.entity.user.User;
 import com.v.hana.exception.user.InvalidUserAccessException;
+import com.v.hana.exception.user.UserNameDuplicateException;
 import com.v.hana.repository.user.UserRepository;
 import com.v.hana.service.user.UserService;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -43,17 +45,28 @@ public class UserController {
     }
 
     @PostMapping("/users/login")
-    public ResponseEntity<UserJwtTokenGetResponse> login(@RequestBody UserLoginRequest loginRequest) {
+    public ResponseEntity<UserJwtTokenGetResponse> login(
+            @RequestBody UserLoginRequest loginRequest) {
         Optional<User> user =
                 userRepository.findByUsernameAndPw(
                         loginRequest.getUsername(), loginRequest.getPw());
         if (user.isEmpty()) throw new InvalidUserAccessException();
         JwtToken jwtToken = jwtTokenProvider.generateToken(user.get());
-        UserJwtTokenGetResponse userJwtTokenGetResponse = UserJwtTokenGetResponse.builder()
-                .accessToken(jwtToken.getAccessToken())
-                .refreshToken(jwtToken.getRefreshToken())
-                .build();
+        UserJwtTokenGetResponse userJwtTokenGetResponse =
+                UserJwtTokenGetResponse.builder()
+                        .accessToken(jwtToken.getAccessToken())
+                        .refreshToken(jwtToken.getRefreshToken())
+                        .build();
         return ResponseEntity.ok(userJwtTokenGetResponse);
+    }
+
+    @GetMapping("users/check_dup")
+    public ResponseEntity<GetSuccessResponse> checkDupUsername(
+            @RequestParam("username") String username) {
+        if (userRepository.findByUsername(username).isPresent()) {
+            throw new UserNameDuplicateException();
+        }
+        return ResponseEntity.ok(GetSuccessResponse.builder().build());
     }
 
     @GetMapping("users/new_token")
@@ -67,8 +80,56 @@ public class UserController {
                         .build());
     }
 
-    @GetMapping("/users/username")
-    public String getUserInfo(@CurrentUser UserDetails userDetails, @RequestParam String message) {
-        return "User: " + userDetails.getUsername() + " Message: " + message;
+    @GetMapping("/users/find/username")
+    public ResponseEntity<GetSuccessResponse<Object>> findUsername(@RequestParam String email) {
+        // 아이디 찾기
+        Optional<User> user = userRepository.findByEmail(email);
+        if (user.isEmpty()) throw new InvalidUserAccessException();
+        return ResponseEntity.ok(GetSuccessResponse.builder().data(user.get().getName()).build());
+    }
+
+    @PostMapping("/users/update/pw")
+    public ResponseEntity<GetSuccessResponse<Object>> findPw(
+            @RequestBody UserChangePwRequest userChangePwRequest) {
+        // 비밀번호 찾기(갱신)
+        Optional<User> user = userRepository.findByEmail(userChangePwRequest.getEmail());
+        if (user.isEmpty()) throw new InvalidUserAccessException();
+        userRepository.updatePasswordByEmail(
+                userChangePwRequest.getEmail(), userChangePwRequest.getPw());
+        return ResponseEntity.ok(GetSuccessResponse.builder().data(user.get().getName()).build());
+    }
+
+    @DeleteMapping("/users/quit")
+    @Transactional
+    public ResponseEntity<DeleteSuccessResponse> deleteCurrentUser(
+            @CurrentUser UserDetails userDetails) {
+        Optional<User> user = userRepository.findByUsername(userDetails.getUsername());
+        if (user.isEmpty()) throw new InvalidUserAccessException();
+        userRepository.deleteUserByEmail(user.get().getEmail());
+        return ResponseEntity.ok(DeleteSuccessResponse.builder().build());
+    }
+
+    @GetMapping("users/info")
+    public ResponseEntity<UserGetResponse> getUserInfo(@CurrentUser UserDetails userDetails) {
+        Optional<User> user = userRepository.findByUsername(userDetails.getUsername());
+        if (user.isEmpty()) throw new InvalidUserAccessException();
+        return ResponseEntity.ok(
+                UserGetResponse.builder()
+                        .username(user.get().getUsername())
+                        .email(user.get().getEmail())
+                        .birthday(user.get().getBirthday())
+                        .gender(user.get().getGender())
+                        .build());
+    }
+
+    @PutMapping("users/update/email")
+    public ResponseEntity<PostSuccessResponse> updateUserEmail(
+            @CurrentUser UserDetails userDetails,
+            @RequestBody UpdateUserInfoRequest updateUserInfoRequest) {
+        Optional<User> user = userRepository.findByUsername(userDetails.getUsername());
+        if (user.isEmpty()) throw new InvalidUserAccessException();
+        userRepository.updateEmailByUsername(
+                userDetails.getUsername(), updateUserInfoRequest.getEmail());
+        return ResponseEntity.ok(PostSuccessResponse.builder().build());
     }
 }
