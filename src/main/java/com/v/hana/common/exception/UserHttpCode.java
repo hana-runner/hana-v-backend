@@ -8,7 +8,8 @@ import org.springframework.http.HttpStatus;
 @Getter
 public enum UserHttpCode implements BaseHttpCode {
     USER_EMAIL_DUPLICATE(HttpStatus.BAD_REQUEST, "USER-001", "입력 받은 사용자 이메일이 이미 존재함."),
-    USER_NAME_DUPLICATE(HttpStatus.BAD_REQUEST, "USER-002", "입력 받은 사용자 이름이 이미 존재함.");
+    USER_NAME_DUPLICATE(HttpStatus.BAD_REQUEST, "USER-002", "입력 받은 사용자 이름이 이미 존재함."),
+    EMPTY_USER(HttpStatus.BAD_REQUEST, "USER-003", "사용자 정보가 없습니다.");
 
     private final HttpStatus httpStatus;
     private final String code;
