@@ -27,11 +27,19 @@ public class AccountApi {
     @Column(name = "bank_name", nullable = false, length = 50)
     private String bankName;
 
+    @Column(name = "account_name", nullable = false, length = 50)
+    private String accountName;
+
+    @Column(name = "account_type", nullable = false, length = 50)
+    private String accountType;
+
     @Builder
-    public AccountApi(Long id, String accountNumber, Long balance, String bankName) {
+    public AccountApi(Long id, String accountNumber, Long balance, String bankName, String accountName, String accountType) {
         this.id = id;
         this.accountNumber = accountNumber;
         this.balance = balance;
         this.bankName = bankName;
+        this.accountName = accountName;
+        this.accountType = accountType;
     }
 }
