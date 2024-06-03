@@ -30,7 +30,7 @@ public class UserController {
     private final UserRepository userRepository;
 
     @MethodInfo(name = "user join", description = "유저 컨트롤러의 회원 가입 메소드를 실행합니다.")
-    @PostMapping("/users")
+    @PostMapping("/users/join")
     public ResponseEntity<PostSuccessResponse> join(
             @Valid @RequestBody UserJoinRequest userJoinRequest) {
         userService.join(
@@ -42,7 +42,7 @@ public class UserController {
         return ResponseEntity.ok(PostSuccessResponse.builder().build());
     }
 
-    @PostMapping("/users/login") // 액세스 토큰으로 로그인
+    @PostMapping("/users/login")
     public ResponseEntity<UserJwtTokenGetResponse> login(@RequestBody UserLoginRequest loginRequest) {
         Optional<User> user =
                 userRepository.findByUsernameAndPw(
@@ -56,7 +56,7 @@ public class UserController {
         return ResponseEntity.ok(userJwtTokenGetResponse);
     }
 
-    @GetMapping("users/new_access_token")
+    @GetMapping("users/new_token")
     public ResponseEntity<UserJwtTokenGetResponse> getNewAccessToken(
             @RequestParam("refresh_token") String refreshToken) {
         JwtToken jwtToken = jwtTokenProvider.getAccessToken(refreshToken);

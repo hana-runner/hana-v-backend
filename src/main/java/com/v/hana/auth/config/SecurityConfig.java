@@ -31,9 +31,9 @@ public class SecurityConfig {
                         (authz) ->
                                 authz.requestMatchers(
                                                 "/swagger-ui/**",
-                                                "/v1/api/users",
+                                                "/v1/api/users/join",
                                                 "v1/api/users/login",
-                                                "v1/api/users/new_access_token")
+                                                "v1/api/users/new_token")
                                         .permitAll()
                                         .anyRequest()
                                         .authenticated())
