@@ -15,14 +15,14 @@ import org.springframework.web.bind.annotation.*;
 public class EmailController {
     private final MailService mailService;
 
-    @PostMapping("/emails/verification-requests")
+    @PostMapping("/emails/authcode")
     public ResponseEntity sendMessage(@RequestParam("email") @Valid String email) {
         mailService.sendCodeToEmail(email);
 
         return ResponseEntity.status(HttpStatus.OK).body("이메일 전송 완료");
     }
 
-    @GetMapping("/emails/verifications")
+    @GetMapping("/emails/check/authcode")
     public ResponseEntity verificationEmail(
             @RequestParam("email") @Valid String email, @RequestParam("code") String authCode) {
         boolean response = mailService.verifiedCode(email, authCode);
