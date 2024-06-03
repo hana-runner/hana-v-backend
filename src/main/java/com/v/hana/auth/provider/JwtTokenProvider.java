@@ -71,7 +71,6 @@ public class JwtTokenProvider {
 
     // 인증 토큰으로 유저 정보 불러오기
     public User getUser(String token) {
-        try {
             this.validateToken(token);
             Claims claims =
                     Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
@@ -83,9 +82,6 @@ public class JwtTokenProvider {
                 return user.get();
             }
             throw new RuntimeException("해당 아이디의 유저가 존재하지 않습니다.");
-        } catch (ExpiredJwtException e) {
-            throw new RuntimeException("만료된 토큰입니다.");
-        }
     }
 
     // 인증 토큰 유효성 검사
@@ -98,8 +94,8 @@ public class JwtTokenProvider {
                     .getBody()
                     .getExpiration()
                     .after(new Date());
-        } catch (Exception e) {
-            return false;
+        } catch (ExpiredJwtException e) {
+            throw new RuntimeException("만료된 토큰입니다.");
         }
     }
 }
