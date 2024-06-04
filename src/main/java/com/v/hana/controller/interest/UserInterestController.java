@@ -4,7 +4,6 @@ import com.v.hana.command.interest.GetUserInterestTransactionsCommand;
 import com.v.hana.command.interest.GetUserInterestsCommand;
 import com.v.hana.common.annotation.MethodInfo;
 import com.v.hana.common.annotation.TypeInfo;
-import com.v.hana.dto.interest.AddUserInterestRequest;
 import com.v.hana.dto.interest.UserInterestResponse;
 import com.v.hana.dto.interest.UserInterestTransactionsResponse;
 import com.v.hana.usecase.interest.UserInterestUseCase;
@@ -29,10 +28,19 @@ public class UserInterestController {
 
     @MethodInfo(name = "getUserInterests", description = "사용자 관심사별 거래 내역 가져오기")
     @GetMapping("/user-interests/transaction/{interestId}")
-    public ResponseEntity<UserInterestTransactionsResponse> getUserInterestTransaction(@PathVariable Long interestId, @RequestParam Long userId, @RequestParam int year, @RequestParam int month) {
+    public ResponseEntity<UserInterestTransactionsResponse> getUserInterestTransaction(
+            @PathVariable Long interestId,
+            @RequestParam Long userId,
+            @RequestParam int year,
+            @RequestParam int month) {
         UserInterestTransactionsResponse transactions =
                 userInterestUseCase.getUserInterestTransactions(
-                    GetUserInterestTransactionsCommand.builder().interestId(interestId).userId(userId).year(year).month(month).build());
+                        GetUserInterestTransactionsCommand.builder()
+                                .interestId(interestId)
+                                .userId(userId)
+                                .year(year)
+                                .month(month)
+                                .build());
         return ResponseEntity.ok(transactions);
     }
 

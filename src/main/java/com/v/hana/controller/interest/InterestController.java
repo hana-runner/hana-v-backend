@@ -1,6 +1,5 @@
 package com.v.hana.controller.interest;
 
-import com.v.hana.command.interest.GetInterestsCommand;
 import com.v.hana.common.annotation.MethodInfo;
 import com.v.hana.common.annotation.TypeInfo;
 import com.v.hana.dto.interest.InterestsResponse;

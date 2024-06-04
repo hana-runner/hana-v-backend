@@ -7,6 +7,5 @@ import lombok.Getter;
 public class GetInterestsCommand {
 
     @Builder
-    public GetInterestsCommand() {
-    }
+    public GetInterestsCommand() {}
 }

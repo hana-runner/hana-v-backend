@@ -1,8 +1,5 @@
 package com.v.hana.dto.interest;
 
-import lombok.Builder;
-import lombok.Getter;
-
 import java.time.LocalDateTime;
 
 public interface UserInterestTransactionDto {

@@ -9,5 +9,6 @@ public class GetAccountsCommand {
 
     @Builder
     public GetAccountsCommand(Long userId) {
-        this.userId = userId;}
+        this.userId = userId;
+    }
 }
