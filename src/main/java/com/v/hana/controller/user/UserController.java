@@ -103,15 +103,16 @@ public class UserController {
 
     @DeleteMapping("/users/quit")
     @Transactional
-    public ResponseEntity<DeleteSuccessResponse> deleteCurrentUser(
-            @CurrentUser UserDetails userDetails) {
+    @CurrentUser
+    public ResponseEntity<DeleteSuccessResponse> deleteCurrentUser() {
         User user = securityUtil.getCurrentUser();
         userRepository.deleteUserByEmail(user.getEmail());
         return ResponseEntity.ok(DeleteSuccessResponse.builder().build());
     }
 
     @GetMapping("users/info")
-    public ResponseEntity<UserGetResponse> getUserInfo(@CurrentUser UserDetails userDetails) {
+    @CurrentUser
+    public ResponseEntity<UserGetResponse> getUserInfo() {
         User user = securityUtil.getCurrentUser();
         return ResponseEntity.ok(
                 UserGetResponse.builder()
@@ -123,12 +124,12 @@ public class UserController {
     }
 
     @PutMapping("users/update/email")
+    @CurrentUser
     public ResponseEntity<PostSuccessResponse> updateUserEmail(
-            @CurrentUser UserDetails userDetails,
             @RequestBody UpdateUserInfoRequest updateUserInfoRequest) {
         User user = securityUtil.getCurrentUser();
         userRepository.updateEmailByUsername(
-                userDetails.getUsername(), updateUserInfoRequest.getEmail());
+                user.getUsername(), updateUserInfoRequest.getEmail());
         return ResponseEntity.ok(PostSuccessResponse.builder().build());
     }
 }
