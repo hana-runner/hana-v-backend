@@ -6,11 +6,15 @@ import lombok.Getter;
 
 @Getter
 public class AccountCheckResponse extends BaseResponse {
-//    private final int response;
-//
-//    @Builder
-//    public AccountCheckResponse(int response){
-//        this.response=response;
-//    }
+    private final String bankName;
+    private final String accountNumber;
+    private final Long balance;
+
+    @Builder
+    public AccountCheckResponse(String bankName, String accountNumber, Long balance){
+        this.bankName = bankName;
+        this.accountNumber = accountNumber;
+        this.balance = balance;
+    }
 
 }

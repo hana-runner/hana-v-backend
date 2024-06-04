@@ -4,6 +4,7 @@ import com.v.hana.command.account.GetAccountsCommand;
 import com.v.hana.command.account.ReadTransactionsCommand;
 import com.v.hana.common.annotation.MethodInfo;
 import com.v.hana.common.annotation.TypeInfo;
+import com.v.hana.dto.account.AccountCheckResponse;
 import com.v.hana.dto.account.AccountDto;
 import com.v.hana.dto.account.AccountGetResponse;
 import com.v.hana.dto.account.AccountTransactionGetResponse;
@@ -11,7 +12,6 @@ import com.v.hana.entity.account.Account;
 import com.v.hana.event.account.ReadAccountTransactionEvent;
 import com.v.hana.event.account.ReadAccountTransactionEventHandler;
 import com.v.hana.exception.account.AccountNotFoundException;
-import com.v.hana.entity.account.AccountApi;
 import com.v.hana.repository.account.AccountApiRepository;
 import com.v.hana.repository.account.AccountRepository;
 import com.v.hana.usecase.account.AccountUseCase;
@@ -32,27 +32,20 @@ public class AccountService implements AccountUseCase {
     @Override
     public AccountGetResponse getAccounts(GetAccountsCommand command) {
 
-        return AccountGetResponse.builder()
-                .data(
-                        accountRepository.findByUserId(command.getUserId()).stream()
-                                .map(
-                                        account -> {
-                                            Account accountFound =
-                                                    accountRepository
-                                                            .findById(account.getId())
-                                                            .orElseThrow(
-                                                                    () ->
-                                                                            new RuntimeException(
-                                                                                    "Account not found"));
-                                            return AccountDto.builder()
-                                                    .id(accountFound.getId())
-                                                    .accountName(accountFound.getAccountName())
-                                                    .accountNumber(accountFound.getAccountNumber())
-                                                    .accountType(accountFound.getAccountType())
-                                                    .balance(accountFound.getBalance())
-                                                    .build();
-                                        })
-                                .collect(Collectors.toCollection(ArrayList::new)))
+        return AccountGetResponse.builder().data(accountRepository.findByUserId(command.getUserId()).stream()
+                        .map(
+                                account -> {
+                                    Account accountFound = accountRepository.findById(account.getId())
+                                            .orElseThrow(AccountNotFoundException::new);
+                                    return AccountDto.builder()
+                                            .id(accountFound.getId())
+                                            .accountName(accountFound.getAccountName())
+                                            .accountNumber(accountFound.getAccountNumber())
+                                            .accountType(accountFound.getAccountType())
+                                            .balance(accountFound.getBalance())
+                                            .build();
+                                })
+                        .collect(Collectors.toCollection(ArrayList::new)))
                 .build();
     }
 
@@ -74,11 +67,9 @@ public class AccountService implements AccountUseCase {
     }
     @MethodInfo(name = "checkAccountNumber", description = "등록 요청한 계좌번호가 유효한지 확인합니다.")
     @Override
-    public AccountApi checkAccountNumber(CheckAccountNumberCommand command) {
+    public AccountCheckResponse checkAccountNumber(CheckAccountNumberCommand command) {
 
-        return accountApiRepository.findByAccountNumber(command.getAccountNumber()).orElseThrow(
-                () -> new RuntimeException("Account not found")
-        );
+        return accountApiRepository.findByAccountNumber(command.getAccountNumber()).orElseThrow(AccountNotFoundException::new);
     }
 
 

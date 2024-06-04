@@ -12,7 +12,7 @@ public enum AccountHttpCode implements BaseHttpCode {
     private final String message;
 
     @Override
-    public BaseHttpReason getHttpReason() {
+    public BaseHttpReason getHttpReason(){
         return BaseHttpReason.builder().httpStatus(httpStatus).code(code).message(message).build();
     }
 

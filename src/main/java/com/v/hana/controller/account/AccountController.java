@@ -5,6 +5,7 @@ import com.v.hana.command.account.ReadTransactionsCommand;
 import com.v.hana.common.annotation.MethodInfo;
 import com.v.hana.common.annotation.TypeInfo;
 import com.v.hana.dto.account.AccountCheckRequest;
+import com.v.hana.dto.account.AccountCheckResponse;
 import com.v.hana.dto.account.AccountGetResponse;
 import com.v.hana.dto.account.AccountTransactionGetResponse;
 import com.v.hana.repository.user.UserRepository;
@@ -69,8 +70,8 @@ public class AccountController {
 
     @MethodInfo(name = "checkAccountNumber", description = "등록 요청한 계좌번호가 유효한지 확인합니다.")
     @PostMapping("/accounts/check/account-info")
-    public ResponseEntity<AccountApi> checkAccountNumber(@RequestBody AccountCheckRequest request){
-        AccountApi checkedAccountNumber = accountUseCase.checkAccountNumber(CheckAccountNumberCommand.builder().accountNumber(request.getAccountNumber()).build());
+    public ResponseEntity<AccountCheckResponse> checkAccountNumber(@RequestBody AccountCheckRequest request){
+        AccountCheckResponse checkedAccountNumber = accountUseCase.checkAccountNumber(CheckAccountNumberCommand.builder().accountNumber(request.getAccountNumber()).build());
 
         return ResponseEntity.ok(checkedAccountNumber);
     }
