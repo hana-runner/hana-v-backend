@@ -1,16 +1,21 @@
 package com.v.hana.service.interest;
 
+import com.v.hana.command.interest.GetUserInterestReportsCommand;
 import com.v.hana.command.interest.GetUserInterestTransactionsCommand;
 import com.v.hana.command.interest.GetUserInterestsCommand;
 import com.v.hana.common.annotation.MethodInfo;
 import com.v.hana.common.annotation.TypeInfo;
 import com.v.hana.dto.interest.*;
 import com.v.hana.entity.interest.Interest;
+import com.v.hana.event.interest.SumAmountEvent;
+import com.v.hana.event.interest.SumAmountEventListener;
 import com.v.hana.repository.interest.InterestRepository;
 import com.v.hana.repository.interest.UserInterestRepository;
 import com.v.hana.repository.transaction.TransactionHistoryDetailRepository;
 import com.v.hana.repository.transaction.TransactionHistoryRepository;
 import com.v.hana.usecase.interest.UserInterestUseCase;
+
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
@@ -25,6 +30,8 @@ public class UserInterestService implements UserInterestUseCase {
     private final TransactionHistoryRepository transactionHistoryRepository;
 
     private final TransactionHistoryDetailRepository transactionHistoryDetailRepository;
+
+    private final SumAmountEventListener sumAmountEventListener;
 
     @MethodInfo(name = "getUserInterests", description = "유저의 관심사를 조회합니다.")
     @Override
@@ -82,14 +89,27 @@ public class UserInterestService implements UserInterestUseCase {
         return UserInterestTransactionsResponse.builder().data(userInterestTransactionsDto).build();
     }
 
+    @MethodInfo(name = "getUserInterestReports", description = "유저의 관심사별 거래 내역 리포트를 조회합니다.")
+    @Override
+    public UserInterestReportsResponse getUserInterestReports(
+            GetUserInterestReportsCommand getUserInterestReportsCommand) {
+        return sumAmountEventListener.handle(
+                SumAmountEvent.builder()
+                        .userId(getUserInterestReportsCommand.getUserId())
+                        .interestId(getUserInterestReportsCommand.getInterestId())
+                        .build());
+    }
+
     public UserInterestService(
             InterestRepository interestRepository,
             UserInterestRepository userInterestRepository,
             TransactionHistoryRepository transactionHistoryRepository,
-            TransactionHistoryDetailRepository transactionHistoryDetailRepository) {
+            TransactionHistoryDetailRepository transactionHistoryDetailRepository,
+            SumAmountEventListener sumAmountEventListener) {
         this.interestRepository = interestRepository;
         this.userInterestRepository = userInterestRepository;
         this.transactionHistoryRepository = transactionHistoryRepository;
         this.transactionHistoryDetailRepository = transactionHistoryDetailRepository;
+        this.sumAmountEventListener = sumAmountEventListener;
     }
 }
