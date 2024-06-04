@@ -1,12 +1,13 @@
 package com.v.hana.dto.transaction;
 
+import com.v.hana.common.response.BaseResponse;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class TransactionDto {
+public class TransactionHistoryDetailsPostResponse extends BaseResponse {
     private final Long id; // transactionHistoryId
     private final Long accountId;
     private final String categoryTitle;
@@ -18,10 +19,10 @@ public class TransactionDto {
     private final Long amount;
     private final Long balance;
     private final LocalDateTime createdAt;
-    private final ArrayList<TransactionHistoryDto> transactionHistoryDetails;
+    private final ArrayList<TransactionHistoryDetailDto> transactionHistoryDetails;
 
     @Builder
-    public TransactionDto(
+    public TransactionHistoryDetailsPostResponse(
             Long id,
             Long accountId,
             String categoryTitle,
@@ -33,7 +34,7 @@ public class TransactionDto {
             Long amount,
             Long balance,
             LocalDateTime createdAt,
-            ArrayList<TransactionHistoryDto> transactionHistoryDetails) {
+            ArrayList<TransactionHistoryDetailDto> transactionHistoryDetails) {
         this.id = id;
         this.accountId = accountId;
         this.categoryTitle = categoryTitle;
