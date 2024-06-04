@@ -1,10 +1,11 @@
 package com.v.hana.event.account;
 
 import com.v.hana.command.transaction.ReadTransactionsCommand;
+import com.v.hana.common.annotation.MethodInfo;
 import com.v.hana.common.annotation.TypeInfo;
 import com.v.hana.dto.account.AccountTransactionGetResponse;
 import com.v.hana.dto.interest.InterestDto;
-import com.v.hana.dto.transaction.TransactionDto;
+import com.v.hana.dto.transaction.TransactionHistoryDetailDto;
 import com.v.hana.dto.transaction.TransactionHistoryDto;
 import com.v.hana.entity.transaction.TransactionHistory;
 import com.v.hana.entity.transaction.TransactionHistoryDetail;
@@ -16,16 +17,16 @@ import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import lombok.Builder;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
-@TypeInfo(name = "ReadAccountTransactionEventHandler", description = "계좌 거래 내역 조회 이벤트 핸들러")
+@TypeInfo(name = "ReadAccountTransactionEventListener", description = "계좌 거래 내역 조회 이벤트 핸들러")
 @Component
-public class ReadAccountTransactionEventHandler {
+public class ReadAccountTransactionEventListener {
     private final TransactionHistoryUseCase transactionHistoryUseCase;
     private final TransactionHistoryDetailUseCase transactionHistoryDetailUseCase;
 
-    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    @MethodInfo(name = "handle", description = "계좌 거래 내역 조회 이벤트를 처리합니다.")
+    @TransactionalEventListener(fallbackExecution = true)
     public AccountTransactionGetResponse handle(
             ReadAccountTransactionEvent readAccountTransactionEvent) {
         CompletableFuture<ArrayList<TransactionHistory>> transactionHistoryFuture =
@@ -85,7 +86,7 @@ public class ReadAccountTransactionEventHandler {
                                                                                     .getEnd()))
                                     .map(
                                             transactionHistory ->
-                                                    TransactionDto.builder()
+                                                    TransactionHistoryDto.builder()
                                                             .id(transactionHistory.getId())
                                                             .accountId(
                                                                     transactionHistory
@@ -126,11 +127,8 @@ public class ReadAccountTransactionEventHandler {
                                                                                                                     .getId()))
                                                                             .map(
                                                                                     transactionHistoryDetail ->
-                                                                                            TransactionHistoryDto
+                                                                                            TransactionHistoryDetailDto
                                                                                                     .builder()
-                                                                                                    .id(
-                                                                                                            transactionHistoryDetail
-                                                                                                                    .getId())
                                                                                                     .interest(
                                                                                                             InterestDto
                                                                                                                     .builder()
@@ -196,7 +194,7 @@ public class ReadAccountTransactionEventHandler {
                                                                                     .getEnd()))
                                     .map(
                                             transactionHistory ->
-                                                    TransactionDto.builder()
+                                                    TransactionHistoryDto.builder()
                                                             .id(transactionHistory.getId())
                                                             .accountId(
                                                                     transactionHistory
@@ -237,11 +235,8 @@ public class ReadAccountTransactionEventHandler {
                                                                                                                     .getId()))
                                                                             .map(
                                                                                     transactionHistoryDetail ->
-                                                                                            TransactionHistoryDto
+                                                                                            TransactionHistoryDetailDto
                                                                                                     .builder()
-                                                                                                    .id(
-                                                                                                            transactionHistoryDetail
-                                                                                                                    .getId())
                                                                                                     .interest(
                                                                                                             InterestDto
                                                                                                                     .builder()
@@ -307,7 +302,7 @@ public class ReadAccountTransactionEventHandler {
                                                                                     .getEnd()))
                                     .map(
                                             transactionHistory ->
-                                                    TransactionDto.builder()
+                                                    TransactionHistoryDto.builder()
                                                             .id(transactionHistory.getId())
                                                             .accountId(
                                                                     transactionHistory
@@ -348,11 +343,8 @@ public class ReadAccountTransactionEventHandler {
                                                                                                                     .getId()))
                                                                             .map(
                                                                                     transactionHistoryDetail ->
-                                                                                            TransactionHistoryDto
+                                                                                            TransactionHistoryDetailDto
                                                                                                     .builder()
-                                                                                                    .id(
-                                                                                                            transactionHistoryDetail
-                                                                                                                    .getId())
                                                                                                     .interest(
                                                                                                             InterestDto
                                                                                                                     .builder()
@@ -394,7 +386,7 @@ public class ReadAccountTransactionEventHandler {
     }
 
     @Builder
-    public ReadAccountTransactionEventHandler(
+    public ReadAccountTransactionEventListener(
             TransactionHistoryUseCase transactionHistoryUseCase,
             TransactionHistoryDetailUseCase transactionHistoryDetailUseCase) {
         this.transactionHistoryUseCase = transactionHistoryUseCase;

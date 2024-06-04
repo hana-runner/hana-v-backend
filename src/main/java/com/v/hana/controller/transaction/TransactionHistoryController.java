@@ -4,12 +4,11 @@ import com.v.hana.command.category.FindCategoryByIdCommand;
 import com.v.hana.command.transaction.ReadTransactionHistoryByIdCommend;
 import com.v.hana.command.transaction.ReadTransactionHistoryDetailsByIdCommend;
 import com.v.hana.command.transaction.UpdateTransactionHistoryCommand;
+import com.v.hana.command.transaction.UpdateTransactionHistoryDetailCommend;
 import com.v.hana.common.annotation.MethodInfo;
 import com.v.hana.common.annotation.TypeInfo;
 import com.v.hana.dto.interest.InterestDto;
-import com.v.hana.dto.transaction.TransactionHistoryGetResponse;
-import com.v.hana.dto.transaction.TransactionHistoryPutRequest;
-import com.v.hana.dto.transaction.TransactionHistoryPutResponse;
+import com.v.hana.dto.transaction.*;
 import com.v.hana.entity.transaction.TransactionHistory;
 import com.v.hana.entity.transaction.TransactionHistoryDetail;
 import com.v.hana.usecase.category.CategoryUseCase;
@@ -72,17 +71,42 @@ public class TransactionHistoryController {
                         .amount(transactionHistory.getAmount())
                         .balance(transactionHistory.getBalance())
                         .createdAt(transactionHistory.getCreatedAt())
-                        .interests(
+                        .transactionHistoryDetails(
                                 transactionHistoryDetails.stream()
-                                        .map(TransactionHistoryDetail::getInterest)
+                                        .filter(
+                                                transactionHistoryDetail ->
+                                                        transactionHistoryDetail
+                                                                .getTransactionHistory()
+                                                                .getId()
+                                                                .equals(transactionHistory.getId()))
                                         .map(
-                                                interest ->
-                                                        InterestDto.builder()
-                                                                .interestId(interest.getId())
-                                                                .title(interest.getTitle())
+                                                transactionHistoryDetail ->
+                                                        TransactionHistoryDetailDto.builder()
+                                                                .interest(
+                                                                        InterestDto.builder()
+                                                                                .interestId(
+                                                                                        transactionHistoryDetail
+                                                                                                .getInterest()
+                                                                                                .getId())
+                                                                                .title(
+                                                                                        transactionHistoryDetail
+                                                                                                .getInterest()
+                                                                                                .getTitle())
+                                                                                .description(
+                                                                                        transactionHistoryDetail
+                                                                                                .getInterest()
+                                                                                                .getDescription())
+                                                                                .color(
+                                                                                        transactionHistoryDetail
+                                                                                                .getInterest()
+                                                                                                .getColor())
+                                                                                .build())
                                                                 .description(
-                                                                        interest.getDescription())
-                                                                .color(interest.getColor())
+                                                                        transactionHistoryDetail
+                                                                                .getDescription())
+                                                                .amount(
+                                                                        transactionHistoryDetail
+                                                                                .getAmount())
                                                                 .build())
                                         .collect(Collectors.toCollection(ArrayList::new)))
                         .build());
@@ -136,17 +160,128 @@ public class TransactionHistoryController {
                         .amount(transactionHistory.getAmount())
                         .balance(transactionHistory.getBalance())
                         .createdAt(transactionHistory.getCreatedAt())
-                        .interests(
+                        .transactionHistoryDetails(
                                 transactionHistoryDetails.stream()
-                                        .map(TransactionHistoryDetail::getInterest)
+                                        .filter(
+                                                transactionHistoryDetail ->
+                                                        transactionHistoryDetail
+                                                                .getTransactionHistory()
+                                                                .getId()
+                                                                .equals(transactionHistory.getId()))
                                         .map(
-                                                interest ->
-                                                        InterestDto.builder()
-                                                                .interestId(interest.getId())
-                                                                .title(interest.getTitle())
+                                                transactionHistoryDetail ->
+                                                        TransactionHistoryDetailDto.builder()
+                                                                .interest(
+                                                                        InterestDto.builder()
+                                                                                .interestId(
+                                                                                        transactionHistoryDetail
+                                                                                                .getInterest()
+                                                                                                .getId())
+                                                                                .title(
+                                                                                        transactionHistoryDetail
+                                                                                                .getInterest()
+                                                                                                .getTitle())
+                                                                                .description(
+                                                                                        transactionHistoryDetail
+                                                                                                .getInterest()
+                                                                                                .getDescription())
+                                                                                .color(
+                                                                                        transactionHistoryDetail
+                                                                                                .getInterest()
+                                                                                                .getColor())
+                                                                                .build())
                                                                 .description(
-                                                                        interest.getDescription())
-                                                                .color(interest.getColor())
+                                                                        transactionHistoryDetail
+                                                                                .getDescription())
+                                                                .amount(
+                                                                        transactionHistoryDetail
+                                                                                .getAmount())
+                                                                .build())
+                                        .collect(Collectors.toCollection(ArrayList::new)))
+                        .build());
+    }
+
+    @MethodInfo(name = "transactionHistoryDetailsPost", description = "거래내역 상세를 수정합니다.")
+    @PostMapping("/transaction-history-details/transaction-history/{transactionHistoryId}")
+    public ResponseEntity<TransactionHistoryDetailsPostResponse>
+            transactionHistoryDetailsPostResponse(
+                    @PathVariable Long transactionHistoryId,
+                    @Valid @RequestBody
+                            TransactionHistoryDetailsPostRequest
+                                    transactionHistoryDetailsPostRequest) {
+        // TODO: 회원 검증 로직 추가
+
+        CompletableFuture<TransactionHistory> transactionHistoryFuture =
+                CompletableFuture.supplyAsync(
+                        () ->
+                                transactionHistoryUseCase.readTransactionHistoryById(
+                                        ReadTransactionHistoryByIdCommend.builder()
+                                                .id(transactionHistoryId)
+                                                .build()));
+        CompletableFuture<ArrayList<TransactionHistoryDetail>> transactionHistoryDetailsFuture =
+                CompletableFuture.supplyAsync(
+                        () ->
+                                transactionHistoryDetailUseCase.updateTransactionHistoryDetails(
+                                        UpdateTransactionHistoryDetailCommend.builder()
+                                                .id(transactionHistoryId)
+                                                .interests(transactionHistoryDetailsPostRequest.getInterests())
+                                                .build()));
+
+        CompletableFuture.allOf(transactionHistoryFuture, transactionHistoryDetailsFuture).join();
+
+        TransactionHistory transactionHistory = transactionHistoryFuture.join();
+        ArrayList<TransactionHistoryDetail> transactionHistoryDetails =
+                transactionHistoryDetailsFuture.join();
+
+        return ResponseEntity.ok(
+                TransactionHistoryDetailsPostResponse.builder()
+                        .id(transactionHistory.getId())
+                        .accountId(transactionHistory.getAccount().getId())
+                        .categoryTitle(transactionHistory.getCategory().getTitle())
+                        .categoryColor(transactionHistory.getCategory().getColor())
+                        .approvalNumber(transactionHistory.getApprovalNumber())
+                        .type(transactionHistory.getType())
+                        .description(transactionHistory.getDescription())
+                        .action(transactionHistory.getAction())
+                        .amount(transactionHistory.getAmount())
+                        .balance(transactionHistory.getBalance())
+                        .createdAt(transactionHistory.getCreatedAt())
+                        .transactionHistoryDetails(
+                                transactionHistoryDetails.stream()
+                                        .filter(
+                                                transactionHistoryDetail ->
+                                                        transactionHistoryDetail
+                                                                .getTransactionHistory()
+                                                                .getId()
+                                                                .equals(transactionHistory.getId()))
+                                        .map(
+                                                transactionHistoryDetail ->
+                                                        TransactionHistoryDetailDto.builder()
+                                                                .interest(
+                                                                        InterestDto.builder()
+                                                                                .interestId(
+                                                                                        transactionHistoryDetail
+                                                                                                .getInterest()
+                                                                                                .getId())
+                                                                                .title(
+                                                                                        transactionHistoryDetail
+                                                                                                .getInterest()
+                                                                                                .getTitle())
+                                                                                .description(
+                                                                                        transactionHistoryDetail
+                                                                                                .getInterest()
+                                                                                                .getDescription())
+                                                                                .color(
+                                                                                        transactionHistoryDetail
+                                                                                                .getInterest()
+                                                                                                .getColor())
+                                                                                .build())
+                                                                .description(
+                                                                        transactionHistoryDetail
+                                                                                .getDescription())
+                                                                .amount(
+                                                                        transactionHistoryDetail
+                                                                                .getAmount())
                                                                 .build())
                                         .collect(Collectors.toCollection(ArrayList::new)))
                         .build());

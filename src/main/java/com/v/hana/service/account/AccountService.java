@@ -13,7 +13,7 @@ import com.v.hana.dto.account.AccountTransactionGetResponse;
 import com.v.hana.dto.account.AccountRegisterResponse;
 import com.v.hana.entity.account.Account;
 import com.v.hana.event.account.ReadAccountTransactionEvent;
-import com.v.hana.event.account.ReadAccountTransactionEventHandler;
+import com.v.hana.event.account.ReadAccountTransactionEventListener;
 import com.v.hana.exception.account.AccountNotFoundException;
 import com.v.hana.repository.account.AccountApiRepository;
 import com.v.hana.repository.account.AccountRepository;
@@ -30,8 +30,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AccountService implements AccountUseCase {
     private final AccountRepository accountRepository;
-    private final ReadAccountTransactionEventHandler readAccountTransactionEventHandler;
     private final AccountApiRepository accountApiRepository;
+    private final ReadAccountTransactionEventListener readAccountTransactionEventListener;
 
     @MethodInfo(name = "getAccounts", description = "등록된 계좌 목록을 조회합니다.")
     @Override
@@ -58,7 +58,7 @@ public class AccountService implements AccountUseCase {
     @Override
     public AccountTransactionGetResponse readTransactionHistories(
             ReadTransactionsCommand readTransactionsCommand) {
-        return readAccountTransactionEventHandler.handle(
+        return readAccountTransactionEventListener.handle(
                 ReadAccountTransactionEvent.builder()
                         .account(
                                 accountRepository
