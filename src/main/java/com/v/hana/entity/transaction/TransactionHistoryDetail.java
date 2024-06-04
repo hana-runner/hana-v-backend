@@ -39,6 +39,14 @@ public class TransactionHistoryDetail {
     private Long amount;
 
     @Builder
+    public TransactionHistoryDetail(Long id, Interest interest, String description, Long amount) {
+        this.id = id;
+        this.interest = interest;
+        this.description = description;
+        this.amount = amount;
+    }
+
+    @Builder
     public TransactionHistoryDetail(
             TransactionHistory transactionHistory,
             User user,

@@ -1,6 +1,5 @@
 package com.v.hana.dto.transaction;
 
-import com.v.hana.entity.interest.Interest;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import lombok.Builder;
@@ -19,7 +18,7 @@ public class TransactionDto {
     private final Long amount;
     private final Long balance;
     private final LocalDateTime createdAt;
-    private final ArrayList<Interest> interests;
+    private final ArrayList<TransactionHistoryDto> transactionHistoryDetails;
 
     @Builder
     public TransactionDto(
@@ -34,7 +33,7 @@ public class TransactionDto {
             Long amount,
             Long balance,
             LocalDateTime createdAt,
-            ArrayList<Interest> interests) {
+            ArrayList<TransactionHistoryDto> transactionHistoryDetails) {
         this.id = id;
         this.accountId = accountId;
         this.categoryTitle = categoryTitle;
@@ -46,6 +45,6 @@ public class TransactionDto {
         this.amount = amount;
         this.balance = balance;
         this.createdAt = createdAt;
-        this.interests = interests;
+        this.transactionHistoryDetails = transactionHistoryDetails;
     }
 }

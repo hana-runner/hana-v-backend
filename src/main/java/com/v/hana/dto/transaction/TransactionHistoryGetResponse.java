@@ -1,7 +1,7 @@
 package com.v.hana.dto.transaction;
 
 import com.v.hana.common.response.BaseResponse;
-import com.v.hana.entity.interest.Interest;
+import com.v.hana.dto.interest.InterestDto;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import lombok.Builder;
@@ -20,7 +20,7 @@ public class TransactionHistoryGetResponse extends BaseResponse {
     private final Long amount;
     private final Long balance;
     private final LocalDateTime createdAt;
-    private final ArrayList<Interest> interests;
+    private final ArrayList<InterestDto> interests;
 
     @Builder
     public TransactionHistoryGetResponse(
@@ -35,7 +35,7 @@ public class TransactionHistoryGetResponse extends BaseResponse {
             Long amount,
             Long balance,
             LocalDateTime createdAt,
-            ArrayList<Interest> interests) {
+            ArrayList<InterestDto> interests) {
         this.id = id;
         this.accountId = accountId;
         this.categoryTitle = categoryTitle;
