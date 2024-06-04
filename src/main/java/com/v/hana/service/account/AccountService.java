@@ -1,5 +1,5 @@
 package com.v.hana.service.account;
-
+import com.v.hana.command.account.CheckAccountNumberCommand;
 import com.v.hana.command.account.GetAccountsCommand;
 import com.v.hana.command.account.ReadTransactionsCommand;
 import com.v.hana.common.annotation.MethodInfo;
@@ -11,6 +11,8 @@ import com.v.hana.entity.account.Account;
 import com.v.hana.event.account.ReadAccountTransactionEvent;
 import com.v.hana.event.account.ReadAccountTransactionEventHandler;
 import com.v.hana.exception.account.AccountNotFoundException;
+import com.v.hana.entity.account.AccountApi;
+import com.v.hana.repository.account.AccountApiRepository;
 import com.v.hana.repository.account.AccountRepository;
 import com.v.hana.usecase.account.AccountUseCase;
 import java.util.ArrayList;
@@ -24,6 +26,7 @@ import org.springframework.stereotype.Service;
 public class AccountService implements AccountUseCase {
     private final AccountRepository accountRepository;
     private final ReadAccountTransactionEventHandler readAccountTransactionEventHandler;
+    private final AccountApiRepository accountApiRepository;
 
     @MethodInfo(name = "getAccounts", description = "등록된 계좌 목록을 조회합니다.")
     @Override
@@ -69,4 +72,14 @@ public class AccountService implements AccountUseCase {
                         .end(readTransactionsCommand.getEnd())
                         .build());
     }
+    @MethodInfo(name = "checkAccountNumber", description = "등록 요청한 계좌번호가 유효한지 확인합니다.")
+    @Override
+    public AccountApi checkAccountNumber(CheckAccountNumberCommand command) {
+
+        return accountApiRepository.findByAccountNumber(command.getAccountNumber()).orElseThrow(
+                () -> new RuntimeException("Account not found")
+        );
+    }
+
+
 }
