@@ -1,6 +1,10 @@
 package com.v.hana.controller.email;
 
 import com.v.hana.common.annotation.TypeInfo;
+import com.v.hana.common.response.GetSuccessResponse;
+import com.v.hana.common.response.PostSuccessResponse;
+import com.v.hana.exception.email.InvalidEmailAuthCodeException;
+import com.v.hana.exception.user.UserNameDuplicateException;
 import com.v.hana.service.email.MailService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,17 +20,17 @@ public class EmailController {
     private final MailService mailService;
 
     @PostMapping("/emails/authcode")
-    public ResponseEntity sendMessage(@RequestParam("email") @Valid String email) {
+    public ResponseEntity<PostSuccessResponse> sendMessage(@RequestParam("email") @Valid String email) {
         mailService.sendCodeToEmail(email);
 
-        return ResponseEntity.status(HttpStatus.OK).body("이메일 전송 완료");
+        return ResponseEntity.ok(PostSuccessResponse.builder().build());
     }
 
     @GetMapping("/emails/check/authcode")
-    public ResponseEntity verificationEmail(
-            @RequestParam("email") @Valid String email, @RequestParam("code") String authCode) {
+    public ResponseEntity<GetSuccessResponse<Object>> verificationEmail(
+            @RequestParam("email") @Valid String email, @RequestParam("code") String authCode){
         boolean response = mailService.verifiedCode(email, authCode);
-        if (!response) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("인증 번호가 틀렸습니다.");
-        return ResponseEntity.status(HttpStatus.OK).body("인증 성공");
+        if (!response) throw new InvalidEmailAuthCodeException();
+        return ResponseEntity.ok(GetSuccessResponse.builder().build());
     }
 }
