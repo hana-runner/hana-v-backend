@@ -1,6 +1,7 @@
 package com.v.hana.service.transaction;
 
 import com.v.hana.command.transaction.ReadTransactionHistoryDetailsByIdCommend;
+import com.v.hana.command.transaction.ReadTransactionsCommand;
 import com.v.hana.common.annotation.MethodInfo;
 import com.v.hana.common.annotation.TypeInfo;
 import com.v.hana.entity.transaction.TransactionHistoryDetail;
@@ -29,6 +30,13 @@ public class TransactionHistoryDetailService implements TransactionHistoryDetail
         }
 
         return transactionHistoryDetails;
+    }
+
+    @MethodInfo(name = "readTransactionHistoryDetails", description = "거래내역 상세 목록을 조회합니다.")
+    @Override
+    public ArrayList<TransactionHistoryDetail> readTransactionHistoryDetails(
+            ReadTransactionsCommand readTransactionsCommand) {
+        return transactionHistoryDetailRepository.findAll();
     }
 
     public TransactionHistoryDetailService(

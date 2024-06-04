@@ -9,7 +9,8 @@ public class UserInterestDto {
     private final String title, subtitle, imageUrl, color;
 
     @Builder
-    public UserInterestDto(Long interestId, String title, String subtitle, String imageUrl, String color) {
+    public UserInterestDto(
+            Long interestId, String title, String subtitle, String imageUrl, String color) {
         this.interestId = interestId;
         this.title = title;
         this.subtitle = subtitle;

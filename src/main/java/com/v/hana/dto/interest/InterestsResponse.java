@@ -1,9 +1,8 @@
 package com.v.hana.dto.interest;
 
+import java.util.ArrayList;
 import lombok.Builder;
 import lombok.Getter;
-
-import java.util.ArrayList;
 
 @Getter
 public class InterestsResponse {

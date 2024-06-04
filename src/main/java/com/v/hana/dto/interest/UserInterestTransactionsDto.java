@@ -1,9 +1,8 @@
 package com.v.hana.dto.interest;
 
+import java.util.ArrayList;
 import lombok.Builder;
 import lombok.Getter;
-
-import java.util.ArrayList;
 
 @Getter
 public class UserInterestTransactionsDto {
@@ -12,7 +11,10 @@ public class UserInterestTransactionsDto {
     private final int interestTotalSpent;
 
     @Builder
-    public UserInterestTransactionsDto(ArrayList<UserInterestTransactionDto> transaction, Long totalSpent, int interestTotalSpent) {
+    public UserInterestTransactionsDto(
+            ArrayList<UserInterestTransactionDto> transaction,
+            Long totalSpent,
+            int interestTotalSpent) {
         this.transaction = transaction;
         this.totalSpent = totalSpent;
         this.interestTotalSpent = interestTotalSpent;

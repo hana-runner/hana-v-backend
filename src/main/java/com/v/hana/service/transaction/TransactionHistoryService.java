@@ -1,6 +1,7 @@
 package com.v.hana.service.transaction;
 
 import com.v.hana.command.transaction.ReadTransactionHistoryByIdCommend;
+import com.v.hana.command.transaction.ReadTransactionsCommand;
 import com.v.hana.command.transaction.UpdateTransactionHistoryCommand;
 import com.v.hana.common.annotation.MethodInfo;
 import com.v.hana.common.annotation.TypeInfo;
@@ -8,6 +9,8 @@ import com.v.hana.entity.transaction.TransactionHistory;
 import com.v.hana.exception.transaction.TransactionIdNotFoundException;
 import com.v.hana.repository.transaction.TransactionHistoryRepository;
 import com.v.hana.usecase.transaction.TransactionHistoryUseCase;
+import java.util.ArrayList;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @TypeInfo(name = "TransactionHistoryService", description = "거래내역 서비스 클래스")
@@ -45,6 +48,16 @@ public class TransactionHistoryService implements TransactionHistoryUseCase {
                         .amount(transactionHistory.getAmount())
                         .balance(transactionHistory.getBalance())
                         .build());
+    }
+
+    @MethodInfo(name = "readTransactionHistory", description = "거래내역 목록을 조회합니다.")
+    @Override
+    public ArrayList<TransactionHistory> readTransactionHistory(
+            ReadTransactionsCommand readTransactionsCommand) {
+        return transactionHistoryRepository.findAll(
+                readTransactionsCommand.getSort()
+                        ? Sort.by("createdAt").descending()
+                        : Sort.by("createdAt").ascending());
     }
 
     public TransactionHistoryService(TransactionHistoryRepository transactionHistoryRepository) {

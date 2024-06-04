@@ -2,7 +2,6 @@ package com.v.hana.command.interest;
 
 import lombok.Builder;
 import lombok.Getter;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Getter
 public class GetUserInterestTransactionsCommand {

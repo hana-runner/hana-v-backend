@@ -13,7 +13,6 @@ import com.v.hana.repository.transaction.TransactionHistoryRepository;
 import com.v.hana.usecase.interest.UserInterestUseCase;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
-
 import org.springframework.stereotype.Service;
 
 @TypeInfo(name = "UserInterestService", description = "사용자 관심사 서비스")
@@ -56,25 +55,38 @@ public class UserInterestService implements UserInterestUseCase {
 
     @MethodInfo(name = "getUserInterestTransactions", description = "유저의 관심사별 거래 내역을 조회합니다.")
     @Override
-    public UserInterestTransactionsResponse getUserInterestTransactions(GetUserInterestTransactionsCommand command) {
-        ArrayList<UserInterestTransactionDto> transactions = transactionHistoryDetailRepository.findTransactionDetailsByUserIdAndInterestIdAndYearAndMonth(command.getUserId(), command.getInterestId(), command.getYear(), command.getMonth());
-        Long totalSpent = transactionHistoryRepository.findUserSpendingByDate(command.getUserId(), command.getYear(), command.getMonth());
-        int interestTotalSpent = transactions.stream().mapToInt(transaction -> transaction.getAmount().intValue()).sum();
+    public UserInterestTransactionsResponse getUserInterestTransactions(
+            GetUserInterestTransactionsCommand command) {
+        ArrayList<UserInterestTransactionDto> transactions =
+                transactionHistoryDetailRepository
+                        .findTransactionDetailsByUserIdAndInterestIdAndYearAndMonth(
+                                command.getUserId(),
+                                command.getInterestId(),
+                                command.getYear(),
+                                command.getMonth());
+        Long totalSpent =
+                transactionHistoryRepository.findUserSpendingByDate(
+                        command.getUserId(), command.getYear(), command.getMonth());
+        int interestTotalSpent =
+                transactions.stream()
+                        .mapToInt(transaction -> transaction.getAmount().intValue())
+                        .sum();
 
+        UserInterestTransactionsDto userInterestTransactionsDto =
+                UserInterestTransactionsDto.builder()
+                        .transaction(transactions)
+                        .totalSpent(totalSpent)
+                        .interestTotalSpent(interestTotalSpent)
+                        .build();
 
-        UserInterestTransactionsDto userInterestTransactionsDto = UserInterestTransactionsDto.builder()
-                .transaction(transactions)
-                .totalSpent(totalSpent)
-                .interestTotalSpent(interestTotalSpent)
-                .build();
-
-        return UserInterestTransactionsResponse.builder()
-                .data(userInterestTransactionsDto)
-                .build();
+        return UserInterestTransactionsResponse.builder().data(userInterestTransactionsDto).build();
     }
 
     public UserInterestService(
-            InterestRepository interestRepository, UserInterestRepository userInterestRepository, TransactionHistoryRepository transactionHistoryRepository, TransactionHistoryDetailRepository transactionHistoryDetailRepository) {
+            InterestRepository interestRepository,
+            UserInterestRepository userInterestRepository,
+            TransactionHistoryRepository transactionHistoryRepository,
+            TransactionHistoryDetailRepository transactionHistoryDetailRepository) {
         this.interestRepository = interestRepository;
         this.userInterestRepository = userInterestRepository;
         this.transactionHistoryRepository = transactionHistoryRepository;

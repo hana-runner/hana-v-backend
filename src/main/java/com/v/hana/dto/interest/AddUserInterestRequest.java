@@ -9,7 +9,8 @@ public class AddUserInterestRequest {
     private final String title, description, imageUrl;
 
     @Builder
-    public AddUserInterestRequest(Long interestId, String title, String description, String imageUrl) {
+    public AddUserInterestRequest(
+            Long interestId, String title, String description, String imageUrl) {
         this.interestId = interestId;
         this.title = title;
         this.description = description;

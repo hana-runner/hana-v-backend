@@ -7,5 +7,7 @@ import com.v.hana.dto.interest.UserInterestTransactionsResponse;
 
 public interface UserInterestUseCase {
     UserInterestResponse getUserInterests(GetUserInterestsCommand command);
-    UserInterestTransactionsResponse getUserInterestTransactions(GetUserInterestTransactionsCommand command);
+
+    UserInterestTransactionsResponse getUserInterestTransactions(
+            GetUserInterestTransactionsCommand command);
 }

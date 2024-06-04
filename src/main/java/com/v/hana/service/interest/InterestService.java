@@ -6,10 +6,9 @@ import com.v.hana.dto.interest.InterestDto;
 import com.v.hana.dto.interest.InterestsResponse;
 import com.v.hana.repository.interest.InterestRepository;
 import com.v.hana.usecase.interest.InterestUseCase;
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.stream.Collectors;
+import org.springframework.stereotype.Service;
 
 @TypeInfo(name = "InterestService", description = "관심사 서비스")
 @Service
@@ -21,18 +20,21 @@ public class InterestService implements InterestUseCase {
     @Override
     public InterestsResponse getInterests() {
         return InterestsResponse.builder()
-                .data(interestRepository.findAll().stream()
-                        .map(interest -> InterestDto.builder()
-                                .interestId(interest.getId())
-                                .title(interest.getTitle())
-                                .description(interest.getDescription())
-                                .color(interest.getColor())
-                                .build()).collect(Collectors.toCollection(ArrayList::new)))
+                .data(
+                        interestRepository.findAll().stream()
+                                .map(
+                                        interest ->
+                                                InterestDto.builder()
+                                                        .interestId(interest.getId())
+                                                        .title(interest.getTitle())
+                                                        .description(interest.getDescription())
+                                                        .color(interest.getColor())
+                                                        .build())
+                                .collect(Collectors.toCollection(ArrayList::new)))
                 .build();
     }
 
-    public InterestService(
-            InterestRepository interestRepository) {
+    public InterestService(InterestRepository interestRepository) {
         this.interestRepository = interestRepository;
     }
 }
