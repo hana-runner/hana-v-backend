@@ -3,6 +3,7 @@ package com.v.hana.controller.user;
 import com.v.hana.auth.annotation.CurrentUser;
 import com.v.hana.auth.dto.JwtToken;
 import com.v.hana.auth.provider.JwtTokenProvider;
+import com.v.hana.auth.util.user.SecurityUtil;
 import com.v.hana.common.annotation.MethodInfo;
 import com.v.hana.common.annotation.TypeInfo;
 import com.v.hana.common.response.DeleteSuccessResponse;
@@ -30,6 +31,7 @@ public class UserController {
     private final UserService userService;
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
+    private final SecurityUtil securityUtil;
 
     @MethodInfo(name = "user join", description = "유저 컨트롤러의 회원 가입 메소드를 실행합니다.")
     @PostMapping("/users/join")
@@ -101,35 +103,33 @@ public class UserController {
 
     @DeleteMapping("/users/quit")
     @Transactional
-    public ResponseEntity<DeleteSuccessResponse> deleteCurrentUser(
-            @CurrentUser UserDetails userDetails) {
-        Optional<User> user = userRepository.findByUsername(userDetails.getUsername());
-        if (user.isEmpty()) throw new InvalidUserAccessException();
-        userRepository.deleteUserByEmail(user.get().getEmail());
+    @CurrentUser
+    public ResponseEntity<DeleteSuccessResponse> deleteCurrentUser() {
+        User user = securityUtil.getCurrentUser();
+        userRepository.deleteUserByEmail(user.getEmail());
         return ResponseEntity.ok(DeleteSuccessResponse.builder().build());
     }
 
     @GetMapping("users/info")
-    public ResponseEntity<UserGetResponse> getUserInfo(@CurrentUser UserDetails userDetails) {
-        Optional<User> user = userRepository.findByUsername(userDetails.getUsername());
-        if (user.isEmpty()) throw new InvalidUserAccessException();
+    @CurrentUser
+    public ResponseEntity<UserGetResponse> getUserInfo() {
+        User user = securityUtil.getCurrentUser();
         return ResponseEntity.ok(
                 UserGetResponse.builder()
-                        .username(user.get().getUsername())
-                        .email(user.get().getEmail())
-                        .birthday(user.get().getBirthday())
-                        .gender(user.get().getGender())
+                        .username(user.getUsername())
+                        .email(user.getEmail())
+                        .birthday(user.getBirthday())
+                        .gender(user.getGender())
                         .build());
     }
 
     @PutMapping("users/update/email")
+    @CurrentUser
     public ResponseEntity<PostSuccessResponse> updateUserEmail(
-            @CurrentUser UserDetails userDetails,
             @RequestBody UpdateUserInfoRequest updateUserInfoRequest) {
-        Optional<User> user = userRepository.findByUsername(userDetails.getUsername());
-        if (user.isEmpty()) throw new InvalidUserAccessException();
+        User user = securityUtil.getCurrentUser();
         userRepository.updateEmailByUsername(
-                userDetails.getUsername(), updateUserInfoRequest.getEmail());
+                user.getUsername(), updateUserInfoRequest.getEmail());
         return ResponseEntity.ok(PostSuccessResponse.builder().build());
     }
 }
