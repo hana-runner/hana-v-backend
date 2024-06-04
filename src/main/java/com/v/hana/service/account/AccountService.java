@@ -1,4 +1,5 @@
 package com.v.hana.service.account;
+
 import com.v.hana.command.account.CheckAccountNumberCommand;
 import com.v.hana.command.account.GetAccountsCommand;
 import com.v.hana.command.account.ReadTransactionsCommand;
@@ -17,8 +18,10 @@ import com.v.hana.exception.account.AccountNotFoundException;
 import com.v.hana.repository.account.AccountApiRepository;
 import com.v.hana.repository.account.AccountRepository;
 import com.v.hana.usecase.account.AccountUseCase;
+
 import java.util.ArrayList;
 import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -67,21 +70,25 @@ public class AccountService implements AccountUseCase {
                         .end(readTransactionsCommand.getEnd())
                         .build());
     }
+
     @MethodInfo(name = "checkAccountNumber", description = "등록 요청한 계좌번호가 유효한지 확인합니다.")
     @Override
     public AccountCheckResponse checkAccountNumber(CheckAccountNumberCommand command) {
 
-        return accountApiRepository.findByAccountNumber(command.getAccountNumber()).orElseThrow(AccountNotFoundException::new);
+        return AccountCheckResponse.builder()
+                .data(accountApiRepository.findByAccountNumber(command.getAccountNumber()).orElseThrow(AccountNotFoundException::new))
+                .build();
     }
 
     @MethodInfo(name = "registerAccount", description = "계좌정보를 등록합니다.")
     @Override
     public AccountRegisterResponse registerAccount(RegisterAccountCommand command) {
-        // TODO: account_api table에 account_type, account_name column 추가
         Account savedAccount = accountRepository.save(Account.builder()
                 .user(command.getUser())
                 .bankName(command.getBankName())
                 .accountNumber(command.getAccountNumber())
+                .accountName(command.getAccountName())
+                .accountType(command.getAccountType())
                 .balance(command.getBalance())
                 .build());
         return AccountRegisterResponse.builder().id(savedAccount.getId()).build();

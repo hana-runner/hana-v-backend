@@ -62,4 +62,12 @@ public class Account {
         this.accountName = accountName;
         this.accountType = accountType;
     }
+
+    @PrePersist
+    protected void onCreate() {
+        if (this.registeredAt == null) {
+            this.registeredAt = new Timestamp(System.currentTimeMillis());
+        }
+    }
+
 }
