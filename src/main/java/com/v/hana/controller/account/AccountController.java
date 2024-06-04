@@ -9,7 +9,10 @@ import com.v.hana.dto.account.AccountCheckResponse;
 import com.v.hana.dto.account.AccountGetResponse;
 import com.v.hana.dto.account.AccountTransactionGetResponse;
 import com.v.hana.repository.user.UserRepository;
+import com.v.hana.command.account.RegisterAccountCommand;
+import com.v.hana.dto.account.*;
 import com.v.hana.entity.account.AccountApi;
+import com.v.hana.entity.user.User;
 import com.v.hana.usecase.account.AccountUseCase;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -27,6 +30,7 @@ public class AccountController {
     private final AccountUseCase accountUseCase;
     private final UserRepository userRepository;
 
+    // TODO : 회원 검증 로직 추가
     @MethodInfo(name = "getAccounts", description = "등록된 계좌 목록을 조회합니다.")
     @GetMapping("/accounts")
     public ResponseEntity<AccountGetResponse> getAccount() {
@@ -70,10 +74,23 @@ public class AccountController {
 
     @MethodInfo(name = "checkAccountNumber", description = "등록 요청한 계좌번호가 유효한지 확인합니다.")
     @PostMapping("/accounts/check/account-info")
-    public ResponseEntity<AccountCheckResponse> checkAccountNumber(@RequestBody AccountCheckRequest request){
+    public ResponseEntity<AccountCheckResponse> checkAccountNumber(@RequestBody AccountCheckRequest request) {
         AccountCheckResponse checkedAccountNumber = accountUseCase.checkAccountNumber(CheckAccountNumberCommand.builder().accountNumber(request.getAccountNumber()).build());
 
         return ResponseEntity.ok(checkedAccountNumber);
+    }
+
+    @MethodInfo(name = "registerAccount", description = "계좌정보를 등록합니다.")
+    @PostMapping("/accounts")
+    public ResponseEntity<AccountRegisterResponse> registerAccount(@RequestBody AccountRegisterRequest request) {
+        // TODO : 회원 검증 로직 추가
+        AccountRegisterResponse registeredAccount = accountUseCase.registerAccount(RegisterAccountCommand.builder()
+                .user(User.builder().build())
+                .bankName(request.getBankName())
+                .accountNumber(request.getAccountNumber())
+                .balance(request.getBalance())
+                .build());
+        return ResponseEntity.ok(registeredAccount);
     }
 
 }

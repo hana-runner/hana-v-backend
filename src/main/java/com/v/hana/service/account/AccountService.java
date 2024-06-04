@@ -2,12 +2,14 @@ package com.v.hana.service.account;
 import com.v.hana.command.account.CheckAccountNumberCommand;
 import com.v.hana.command.account.GetAccountsCommand;
 import com.v.hana.command.account.ReadTransactionsCommand;
+import com.v.hana.command.account.RegisterAccountCommand;
 import com.v.hana.common.annotation.MethodInfo;
 import com.v.hana.common.annotation.TypeInfo;
 import com.v.hana.dto.account.AccountCheckResponse;
 import com.v.hana.dto.account.AccountDto;
 import com.v.hana.dto.account.AccountGetResponse;
 import com.v.hana.dto.account.AccountTransactionGetResponse;
+import com.v.hana.dto.account.AccountRegisterResponse;
 import com.v.hana.entity.account.Account;
 import com.v.hana.event.account.ReadAccountTransactionEvent;
 import com.v.hana.event.account.ReadAccountTransactionEventHandler;
@@ -72,5 +74,16 @@ public class AccountService implements AccountUseCase {
         return accountApiRepository.findByAccountNumber(command.getAccountNumber()).orElseThrow(AccountNotFoundException::new);
     }
 
-
+    @MethodInfo(name = "registerAccount", description = "계좌정보를 등록합니다.")
+    @Override
+    public AccountRegisterResponse registerAccount(RegisterAccountCommand command) {
+        // TODO: account_api table에 account_type, account_name column 추가
+        Account savedAccount = accountRepository.save(Account.builder()
+                .user(command.getUser())
+                .bankName(command.getBankName())
+                .accountNumber(command.getAccountNumber())
+                .balance(command.getBalance())
+                .build());
+        return AccountRegisterResponse.builder().id(savedAccount.getId()).build();
+    }
 }
