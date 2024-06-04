@@ -2,13 +2,10 @@ package com.v.hana.common.exception;
 
 import com.v.hana.common.response.BaseHttpCode;
 import com.v.hana.common.response.BaseHttpReason;
-import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
-@Getter
-public enum TransactionHttpCode implements BaseHttpCode {
-    TRANSACTION_ID_NOT_FOUND(HttpStatus.NOT_FOUND, "TRANSACTION-001", "해당 ID의 거래내역이 존재하지 않습니다."),
-    READ_TRANSACTION_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "TRANSACTION-002", "거래내역 조회에 실패하였습니다.");
+public enum AccountHttpCode implements BaseHttpCode {
+    ACCOUNT_NOT_FOUND(HttpStatus.NOT_FOUND, "ACCOUNT-001", "계좌 정보가 존재하지 않습니다.");
 
     private final HttpStatus httpStatus;
     private final String code;
@@ -19,7 +16,7 @@ public enum TransactionHttpCode implements BaseHttpCode {
         return BaseHttpReason.builder().httpStatus(httpStatus).code(code).message(message).build();
     }
 
-    TransactionHttpCode(HttpStatus httpStatus, String code, String message) {
+    AccountHttpCode(HttpStatus httpStatus, String code, String message) {
         this.httpStatus = httpStatus;
         this.code = code;
         this.message = message;
