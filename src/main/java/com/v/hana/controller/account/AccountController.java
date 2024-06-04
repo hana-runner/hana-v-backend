@@ -1,4 +1,7 @@
 package com.v.hana.controller.account;
+
+import com.v.hana.auth.annotation.CurrentUser;
+import com.v.hana.auth.util.user.SecurityUtil;
 import com.v.hana.command.account.CheckAccountNumberCommand;
 import com.v.hana.command.account.GetAccountsCommand;
 import com.v.hana.command.account.ReadTransactionsCommand;
@@ -14,8 +17,11 @@ import com.v.hana.dto.account.*;
 import com.v.hana.entity.account.AccountApi;
 import com.v.hana.entity.user.User;
 import com.v.hana.usecase.account.AccountUseCase;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Optional;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -28,15 +34,17 @@ import org.springframework.web.bind.annotation.*;
 public class AccountController {
 
     private final AccountUseCase accountUseCase;
+    private final SecurityUtil securityUtil;
     private final UserRepository userRepository;
 
     // TODO : 회원 검증 로직 추가
     @MethodInfo(name = "getAccounts", description = "등록된 계좌 목록을 조회합니다.")
     @GetMapping("/accounts")
+    @CurrentUser
     public ResponseEntity<AccountGetResponse> getAccount() {
-        // TODO : 회원 검증 로직 추가
+        User currentUser = securityUtil.getCurrentUser();
         AccountGetResponse accounts =
-                accountUseCase.getAccounts(GetAccountsCommand.builder().userId(1L).build());
+                accountUseCase.getAccounts(GetAccountsCommand.builder().userId(currentUser.getId()).build());
 
         return ResponseEntity.ok(accounts);
     }
@@ -48,11 +56,11 @@ public class AccountController {
             @RequestParam(name = "option", required = false, defaultValue = "0") Integer option,
             @RequestParam(name = "sort", required = false, defaultValue = "true") Boolean sort,
             @RequestParam(name = "start", required = false)
-                    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-                    LocalDate start,
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            LocalDate start,
             @RequestParam(name = "end", required = false)
-                    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-                    LocalDate end) {
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+            LocalDate end) {
 
         if (start == null) {
             start = LocalDate.now().minusMonths(1);
@@ -82,12 +90,16 @@ public class AccountController {
 
     @MethodInfo(name = "registerAccount", description = "계좌정보를 등록합니다.")
     @PostMapping("/accounts")
+    @CurrentUser
     public ResponseEntity<AccountRegisterResponse> registerAccount(@RequestBody AccountRegisterRequest request) {
         // TODO : 회원 검증 로직 추가
+        User currentUser = securityUtil.getCurrentUser();
         AccountRegisterResponse registeredAccount = accountUseCase.registerAccount(RegisterAccountCommand.builder()
-                .user(User.builder().build())
+                .user(currentUser)
                 .bankName(request.getBankName())
                 .accountNumber(request.getAccountNumber())
+                .accountType(request.getAccountType())
+                .accountName(request.getAccountName())
                 .balance(request.getBalance())
                 .build());
         return ResponseEntity.ok(registeredAccount);
