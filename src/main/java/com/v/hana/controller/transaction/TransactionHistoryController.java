@@ -6,10 +6,10 @@ import com.v.hana.command.transaction.ReadTransactionHistoryDetailsByIdCommend;
 import com.v.hana.command.transaction.UpdateTransactionHistoryCommand;
 import com.v.hana.common.annotation.MethodInfo;
 import com.v.hana.common.annotation.TypeInfo;
+import com.v.hana.dto.interest.InterestDto;
 import com.v.hana.dto.transaction.TransactionHistoryGetResponse;
 import com.v.hana.dto.transaction.TransactionHistoryPutRequest;
 import com.v.hana.dto.transaction.TransactionHistoryPutResponse;
-import com.v.hana.entity.interest.Interest;
 import com.v.hana.entity.transaction.TransactionHistory;
 import com.v.hana.entity.transaction.TransactionHistoryDetail;
 import com.v.hana.usecase.category.CategoryUseCase;
@@ -77,13 +77,11 @@ public class TransactionHistoryController {
                                         .map(TransactionHistoryDetail::getInterest)
                                         .map(
                                                 interest ->
-                                                        Interest.builder()
-                                                                .id(interest.getId())
+                                                        InterestDto.builder()
+                                                                .interestId(interest.getId())
                                                                 .title(interest.getTitle())
                                                                 .description(
                                                                         interest.getDescription())
-                                                                .baseImageUrl(
-                                                                        interest.getBaseImageUrl())
                                                                 .color(interest.getColor())
                                                                 .build())
                                         .collect(Collectors.toCollection(ArrayList::new)))
@@ -143,13 +141,11 @@ public class TransactionHistoryController {
                                         .map(TransactionHistoryDetail::getInterest)
                                         .map(
                                                 interest ->
-                                                        Interest.builder()
-                                                                .id(interest.getId())
+                                                        InterestDto.builder()
+                                                                .interestId(interest.getId())
                                                                 .title(interest.getTitle())
                                                                 .description(
                                                                         interest.getDescription())
-                                                                .baseImageUrl(
-                                                                        interest.getBaseImageUrl())
                                                                 .color(interest.getColor())
                                                                 .build())
                                         .collect(Collectors.toCollection(ArrayList::new)))
