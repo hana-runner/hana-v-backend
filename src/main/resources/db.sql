@@ -127,3 +127,7 @@ CREATE TABLE `account_api` (
                             `account_number` varchar(255) NOT NULL unique COMMENT '계좌 번호',
                             `balance` bigint NOT NULL COMMENT '잔액'
 ) COMMENT '계좌 API 테이블';
+
+ALTER TABLE `account_api`
+    ADD COLUMN `account_name` varchar(50) NOT NULL COMMENT '계좌 이름',
+ADD COLUMN `account_type` varchar(50) NOT NULL COMMENT '계좌 유형';
