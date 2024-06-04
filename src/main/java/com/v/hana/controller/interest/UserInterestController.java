@@ -1,9 +1,11 @@
 package com.v.hana.controller.interest;
 
+import com.v.hana.command.interest.GetUserInterestReportsCommand;
 import com.v.hana.command.interest.GetUserInterestTransactionsCommand;
 import com.v.hana.command.interest.GetUserInterestsCommand;
 import com.v.hana.common.annotation.MethodInfo;
 import com.v.hana.common.annotation.TypeInfo;
+import com.v.hana.dto.interest.UserInterestReportsResponse;
 import com.v.hana.dto.interest.UserInterestResponse;
 import com.v.hana.dto.interest.UserInterestTransactionsResponse;
 import com.v.hana.usecase.interest.UserInterestUseCase;
@@ -43,6 +45,21 @@ public class UserInterestController {
                                 .build());
         return ResponseEntity.ok(transactions);
     }
+
+    @MethodInfo(name = "getUserInterestReports", description = "사용자 관심사별 거래 내역 리포트를 가져옵니다.")
+    @GetMapping("/user-interests/report/{interestId}")
+    public ResponseEntity<UserInterestReportsResponse> getUserInterestReports(
+            @PathVariable Long interestId,
+            @RequestParam Long userId) {
+        UserInterestReportsResponse reports =
+                userInterestUseCase.getUserInterestReports(
+                        GetUserInterestReportsCommand.builder()
+                                .interestId(interestId)
+                                .userId(userId)
+                                .build());
+        return ResponseEntity.ok(reports);
+    }
+
 
     public UserInterestController(UserInterestUseCase userInterestUseCase) {
         this.userInterestUseCase = userInterestUseCase;

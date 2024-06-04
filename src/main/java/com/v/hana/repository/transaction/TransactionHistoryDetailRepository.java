@@ -4,6 +4,9 @@ import com.v.hana.common.annotation.MethodInfo;
 import com.v.hana.common.annotation.TypeInfo;
 import com.v.hana.dto.interest.UserInterestTransactionDto;
 import com.v.hana.entity.transaction.TransactionHistoryDetail;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -54,4 +57,18 @@ public interface TransactionHistoryDetailRepository
             @Param("userId") Long userId,
             @Param("createdAt") String createdAt,
             @Param("updatedAt") String updatedAt);
+
+    @MethodInfo(name = "sumAmountByUserIdAndInterestId", description = "유저 ID와 관심사 ID로 거래내역 상세의 금액을 합산합니다.")
+    @Query(
+            value =
+                    "SELECT SUM(amount) FROM transaction_history_details WHERE user_id = :userId AND interest_id = :interestId AND created_at >= :start AND created_at <= :end",
+            nativeQuery = true)
+    Long sumAmountByUserIdAndInterestId(Long userId, Long interestId, LocalDate start, LocalDate end);
+
+    @MethodInfo(name = "sumAmountByInterestId", description = "관심사 ID로 거래내역 상세의 금액을 합산합니다.")
+    @Query(
+            value =
+                    "SELECT SUM(amount) FROM transaction_history_details WHERE interest_id = :interestId AND created_at >= :start AND created_at <= :end",
+            nativeQuery = true)
+    Long sumAmountByInterestId(Long interestId, LocalDate start, LocalDate end);
 }
