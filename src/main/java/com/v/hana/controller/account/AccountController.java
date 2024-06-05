@@ -2,10 +2,14 @@ package com.v.hana.controller.account;
 
 import com.v.hana.auth.annotation.CurrentUser;
 import com.v.hana.auth.util.user.SecurityUtil;
+<<<<<<< Updated upstream
 import com.v.hana.command.account.CheckAccountNumberCommand;
 import com.v.hana.command.account.GetAccountsCommand;
 import com.v.hana.command.account.ReadTransactionsCommand;
 import com.v.hana.command.account.RegisterAccountCommand;
+=======
+import com.v.hana.command.account.*;
+>>>>>>> Stashed changes
 import com.v.hana.common.annotation.MethodInfo;
 import com.v.hana.common.annotation.TypeInfo;
 import com.v.hana.dto.account.*;
@@ -13,11 +17,19 @@ import com.v.hana.dto.account.AccountCheckRequest;
 import com.v.hana.dto.account.AccountCheckResponse;
 import com.v.hana.dto.account.AccountGetResponse;
 import com.v.hana.dto.account.AccountTransactionGetResponse;
+<<<<<<< Updated upstream
+=======
+import com.v.hana.dto.account.*;
+>>>>>>> Stashed changes
 import com.v.hana.entity.user.User;
 import com.v.hana.repository.user.UserRepository;
 import com.v.hana.usecase.account.AccountUseCase;
 import java.time.LocalDate;
 import java.time.LocalTime;
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -31,13 +43,12 @@ public class AccountController {
 
     private final AccountUseCase accountUseCase;
     private final SecurityUtil securityUtil;
-    private final UserRepository userRepository;
 
     // TODO : 회원 검증 로직 추가
     @MethodInfo(name = "getAccounts", description = "등록된 계좌 목록을 조회합니다.")
     @GetMapping("/accounts")
     @CurrentUser
-    public ResponseEntity<AccountGetResponse> getAccount() {
+    public ResponseEntity<AccountGetResponse> getAccounts() {
         User currentUser = securityUtil.getCurrentUser();
         AccountGetResponse accounts =
                 accountUseCase.getAccounts(
@@ -109,4 +120,35 @@ public class AccountController {
                                 .build());
         return ResponseEntity.ok(registeredAccount);
     }
+<<<<<<< Updated upstream
+=======
+
+    @MethodInfo(name = "getExpensePerCategories", description = "카테고리별 지출 합계를 조회합니다.")
+    @GetMapping("/accounts/categories")
+    @CurrentUser
+    public ResponseEntity<AccountExpenseResponse> getExpensePerCategories(@RequestParam(name = "start", required = false)
+                                                     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                     LocalDate start, @RequestParam(name = "end", required = false)
+                                                     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                     LocalDate end) {
+        if (start == null) {
+            start = LocalDate.now().minusMonths(1);
+//            start = LocalDate.of(2024, 4, 5);
+        }
+
+        if (end == null) {
+            end = LocalDate.now();
+//            end = LocalDate.of(2024, 5, 5);
+        }
+        User currentUser = securityUtil.getCurrentUser();
+        AccountExpenseResponse expensePerCategories = accountUseCase.getExpensePerCategories(GetExpenseCommand.builder()
+                .userId(currentUser.getId())
+                .start(start)
+                .end(end)
+                .build());
+
+        return ResponseEntity.ok(expensePerCategories);
+    }
+
+>>>>>>> Stashed changes
 }

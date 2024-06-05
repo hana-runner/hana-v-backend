@@ -1,22 +1,25 @@
 package com.v.hana.service.account;
 
-import com.v.hana.command.account.CheckAccountNumberCommand;
-import com.v.hana.command.account.GetAccountsCommand;
-import com.v.hana.command.account.ReadTransactionsCommand;
-import com.v.hana.command.account.RegisterAccountCommand;
+import com.v.hana.command.account.*;
 import com.v.hana.common.annotation.MethodInfo;
 import com.v.hana.common.annotation.TypeInfo;
+<<<<<<< Updated upstream
 import com.v.hana.dto.account.AccountCheckResponse;
 import com.v.hana.dto.account.AccountDto;
 import com.v.hana.dto.account.AccountGetResponse;
 import com.v.hana.dto.account.AccountRegisterResponse;
 import com.v.hana.dto.account.AccountTransactionGetResponse;
+=======
+import com.v.hana.dto.account.*;
+>>>>>>> Stashed changes
 import com.v.hana.entity.account.Account;
 import com.v.hana.event.account.ReadAccountTransactionEvent;
 import com.v.hana.event.account.ReadAccountTransactionEventListener;
 import com.v.hana.exception.account.AccountNotFoundException;
+import com.v.hana.exception.transaction.ExpenseNotFoundException;
 import com.v.hana.repository.account.AccountApiRepository;
 import com.v.hana.repository.account.AccountRepository;
+import com.v.hana.repository.transaction.TransactionHistoryRepository;
 import com.v.hana.usecase.account.AccountUseCase;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
@@ -30,6 +33,7 @@ public class AccountService implements AccountUseCase {
     private final AccountRepository accountRepository;
     private final AccountApiRepository accountApiRepository;
     private final ReadAccountTransactionEventListener readAccountTransactionEventListener;
+    private final TransactionHistoryRepository transactionHistoryRepository;
 
     @MethodInfo(name = "getAccounts", description = "등록된 계좌 목록을 조회합니다.")
     @Override
@@ -100,5 +104,15 @@ public class AccountService implements AccountUseCase {
                                 .balance(command.getBalance())
                                 .build());
         return AccountRegisterResponse.builder().id(savedAccount.getId()).build();
+    }
+
+    @MethodInfo(name = "getExpensePerCategories", description = "카테고리별 지출 합계를 조회합니다.")
+    @Override
+    public AccountExpenseResponse getExpensePerCategories(GetExpenseCommand command) {
+        ArrayList<ExpensePerCategory> expensePerCategories = transactionHistoryRepository.getExpensePerCategories(command.getUserId(), command.getStart(), command.getEnd());
+        if (expensePerCategories.isEmpty()){
+            throw new ExpenseNotFoundException();
+        }
+        return AccountExpenseResponse.builder().data(expensePerCategories).build();
     }
 }
