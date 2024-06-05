@@ -10,6 +10,7 @@ import lombok.Getter;
 public class TransactionHistoryPutResponse extends BaseResponse {
     private final Long id; // transactionHistoryId
     private final Long accountId;
+    private final Long categoryId;
     private final String categoryTitle;
     private final String categoryColor;
     private final Integer approvalNumber;
@@ -25,6 +26,7 @@ public class TransactionHistoryPutResponse extends BaseResponse {
     public TransactionHistoryPutResponse(
             Long id,
             Long accountId,
+            Long categoryId,
             String categoryTitle,
             String categoryColor,
             Integer approvalNumber,
@@ -37,6 +39,7 @@ public class TransactionHistoryPutResponse extends BaseResponse {
             ArrayList<TransactionHistoryDetailDto> transactionHistoryDetails) {
         this.id = id;
         this.accountId = accountId;
+        this.categoryId = categoryId;
         this.categoryTitle = categoryTitle;
         this.categoryColor = categoryColor;
         this.approvalNumber = approvalNumber;

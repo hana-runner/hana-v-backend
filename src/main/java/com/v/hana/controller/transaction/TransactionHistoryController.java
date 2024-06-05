@@ -62,6 +62,7 @@ public class TransactionHistoryController {
                 TransactionHistoryGetResponse.builder()
                         .id(transactionHistory.getId())
                         .accountId(transactionHistory.getAccount().getId())
+                        .categoryId(transactionHistory.getCategory().getId())
                         .categoryTitle(transactionHistory.getCategory().getTitle())
                         .categoryColor(transactionHistory.getCategory().getColor())
                         .approvalNumber(transactionHistory.getApprovalNumber())
@@ -82,6 +83,9 @@ public class TransactionHistoryController {
                                         .map(
                                                 transactionHistoryDetail ->
                                                         TransactionHistoryDetailDto.builder()
+                                                                .id(
+                                                                        transactionHistoryDetail
+                                                                                .getId())
                                                                 .interest(
                                                                         InterestDto.builder()
                                                                                 .interestId(
@@ -151,6 +155,7 @@ public class TransactionHistoryController {
                 TransactionHistoryPutResponse.builder()
                         .id(transactionHistory.getId())
                         .accountId(transactionHistory.getAccount().getId())
+                        .categoryId(transactionHistory.getCategory().getId())
                         .categoryTitle(transactionHistory.getCategory().getTitle())
                         .categoryColor(transactionHistory.getCategory().getColor())
                         .approvalNumber(transactionHistory.getApprovalNumber())
@@ -171,6 +176,9 @@ public class TransactionHistoryController {
                                         .map(
                                                 transactionHistoryDetail ->
                                                         TransactionHistoryDetailDto.builder()
+                                                                .id(
+                                                                        transactionHistoryDetail
+                                                                                .getId())
                                                                 .interest(
                                                                         InterestDto.builder()
                                                                                 .interestId(
@@ -239,6 +247,7 @@ public class TransactionHistoryController {
                 TransactionHistoryDetailsPostResponse.builder()
                         .id(transactionHistory.getId())
                         .accountId(transactionHistory.getAccount().getId())
+                        .categoryId(transactionHistory.getCategory().getId())
                         .categoryTitle(transactionHistory.getCategory().getTitle())
                         .categoryColor(transactionHistory.getCategory().getColor())
                         .approvalNumber(transactionHistory.getApprovalNumber())
@@ -259,6 +268,9 @@ public class TransactionHistoryController {
                                         .map(
                                                 transactionHistoryDetail ->
                                                         TransactionHistoryDetailDto.builder()
+                                                                .id(
+                                                                        transactionHistoryDetail
+                                                                                .getId())
                                                                 .interest(
                                                                         InterestDto.builder()
                                                                                 .interestId(

@@ -10,5 +10,4 @@ public interface ExpensePerCategory {
     String getColor();
 
     Long getExpense();
-
 }
