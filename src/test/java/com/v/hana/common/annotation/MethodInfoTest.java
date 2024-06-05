@@ -3,8 +3,11 @@ package com.v.hana.common.annotation;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import com.v.hana.common.config.MySQLTestConfig;
+import com.v.hana.common.config.RedisTestConfig;
 import java.lang.reflect.Method;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 
 class ExampleClassWithMethod {
@@ -14,6 +17,7 @@ class ExampleClassWithMethod {
 
 @TypeInfo(name = "MethodInfoTest", description = "MethodInfo 어노테이션 테스트")
 @SpringBootTest
+@ExtendWith({MySQLTestConfig.class, RedisTestConfig.class})
 public class MethodInfoTest {
 
     @MethodInfo(name = "testMethodInfo", description = "MethodInfo 어노테이션을 테스트합니다.")

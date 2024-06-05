@@ -14,7 +14,6 @@ import com.v.hana.repository.transaction.TransactionHistoryDetailRepository;
 import com.v.hana.repository.transaction.TransactionHistoryRepository;
 import com.v.hana.usecase.transaction.TransactionHistoryDetailUseCase;
 import jakarta.transaction.Transactional;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -82,13 +81,13 @@ public class TransactionHistoryDetailService implements TransactionHistoryDetail
             name = "sumAmountByUserIdAndInterestId",
             description = "유저 ID와 관심사 ID로 거래내역 상세의 금액을 합산합니다.")
     @Override
-    public Long sumAmountByUserIdAndInterestId(Long userId, Long interestId, LocalDate start, LocalDate end) {
-        return transactionHistoryDetailRepository.sumAmountByUserIdAndInterestId(userId, interestId, start, end);
+    public Long sumAmountByUserIdAndInterestId(
+            Long userId, Long interestId, LocalDate start, LocalDate end) {
+        return transactionHistoryDetailRepository.sumAmountByUserIdAndInterestId(
+                userId, interestId, start, end);
     }
 
-    @MethodInfo(
-            name = "sumAmountByInterestId",
-            description = "관심사 ID로 거래내역 상세의 금액을 합산합니다.")
+    @MethodInfo(name = "sumAmountByInterestId", description = "관심사 ID로 거래내역 상세의 금액을 합산합니다.")
     @Override
     public Long sumAmountByInterestId(Long interestId, LocalDate start, LocalDate end) {
         return transactionHistoryDetailRepository.sumAmountByInterestId(interestId, start, end);

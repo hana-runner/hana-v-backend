@@ -5,23 +5,19 @@ import com.v.hana.auth.util.user.SecurityUtil;
 import com.v.hana.command.account.CheckAccountNumberCommand;
 import com.v.hana.command.account.GetAccountsCommand;
 import com.v.hana.command.account.ReadTransactionsCommand;
+import com.v.hana.command.account.RegisterAccountCommand;
 import com.v.hana.common.annotation.MethodInfo;
 import com.v.hana.common.annotation.TypeInfo;
+import com.v.hana.dto.account.*;
 import com.v.hana.dto.account.AccountCheckRequest;
 import com.v.hana.dto.account.AccountCheckResponse;
 import com.v.hana.dto.account.AccountGetResponse;
 import com.v.hana.dto.account.AccountTransactionGetResponse;
-import com.v.hana.repository.user.UserRepository;
-import com.v.hana.command.account.RegisterAccountCommand;
-import com.v.hana.dto.account.*;
-import com.v.hana.entity.account.AccountApi;
 import com.v.hana.entity.user.User;
+import com.v.hana.repository.user.UserRepository;
 import com.v.hana.usecase.account.AccountUseCase;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Optional;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -44,7 +40,8 @@ public class AccountController {
     public ResponseEntity<AccountGetResponse> getAccount() {
         User currentUser = securityUtil.getCurrentUser();
         AccountGetResponse accounts =
-                accountUseCase.getAccounts(GetAccountsCommand.builder().userId(currentUser.getId()).build());
+                accountUseCase.getAccounts(
+                        GetAccountsCommand.builder().userId(currentUser.getId()).build());
 
         return ResponseEntity.ok(accounts);
     }
@@ -56,11 +53,11 @@ public class AccountController {
             @RequestParam(name = "option", required = false, defaultValue = "0") Integer option,
             @RequestParam(name = "sort", required = false, defaultValue = "true") Boolean sort,
             @RequestParam(name = "start", required = false)
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-            LocalDate start,
+                    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                    LocalDate start,
             @RequestParam(name = "end", required = false)
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-            LocalDate end) {
+                    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                    LocalDate end) {
 
         if (start == null) {
             start = LocalDate.now().minusMonths(1);
@@ -82,8 +79,13 @@ public class AccountController {
 
     @MethodInfo(name = "checkAccountNumber", description = "등록 요청한 계좌번호가 유효한지 확인합니다.")
     @PostMapping("/accounts/check/account-info")
-    public ResponseEntity<AccountCheckResponse> checkAccountNumber(@RequestBody AccountCheckRequest request) {
-        AccountCheckResponse checkedAccountNumber = accountUseCase.checkAccountNumber(CheckAccountNumberCommand.builder().accountNumber(request.getAccountNumber()).build());
+    public ResponseEntity<AccountCheckResponse> checkAccountNumber(
+            @RequestBody AccountCheckRequest request) {
+        AccountCheckResponse checkedAccountNumber =
+                accountUseCase.checkAccountNumber(
+                        CheckAccountNumberCommand.builder()
+                                .accountNumber(request.getAccountNumber())
+                                .build());
 
         return ResponseEntity.ok(checkedAccountNumber);
     }
@@ -91,18 +93,20 @@ public class AccountController {
     @MethodInfo(name = "registerAccount", description = "계좌정보를 등록합니다.")
     @PostMapping("/accounts")
     @CurrentUser
-    public ResponseEntity<AccountRegisterResponse> registerAccount(@RequestBody AccountRegisterRequest request) {
+    public ResponseEntity<AccountRegisterResponse> registerAccount(
+            @RequestBody AccountRegisterRequest request) {
         // TODO : 회원 검증 로직 추가
         User currentUser = securityUtil.getCurrentUser();
-        AccountRegisterResponse registeredAccount = accountUseCase.registerAccount(RegisterAccountCommand.builder()
-                .user(currentUser)
-                .bankName(request.getBankName())
-                .accountNumber(request.getAccountNumber())
-                .accountType(request.getAccountType())
-                .accountName(request.getAccountName())
-                .balance(request.getBalance())
-                .build());
+        AccountRegisterResponse registeredAccount =
+                accountUseCase.registerAccount(
+                        RegisterAccountCommand.builder()
+                                .user(currentUser)
+                                .bankName(request.getBankName())
+                                .accountNumber(request.getAccountNumber())
+                                .accountType(request.getAccountType())
+                                .accountName(request.getAccountName())
+                                .balance(request.getBalance())
+                                .build());
         return ResponseEntity.ok(registeredAccount);
     }
-
 }

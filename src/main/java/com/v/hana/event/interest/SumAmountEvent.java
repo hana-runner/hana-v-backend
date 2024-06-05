@@ -5,8 +5,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.LocalDate;
-
 @Getter
 public class SumAmountEvent extends BaseEvent {
     @NotNull(message = "관심사 ID는 필수입니다.")

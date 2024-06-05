@@ -14,7 +14,13 @@ public class RegisterAccountCommand {
     private final Long balance;
 
     @Builder
-    public RegisterAccountCommand(User user, String bankName, String accountNumber, String accountName, String accountType, Long balance) {
+    public RegisterAccountCommand(
+            User user,
+            String bankName,
+            String accountNumber,
+            String accountName,
+            String accountType,
+            Long balance) {
         this.user = user;
         this.bankName = bankName;
         this.accountNumber = accountNumber;

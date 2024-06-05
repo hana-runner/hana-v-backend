@@ -7,24 +7,21 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     env:
       SPRING_PROFILES_ACTIVE: test
+      LOGGING_LEVEL: TRACE
       DATABASE_JDBC_URL: ${{ secrets.DATABASE_JDBC_URL }}
       MYSQL_USERNAME: ${{ secrets.MYSQL_USERNAME }}
       MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
-      EMAIL_HOST: ${{ secretes.EMAIL_HOST }}
-      EMAIL_PORT: ${{ secretes.EMAIL_PORT }}
-      EMAIL_USERNAME: ${{ secretes.EMAIL_USERNAME }}
-      EMAIL_PASSWORD: ${{ secretes.EMAIL_PASSWORD }}
-      REDIS_VERSION: ${{ secretes.REDIS_VERSION }}
-      REDIS_HOST: ${{ secretes.REDIS_HOST }}
-      REDIS_PORT: ${{ secretes.REDIS_PORT }}
-      REDIS_PASSWORD: ${{ secretes.REDIS_PASSWORD }}
-      REDIS_VOLUME: ${{ secrets.REDIS_VOLUME }}
-      JWT_SECRET_KEY: ${{ secerts.JWT_SECRET_KEY }}
+      EMAIL_HOST: ${{ secrets.EMAIL_HOST }}
+      EMAIL_PORT: ${{ secrets.EMAIL_PORT }}
+      EMAIL_USERNAME: ${{ secrets.EMAIL_USERNAME }}
+      EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+      REDIS_HOST: ${{ secrets.REDIS_HOST }}
+      REDIS_PORT: ${{ secrets.REDIS_PORT }}
+      REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
+      JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
       ACCESS_TOKEN_EXPIRATION: ${{ secrets.ACCESS_TOKEN_EXPIRATION }}
       REFRESH_TOKEN_EXPIRATION: ${{ secrets.REFRESH_TOKEN_EXPIRATION }}
 

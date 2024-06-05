@@ -1,15 +1,13 @@
 name: 프로젝트 배포
 
 on:
-  pull_request:
-    types: [closed]
+  push:
     branches:
-      - master
+      - 'dev'
 
 jobs:
   push:
     runs-on: ubuntu-latest
-
     steps:
       - name: 코드 체크아웃
         uses: actions/checkout@v3
@@ -53,15 +51,12 @@ jobs:
           echo "ENV EMAIL_PORT=${{ secrets.EMAIL_PORT }}" >> dockerfile.temp
           echo "ENV EMAIL_USERNAME=${{ secrets.EMAIL_USERNAME }}" >> dockerfile.temp
           echo "ENV EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }}" >> dockerfile.temp
-          echo "ENV REDIS_VERSION=${{ secrets.REDIS_HOST }}" >> dockerfile.temp
           echo "ENV REDIS_HOST=${{ secrets.REDIS_HOST }}" >> dockerfile.temp
           echo "ENV REDIS_PORT=${{ secrets.REDIS_PORT }}" >> dockerfile.temp
-          echo "ENV REDIS_VOLUME=${{ secrets.REDIS_VOLUNE }}" >> dockerfile.temp
           echo "ENV REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}" >> dockerfile.temp
           echo "ENV JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}" >> dockerfile.temp
           echo "ENV REFRESH_TOKEN_EXPIRATION=${{ secrets.REFRESH_TOKEN_EXPIRATION }}" >> dockerfile.temp
           echo "ENV ACCESS_TOKEN_EXPIRATION=${{ secrets.ACCESS_TOKEN_EXPIRATION }}" >> dockerfile.temp
-          
           
           mv dockerfile.temp dockerfile
 
@@ -114,8 +109,10 @@ jobs:
           key: ${{ secrets.EC2_KEY }}
           script: |
             sudo docker stop ${{ secrets.DOCKER_HUB_NAME }}
-            sudo docker rm -f ${{ secrets.DOCKER_HUB_NAME }}
-            sudo docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_NAME }}:latest
+            sudo docker rm ${{ secrets.DOCKER_HUB_NAME }}
+            sudo docker image prune -a -f
+            sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_NAME }}:latest
             sudo docker run -p ${{ secrets.DOCKER_HUB_PORT }}:8080 \
+              -p ${{ secrets.RDS_PORT }}:3306 \
               --name ${{ secrets.DOCKER_HUB_NAME }} \
               -d ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_NAME }}

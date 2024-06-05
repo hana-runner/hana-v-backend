@@ -2,6 +2,7 @@ buildscript {
 	ext {
 		springBootVersion = '3.2.5'
 		restdocsApiSpecVersion = '0.17.1'
+		testContainerVersion = '1.19.5'
 	}
 }
 
@@ -59,7 +60,6 @@ dependencies {
 	testRuntimeOnly group: 'org.junit.platform', name: 'junit-platform-launcher', version: '1.10.2'
 	compileOnly group: 'org.projectlombok', name: 'lombok', version: lombokVersion
 	runtimeOnly  group: 'com.mysql', name: 'mysql-connector-j', version: '8.4.0'
-	runtimeOnly group: 'com.h2database', name: 'h2', version: '2.2.224'
 	annotationProcessor group: 'org.projectlombok', name: 'lombok', version: lombokVersion
 	testCompileOnly group: 'org.projectlombok', name: 'lombok', version: lombokVersion
 	testAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: lombokVersion
@@ -76,6 +76,10 @@ dependencies {
 	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
 	implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
 	implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+	// Testcontainers
+	testImplementation group: 'org.testcontainers', name: 'testcontainers', version: testContainerVersion
+	testImplementation group: 'org.testcontainers', name: 'junit-jupiter', version: testContainerVersion
 }
 
 openapi3 {

@@ -20,7 +20,6 @@ import jakarta.validation.Valid;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @TypeInfo(name = "UserController", description = "유저 컨트롤러 클래스")
@@ -128,8 +127,7 @@ public class UserController {
     public ResponseEntity<PostSuccessResponse> updateUserEmail(
             @RequestBody UpdateUserInfoRequest updateUserInfoRequest) {
         User user = securityUtil.getCurrentUser();
-        userRepository.updateEmailByUsername(
-                user.getUsername(), updateUserInfoRequest.getEmail());
+        userRepository.updateEmailByUsername(user.getUsername(), updateUserInfoRequest.getEmail());
         return ResponseEntity.ok(PostSuccessResponse.builder().build());
     }
 }

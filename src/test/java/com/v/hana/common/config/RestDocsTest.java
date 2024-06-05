@@ -1,4 +1,4 @@
-package com.v.hana.docs;
+package com.v.hana.common.config;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 
@@ -13,7 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 @TypeInfo(name = "RestDocsTest", description = "Rest Docs 테스트 클래스")
-@ExtendWith(RestDocumentationExtension.class)
+@ExtendWith({RestDocumentationExtension.class, MySQLTestConfig.class, RedisTestConfig.class})
 public abstract class RestDocsTest {
 
     protected MockMvc mockMvc;

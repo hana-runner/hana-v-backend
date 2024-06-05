@@ -34,7 +34,13 @@ public class AccountApi {
     private String accountType;
 
     @Builder
-    public AccountApi(Long id, String accountNumber, Long balance, String bankName, String accountName, String accountType) {
+    public AccountApi(
+            Long id,
+            String accountNumber,
+            Long balance,
+            String bankName,
+            String accountName,
+            String accountType) {
         this.id = id;
         this.accountNumber = accountNumber;
         this.balance = balance;

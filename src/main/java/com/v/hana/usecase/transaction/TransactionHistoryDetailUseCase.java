@@ -4,7 +4,6 @@ import com.v.hana.command.transaction.ReadTransactionHistoryDetailsByIdCommend;
 import com.v.hana.command.transaction.ReadTransactionsCommand;
 import com.v.hana.command.transaction.UpdateTransactionHistoryDetailCommend;
 import com.v.hana.entity.transaction.TransactionHistoryDetail;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -18,7 +17,8 @@ public interface TransactionHistoryDetailUseCase {
     ArrayList<TransactionHistoryDetail> updateTransactionHistoryDetails(
             UpdateTransactionHistoryDetailCommend updateTransactionHistoryDetailCommend);
 
-    Long sumAmountByUserIdAndInterestId(Long userId, Long interestId, LocalDate start, LocalDate end);
+    Long sumAmountByUserIdAndInterestId(
+            Long userId, Long interestId, LocalDate start, LocalDate end);
 
     Long sumAmountByInterestId(Long interestId, LocalDate start, LocalDate end);
 }

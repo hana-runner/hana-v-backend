@@ -64,7 +64,6 @@ public class UserInterestController {
         return ResponseEntity.ok(reports);
     }
 
-
     public UserInterestController(UserInterestUseCase userInterestUseCase) {
         this.userInterestUseCase = userInterestUseCase;
     }
