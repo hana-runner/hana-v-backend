@@ -21,7 +21,12 @@ public class SumAmountEventListener {
     public UserInterestReportsResponse handle(SumAmountEvent sumAmountEvent) {
         Long userId = sumAmountEvent.getUserId();
 
-        LocalDate end = LocalDate.now();
+        LocalDate end = LocalDate.of(sumAmountEvent.getYear(), sumAmountEvent.getMonth(), 1);
+
+        if (end.isAfter(LocalDate.now())) {
+            end = LocalDate.now();
+        }
+
         LocalDate start = end.minusMonths(6).withDayOfMonth(1);
 
         Long myAverage = transactionHistoryDetailUseCase

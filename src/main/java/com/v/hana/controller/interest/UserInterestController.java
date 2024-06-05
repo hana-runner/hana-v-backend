@@ -50,12 +50,16 @@ public class UserInterestController {
     @GetMapping("/user-interests/report/{interestId}")
     public ResponseEntity<UserInterestReportsResponse> getUserInterestReports(
             @PathVariable Long interestId,
-            @RequestParam Long userId) {
+            @RequestParam Long userId,
+            @RequestParam int year,
+            @RequestParam int month) {
         UserInterestReportsResponse reports =
                 userInterestUseCase.getUserInterestReports(
                         GetUserInterestReportsCommand.builder()
                                 .interestId(interestId)
                                 .userId(userId)
+                                .year(year)
+                                .month(month)
                                 .build());
         return ResponseEntity.ok(reports);
     }
