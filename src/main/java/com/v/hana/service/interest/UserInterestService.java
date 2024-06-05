@@ -97,6 +97,8 @@ public class UserInterestService implements UserInterestUseCase {
                 SumAmountEvent.builder()
                         .userId(getUserInterestReportsCommand.getUserId())
                         .interestId(getUserInterestReportsCommand.getInterestId())
+                        .year(getUserInterestReportsCommand.getYear())
+                        .month(getUserInterestReportsCommand.getMonth())
                         .build());
     }
 
