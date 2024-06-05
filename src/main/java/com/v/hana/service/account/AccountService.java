@@ -13,11 +13,10 @@ import com.v.hana.repository.account.AccountApiRepository;
 import com.v.hana.repository.account.AccountRepository;
 import com.v.hana.repository.transaction.TransactionHistoryRepository;
 import com.v.hana.usecase.account.AccountUseCase;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @TypeInfo(name = "AccountService", description = "계좌 서비스 클래스")
 @Service
@@ -102,8 +101,10 @@ public class AccountService implements AccountUseCase {
     @MethodInfo(name = "getExpensePerCategories", description = "카테고리별 지출 합계를 조회합니다.")
     @Override
     public AccountExpenseResponse getExpensePerCategories(GetExpenseCommand command) {
-        ArrayList<ExpensePerCategory> expensePerCategories = transactionHistoryRepository.getExpensePerCategories(command.getUserId(), command.getStart(), command.getEnd());
-        if (expensePerCategories.isEmpty()){
+        ArrayList<ExpensePerCategory> expensePerCategories =
+                transactionHistoryRepository.getExpensePerCategories(
+                        command.getUserId(), command.getStart(), command.getEnd());
+        if (expensePerCategories.isEmpty()) {
             throw new ExpenseNotFoundException();
         }
         return AccountExpenseResponse.builder().data(expensePerCategories).build();

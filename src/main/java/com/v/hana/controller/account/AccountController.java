@@ -8,13 +8,12 @@ import com.v.hana.common.annotation.TypeInfo;
 import com.v.hana.dto.account.*;
 import com.v.hana.entity.user.User;
 import com.v.hana.usecase.account.AccountUseCase;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDate;
-import java.time.LocalTime;
 
 @TypeInfo(name = "AccountController", description = "계좌 컨트롤러")
 @RestController
@@ -105,28 +104,31 @@ public class AccountController {
     @MethodInfo(name = "getExpensePerCategories", description = "카테고리별 지출 합계를 조회합니다.")
     @GetMapping("/accounts/categories")
     @CurrentUser
-    public ResponseEntity<AccountExpenseResponse> getExpensePerCategories(@RequestParam(name = "start", required = false)
-                                                     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-                                                     LocalDate start, @RequestParam(name = "end", required = false)
-                                                     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-                                                     LocalDate end) {
+    public ResponseEntity<AccountExpenseResponse> getExpensePerCategories(
+            @RequestParam(name = "start", required = false)
+                    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                    LocalDate start,
+            @RequestParam(name = "end", required = false)
+                    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                    LocalDate end) {
         if (start == null) {
             start = LocalDate.now().minusMonths(1);
-//            start = LocalDate.of(2024, 4, 5);
+            //            start = LocalDate.of(2024, 4, 5);
         }
 
         if (end == null) {
             end = LocalDate.now();
-//            end = LocalDate.of(2024, 5, 5);
+            //            end = LocalDate.of(2024, 5, 5);
         }
         User currentUser = securityUtil.getCurrentUser();
-        AccountExpenseResponse expensePerCategories = accountUseCase.getExpensePerCategories(GetExpenseCommand.builder()
-                .userId(currentUser.getId())
-                .start(start)
-                .end(end)
-                .build());
+        AccountExpenseResponse expensePerCategories =
+                accountUseCase.getExpensePerCategories(
+                        GetExpenseCommand.builder()
+                                .userId(currentUser.getId())
+                                .start(start)
+                                .end(end)
+                                .build());
 
         return ResponseEntity.ok(expensePerCategories);
     }
-
 }
