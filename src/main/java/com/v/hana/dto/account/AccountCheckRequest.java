@@ -13,5 +13,4 @@ public class AccountCheckRequest {
         this.bankName = bankName;
         this.accountNumber = accountNumber;
     }
-
 }

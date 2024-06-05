@@ -9,8 +9,8 @@ import com.v.hana.common.annotation.TypeInfo;
 import com.v.hana.dto.account.AccountCheckResponse;
 import com.v.hana.dto.account.AccountDto;
 import com.v.hana.dto.account.AccountGetResponse;
-import com.v.hana.dto.account.AccountTransactionGetResponse;
 import com.v.hana.dto.account.AccountRegisterResponse;
+import com.v.hana.dto.account.AccountTransactionGetResponse;
 import com.v.hana.entity.account.Account;
 import com.v.hana.event.account.ReadAccountTransactionEvent;
 import com.v.hana.event.account.ReadAccountTransactionEventListener;
@@ -18,10 +18,8 @@ import com.v.hana.exception.account.AccountNotFoundException;
 import com.v.hana.repository.account.AccountApiRepository;
 import com.v.hana.repository.account.AccountRepository;
 import com.v.hana.usecase.account.AccountUseCase;
-
 import java.util.ArrayList;
 import java.util.stream.Collectors;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -37,20 +35,25 @@ public class AccountService implements AccountUseCase {
     @Override
     public AccountGetResponse getAccounts(GetAccountsCommand command) {
 
-        return AccountGetResponse.builder().data(accountRepository.findByUserId(command.getUserId()).stream()
-                        .map(
-                                account -> {
-                                    Account accountFound = accountRepository.findById(account.getId())
-                                            .orElseThrow(AccountNotFoundException::new);
-                                    return AccountDto.builder()
-                                            .id(accountFound.getId())
-                                            .accountName(accountFound.getAccountName())
-                                            .accountNumber(accountFound.getAccountNumber())
-                                            .accountType(accountFound.getAccountType())
-                                            .balance(accountFound.getBalance())
-                                            .build();
-                                })
-                        .collect(Collectors.toCollection(ArrayList::new)))
+        return AccountGetResponse.builder()
+                .data(
+                        accountRepository.findByUserId(command.getUserId()).stream()
+                                .map(
+                                        account -> {
+                                            Account accountFound =
+                                                    accountRepository
+                                                            .findById(account.getId())
+                                                            .orElseThrow(
+                                                                    AccountNotFoundException::new);
+                                            return AccountDto.builder()
+                                                    .id(accountFound.getId())
+                                                    .accountName(accountFound.getAccountName())
+                                                    .accountNumber(accountFound.getAccountNumber())
+                                                    .accountType(accountFound.getAccountType())
+                                                    .balance(accountFound.getBalance())
+                                                    .build();
+                                        })
+                                .collect(Collectors.toCollection(ArrayList::new)))
                 .build();
     }
 
@@ -76,21 +79,26 @@ public class AccountService implements AccountUseCase {
     public AccountCheckResponse checkAccountNumber(CheckAccountNumberCommand command) {
 
         return AccountCheckResponse.builder()
-                .data(accountApiRepository.findByAccountNumber(command.getAccountNumber()).orElseThrow(AccountNotFoundException::new))
+                .data(
+                        accountApiRepository
+                                .findByAccountNumber(command.getAccountNumber())
+                                .orElseThrow(AccountNotFoundException::new))
                 .build();
     }
 
     @MethodInfo(name = "registerAccount", description = "계좌정보를 등록합니다.")
     @Override
     public AccountRegisterResponse registerAccount(RegisterAccountCommand command) {
-        Account savedAccount = accountRepository.save(Account.builder()
-                .user(command.getUser())
-                .bankName(command.getBankName())
-                .accountNumber(command.getAccountNumber())
-                .accountName(command.getAccountName())
-                .accountType(command.getAccountType())
-                .balance(command.getBalance())
-                .build());
+        Account savedAccount =
+                accountRepository.save(
+                        Account.builder()
+                                .user(command.getUser())
+                                .bankName(command.getBankName())
+                                .accountNumber(command.getAccountNumber())
+                                .accountName(command.getAccountName())
+                                .accountType(command.getAccountType())
+                                .balance(command.getBalance())
+                                .build());
         return AccountRegisterResponse.builder().id(savedAccount.getId()).build();
     }
 }

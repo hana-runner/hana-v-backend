@@ -224,7 +224,9 @@ public class TransactionHistoryController {
                                 transactionHistoryDetailUseCase.updateTransactionHistoryDetails(
                                         UpdateTransactionHistoryDetailCommend.builder()
                                                 .id(transactionHistoryId)
-                                                .interests(transactionHistoryDetailsPostRequest.getInterests())
+                                                .interests(
+                                                        transactionHistoryDetailsPostRequest
+                                                                .getInterests())
                                                 .build()));
 
         CompletableFuture.allOf(transactionHistoryFuture, transactionHistoryDetailsFuture).join();

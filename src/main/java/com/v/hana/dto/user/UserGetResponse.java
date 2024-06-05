@@ -1,6 +1,5 @@
 package com.v.hana.dto.user;
 
-import com.v.hana.common.constant.Gender;
 import com.v.hana.common.response.BaseResponse;
 import java.time.LocalDate;
 import lombok.Builder;

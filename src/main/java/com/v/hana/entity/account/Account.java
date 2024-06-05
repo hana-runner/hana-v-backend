@@ -69,5 +69,4 @@ public class Account {
             this.registeredAt = new Timestamp(System.currentTimeMillis());
         }
     }
-
 }
