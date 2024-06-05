@@ -3,15 +3,7 @@ package com.v.hana.service.account;
 import com.v.hana.command.account.*;
 import com.v.hana.common.annotation.MethodInfo;
 import com.v.hana.common.annotation.TypeInfo;
-<<<<<<< Updated upstream
-import com.v.hana.dto.account.AccountCheckResponse;
-import com.v.hana.dto.account.AccountDto;
-import com.v.hana.dto.account.AccountGetResponse;
-import com.v.hana.dto.account.AccountRegisterResponse;
-import com.v.hana.dto.account.AccountTransactionGetResponse;
-=======
 import com.v.hana.dto.account.*;
->>>>>>> Stashed changes
 import com.v.hana.entity.account.Account;
 import com.v.hana.event.account.ReadAccountTransactionEvent;
 import com.v.hana.event.account.ReadAccountTransactionEventListener;
@@ -21,10 +13,11 @@ import com.v.hana.repository.account.AccountApiRepository;
 import com.v.hana.repository.account.AccountRepository;
 import com.v.hana.repository.transaction.TransactionHistoryRepository;
 import com.v.hana.usecase.account.AccountUseCase;
-import java.util.ArrayList;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 @TypeInfo(name = "AccountService", description = "계좌 서비스 클래스")
 @Service

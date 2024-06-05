@@ -2,38 +2,19 @@ package com.v.hana.controller.account;
 
 import com.v.hana.auth.annotation.CurrentUser;
 import com.v.hana.auth.util.user.SecurityUtil;
-<<<<<<< Updated upstream
-import com.v.hana.command.account.CheckAccountNumberCommand;
-import com.v.hana.command.account.GetAccountsCommand;
-import com.v.hana.command.account.ReadTransactionsCommand;
-import com.v.hana.command.account.RegisterAccountCommand;
-=======
 import com.v.hana.command.account.*;
->>>>>>> Stashed changes
 import com.v.hana.common.annotation.MethodInfo;
 import com.v.hana.common.annotation.TypeInfo;
 import com.v.hana.dto.account.*;
-import com.v.hana.dto.account.AccountCheckRequest;
-import com.v.hana.dto.account.AccountCheckResponse;
-import com.v.hana.dto.account.AccountGetResponse;
-import com.v.hana.dto.account.AccountTransactionGetResponse;
-<<<<<<< Updated upstream
-=======
-import com.v.hana.dto.account.*;
->>>>>>> Stashed changes
 import com.v.hana.entity.user.User;
-import com.v.hana.repository.user.UserRepository;
 import com.v.hana.usecase.account.AccountUseCase;
-import java.time.LocalDate;
-import java.time.LocalTime;
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @TypeInfo(name = "AccountController", description = "계좌 컨트롤러")
 @RestController
@@ -120,8 +101,6 @@ public class AccountController {
                                 .build());
         return ResponseEntity.ok(registeredAccount);
     }
-<<<<<<< Updated upstream
-=======
 
     @MethodInfo(name = "getExpensePerCategories", description = "카테고리별 지출 합계를 조회합니다.")
     @GetMapping("/accounts/categories")
@@ -150,5 +129,4 @@ public class AccountController {
         return ResponseEntity.ok(expensePerCategories);
     }
 
->>>>>>> Stashed changes
 }
