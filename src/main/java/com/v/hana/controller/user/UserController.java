@@ -119,7 +119,7 @@ public class UserController {
                         .username(user.getUsername())
                         .email(user.getEmail())
                         .birthday(user.getBirthday())
-                        .gender(user.getGender())
+                        .gender(user.getGender().ordinal())
                         .build());
     }
 
