@@ -1,0 +1,20 @@
+version: ${DOCKER_COMPOSE_VERSION}
+
+services:
+  redis:
+    image: redis:${REDIS_VERSION}
+    container_name: hana_v_redis
+    hostname: hana_v_redis
+    ports:
+      - ${REDIS_PORT}:6379
+    command: >
+      bash -c "
+      redis-server --port ${REDIS_PORT} --requirepass ${REDIS_PASSWORD}
+      "
+    volumes:
+      - ${REDIS_VOLUME}/data:/data
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 10s
+      retries: 120
