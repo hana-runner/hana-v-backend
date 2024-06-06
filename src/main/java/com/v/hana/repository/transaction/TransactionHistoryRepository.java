@@ -1,5 +1,6 @@
 package com.v.hana.repository.transaction;
 
+import com.v.hana.common.annotation.MethodInfo;
 import com.v.hana.common.annotation.TypeInfo;
 import com.v.hana.dto.account.ExpensePerCategory;
 import com.v.hana.entity.transaction.TransactionHistory;
@@ -7,6 +8,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -23,6 +25,14 @@ public interface TransactionHistoryRepository extends JpaRepository<TransactionH
     Long findUserSpendingByDate(Long userId, int year, int month);
 
     ArrayList<TransactionHistory> findAll(Sort sort);
+
+    @MethodInfo(name = "updateCategory", description = "거래내역 카테고리를 수정합니다.")
+    @Modifying
+    @Query(
+            value =
+                    "UPDATE transaction_histories SET category_id = :categoryId WHERE id = :transactionHistoryId",
+            nativeQuery = true)
+    void updateCategory(Long transactionHistoryId, Long categoryId);
 
     @Query(
             value =

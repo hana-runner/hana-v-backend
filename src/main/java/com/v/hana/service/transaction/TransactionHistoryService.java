@@ -9,6 +9,7 @@ import com.v.hana.entity.transaction.TransactionHistory;
 import com.v.hana.exception.transaction.TransactionIdNotFoundException;
 import com.v.hana.repository.transaction.TransactionHistoryRepository;
 import com.v.hana.usecase.transaction.TransactionHistoryUseCase;
+import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -30,24 +31,10 @@ public class TransactionHistoryService implements TransactionHistoryUseCase {
 
     @MethodInfo(name = "updateTransactionHistory", description = "거래내역 상세를 수정합니다.")
     @Override
+    @Transactional
     public TransactionHistory updateTransactionHistory(UpdateTransactionHistoryCommand command) {
-        TransactionHistory transactionHistory =
-                transactionHistoryRepository
-                        .findById(command.getId())
-                        .orElseThrow(TransactionIdNotFoundException::new);
-
-        return transactionHistoryRepository.save(
-                TransactionHistory.builder()
-                        .user(transactionHistory.getUser())
-                        .account(transactionHistory.getAccount())
-                        .category(command.getCategory())
-                        .approvalNumber(transactionHistory.getApprovalNumber())
-                        .type(transactionHistory.getType())
-                        .description(transactionHistory.getDescription())
-                        .action(transactionHistory.getAction())
-                        .amount(transactionHistory.getAmount())
-                        .balance(transactionHistory.getBalance())
-                        .build());
+        transactionHistoryRepository.updateCategory(command.getId(), command.getCategory().getId());
+        return transactionHistoryRepository.findById(command.getId()).get();
     }
 
     @MethodInfo(name = "readTransactionHistory", description = "거래내역 목록을 조회합니다.")
