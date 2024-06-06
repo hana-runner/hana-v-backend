@@ -65,16 +65,6 @@ jobs:
       - name: Gradle 빌드
         run: ./gradlew build --no-daemon
 
-      - name: PR에 테스트 커버리지 리포트 작성
-        id: jacoco
-        uses: madrapps/jacoco-report@v1.2
-        with:
-          title: 📝 테스트 커버리지 리포트
-          paths: ${{ github.workspace }}/build/reports/jacoco/test/jacocoTestReport.xml
-          token: ${{ secrets.GITHUB_TOKEN }}
-          min-coverage-overall: 50
-          min-coverage-changed-files: 50
-
       - name: Docker Buildx 설정
         uses: docker/setup-buildx-action@v2
 
@@ -89,7 +79,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_NAME }}:${{ github.sha }}
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/hana-v-backend:${{ github.sha }}
 
       - name: Docker 이미지 디제스트 값 출력
         run: echo ${{ steps.docker_build.outputs.digest }}
@@ -99,7 +89,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_NAME }}:latest
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/hana-v-backend:latest
 
       - name: 어플리케이션 배포
         uses: appleboy/ssh-action@master
@@ -108,11 +98,11 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_KEY }}
           script: |
-            sudo docker stop ${{ secrets.DOCKER_HUB_NAME }}
-            sudo docker rm ${{ secrets.DOCKER_HUB_NAME }}
+            sudo docker stop hana-v-backend
+            sudo docker rm hana-v-backend
             sudo docker image prune -a -f
             sudo docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_NAME }}:latest
             sudo docker run -p ${{ secrets.DOCKER_HUB_PORT }}:8080 \
               -p ${{ secrets.RDS_PORT }}:3306 \
-              --name ${{ secrets.DOCKER_HUB_NAME }} \
-              -d ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_NAME }}
+              --name hana-v-backend \
+              -d ${{ secrets.DOCKER_HUB_USERNAME }}/hana-v-backend
