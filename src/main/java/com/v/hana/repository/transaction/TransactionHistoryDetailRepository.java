@@ -88,6 +88,6 @@ public interface TransactionHistoryDetailRepository
             "JOIN interests i ON i.id = thd.interest_id " +
             "JOIN temp ON temp.id = thd.transaction_history_id " +
             "WHERE u.id = :userId " +
-            "AND thd.created_at BETWEEN :start AND :end", nativeQuery = true)
+            "AND thd.created_at >= :start AND thd.created_at <= :end", nativeQuery = true)
     ArrayList<ExpensePerInterest> getExpensePerInterests(Long userId, LocalDate start, LocalDate end);
 }

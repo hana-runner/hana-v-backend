@@ -435,7 +435,7 @@ public class TransactionHistoryController {
         }
 
         if (end == null) {
-            end = LocalDate.now();
+            end = LocalDate.now().plusDays(1);
             //            end = LocalDate.of(2024, 5, 5);
         }
         User currentUser = securityUtil.getCurrentUser();
