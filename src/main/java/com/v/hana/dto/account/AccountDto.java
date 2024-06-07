@@ -13,7 +13,13 @@ public class AccountDto {
     private final String accountType;
 
     @Builder
-    public AccountDto(Long id, String bankName, String accountNumber, Long balance, String accountName, String accountType) {
+    public AccountDto(
+            Long id,
+            String bankName,
+            String accountNumber,
+            Long balance,
+            String accountName,
+            String accountType) {
         this.id = id;
         this.bankName = bankName;
         this.accountNumber = accountNumber;

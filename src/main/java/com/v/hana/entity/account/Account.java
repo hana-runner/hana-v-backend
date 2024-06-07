@@ -8,12 +8,14 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
 
 @TypeInfo(name = "Account", description = "계좌 엔티티 클래스")
 @Entity
 @Table(name = "accounts")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@SQLDelete(sql = "UPDATE accounts SET is_deleted = true WHERE id = ?")
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

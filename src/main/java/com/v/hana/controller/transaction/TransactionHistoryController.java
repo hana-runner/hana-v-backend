@@ -26,7 +26,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
@@ -422,12 +421,13 @@ public class TransactionHistoryController {
     @MethodInfo(name = "getExpensePerInterests", description = "카테고리 지출에 대한 관심사별 지출 합계를 조회합니다.")
     @GetMapping("/transaction-history-details/expenses")
     @CurrentUser
-    public ResponseEntity<ExpenseResponse> getExpensePerInterests(@RequestParam(name = "start", required = false)
-                                                        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-                                                        LocalDate start,
-                                                                  @RequestParam(name = "end", required = false)
-                                                        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-                                                        LocalDate end) {
+    public ResponseEntity<ExpenseResponse> getExpensePerInterests(
+            @RequestParam(name = "start", required = false)
+                    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                    LocalDate start,
+            @RequestParam(name = "end", required = false)
+                    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                    LocalDate end) {
 
         if (start == null) {
             start = LocalDate.now().minusMonths(1);
@@ -439,8 +439,9 @@ public class TransactionHistoryController {
             //            end = LocalDate.of(2024, 5, 5);
         }
         User currentUser = securityUtil.getCurrentUser();
-        ArrayList<ExpensePerInterest> expensePerInterests = transactionHistoryDetailUseCase.getExpensePerInterests(currentUser.getId(), start, end);
+        ArrayList<ExpensePerInterest> expensePerInterests =
+                transactionHistoryDetailUseCase.getExpensePerInterests(
+                        currentUser.getId(), start, end);
         return ResponseEntity.ok(ExpenseResponse.builder().data(expensePerInterests).build());
     }
-
 }
