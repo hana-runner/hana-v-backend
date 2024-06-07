@@ -15,6 +15,8 @@ import com.v.hana.entity.user.User;
 import com.v.hana.exception.user.InvalidUserAccessException;
 import com.v.hana.exception.user.UserNameDuplicateException;
 import com.v.hana.repository.user.UserRepository;
+import com.v.hana.service.RedisService;
+import com.v.hana.service.fcm.GetValidNotificationService;
 import com.v.hana.service.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -39,6 +41,8 @@ public class UserController {
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
     private final SecurityUtil securityUtil;
+    private final RedisService redisService;
+    private final GetValidNotificationService getValidNotificationService;
 
     @MethodInfo(name = "user join", description = "유저 컨트롤러의 회원 가입 메소드를 실행합니다.")
     @PostMapping("/users/join")
@@ -491,5 +495,46 @@ public class UserController {
         User user = securityUtil.getCurrentUser();
         userRepository.updateEmailByUsername(user.getUsername(), updateUserInfoRequest.getEmail());
         return ResponseEntity.ok(PostSuccessResponse.builder().build());
+    }
+
+    @PutMapping("/users/update/is_receieve_alarm")
+    @CurrentUser
+    public ResponseEntity<PostSuccessResponse> updateIsReceieveAlarm(
+            @RequestBody UpdateIsReceieveAlarmRequest updateIsReceieveAlarmRequest) {
+        User user = securityUtil.getCurrentUser();
+        userRepository.updateIsReceiveAlarmByUsername(
+                user.getUsername(), updateIsReceieveAlarmRequest.is_receieve_alarm());
+        return ResponseEntity.ok(PostSuccessResponse.builder().build());
+    }
+
+    @PostMapping("/users/alarm/device_token")
+    @CurrentUser
+    public ResponseEntity<PostSuccessResponse> updateDeviceToken(
+            @RequestBody UpdateDeviceTokenRequest updateDeviceTokenRequest) {
+        User user = securityUtil.getCurrentUser();
+        redisService.set(
+                user.getUsername() + ":device-token", updateDeviceTokenRequest.getDevice_token());
+        return ResponseEntity.ok(PostSuccessResponse.builder().build());
+    }
+
+    @GetMapping("/users/alarms")
+    @CurrentUser
+    public ResponseEntity<GetSuccessResponse<Object>> getUserAlarms() {
+        User user = securityUtil.getCurrentUser();
+        return ResponseEntity.ok(
+                GetSuccessResponse.builder()
+                        .data(
+                                getValidNotificationService.getNotifications(
+                                        String.valueOf(user.getId())))
+                        .build());
+    }
+
+    @DeleteMapping("/users/alarms")
+    @Transactional
+    @CurrentUser
+    public ResponseEntity<DeleteSuccessResponse> deleteUserAlarm() {
+        User user = securityUtil.getCurrentUser();
+        redisService.deleteArray("user:" + user.getId() + ":notifications");
+        return ResponseEntity.ok(DeleteSuccessResponse.builder().build());
     }
 }

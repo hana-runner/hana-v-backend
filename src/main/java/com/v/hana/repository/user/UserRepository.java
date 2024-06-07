@@ -33,4 +33,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
             value = "UPDATE users u SET u.email = :newEmail WHERE u.username = :username",
             nativeQuery = true)
     void updateEmailByUsername(String username, String newEmail);
+
+    @Modifying
+    @Transactional
+    @Query(
+            value =
+                    "UPDATE users u SET u.is_receive_alarm = :is_receive_alarm WHERE u.username = :username",
+            nativeQuery = true)
+    void updateIsReceiveAlarmByUsername(String username, boolean is_receive_alarm);
 }
