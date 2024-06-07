@@ -1,5 +1,7 @@
 package com.v.hana.controller.transaction;
 
+import com.v.hana.auth.annotation.CurrentUser;
+import com.v.hana.auth.util.user.SecurityUtil;
 import com.v.hana.command.category.FindCategoryByIdCommand;
 import com.v.hana.command.transaction.ReadTransactionHistoryByIdCommend;
 import com.v.hana.command.transaction.ReadTransactionHistoryDetailsByIdCommend;
@@ -11,6 +13,7 @@ import com.v.hana.dto.interest.InterestDto;
 import com.v.hana.dto.transaction.*;
 import com.v.hana.entity.transaction.TransactionHistory;
 import com.v.hana.entity.transaction.TransactionHistoryDetail;
+import com.v.hana.entity.user.User;
 import com.v.hana.usecase.category.CategoryUseCase;
 import com.v.hana.usecase.transaction.TransactionHistoryDetailUseCase;
 import com.v.hana.usecase.transaction.TransactionHistoryUseCase;
@@ -30,12 +33,14 @@ public class TransactionHistoryController {
     private final TransactionHistoryUseCase transactionHistoryUseCase;
     private final TransactionHistoryDetailUseCase transactionHistoryDetailUseCase;
     private final CategoryUseCase categoryUseCase;
+    private final SecurityUtil securityUtil;
 
     @MethodInfo(name = "transactionHistoryGet", description = "거래내역 목록을 조회합니다.")
     @GetMapping("/transaction-histories/{transactionHistoryId}")
+    @CurrentUser
     public ResponseEntity<TransactionHistoryGetResponse> transactionHistoriesGet(
             @PathVariable Long transactionHistoryId) {
-        // TODO: 회원 검증 로직 추가
+        User user = securityUtil.getCurrentUser();
 
         CompletableFuture<TransactionHistory> transactionHistoryFuture =
                 CompletableFuture.supplyAsync(
@@ -118,10 +123,11 @@ public class TransactionHistoryController {
 
     @MethodInfo(name = "transactionHistoryPut", description = "거래내역의 카테고리를 수정합니다.")
     @PutMapping("/transaction-histories/{transactionHistoryId}")
+    @CurrentUser
     public ResponseEntity<TransactionHistoryPutResponse> transactionHistoriesPut(
             @PathVariable Long transactionHistoryId,
             @Valid @RequestBody TransactionHistoryPutRequest transactionHistoryPutRequest) {
-        // TODO: 회원 검증 로직 추가;
+        User user = securityUtil.getCurrentUser();
 
         CompletableFuture<TransactionHistory> transactionHistoryFuture =
                 CompletableFuture.supplyAsync(
@@ -211,13 +217,14 @@ public class TransactionHistoryController {
 
     @MethodInfo(name = "transactionHistoryDetailsPost", description = "거래내역 상세를 수정합니다.")
     @PostMapping("/transaction-history-details/transaction-history/{transactionHistoryId}")
+    @CurrentUser
     public ResponseEntity<TransactionHistoryDetailsPostResponse>
             transactionHistoryDetailsPostResponse(
                     @PathVariable Long transactionHistoryId,
                     @Valid @RequestBody
                             TransactionHistoryDetailsPostRequest
                                     transactionHistoryDetailsPostRequest) {
-        // TODO: 회원 검증 로직 추가
+        User user = securityUtil.getCurrentUser();
 
         CompletableFuture<TransactionHistory> transactionHistoryFuture =
                 CompletableFuture.supplyAsync(

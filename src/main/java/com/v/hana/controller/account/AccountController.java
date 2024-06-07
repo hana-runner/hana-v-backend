@@ -24,7 +24,6 @@ public class AccountController {
     private final AccountUseCase accountUseCase;
     private final SecurityUtil securityUtil;
 
-    // TODO : 회원 검증 로직 추가
     @MethodInfo(name = "getAccounts", description = "등록된 계좌 목록을 조회합니다.")
     @GetMapping("/accounts")
     @CurrentUser
@@ -39,6 +38,7 @@ public class AccountController {
 
     @MethodInfo(name = "TransactionsGet", description = "계좌의 거래 내역을 조회합니다.")
     @GetMapping("/accounts/{accountId}/history")
+    @CurrentUser
     public ResponseEntity<AccountTransactionGetResponse> TransactionsGet(
             @PathVariable(name = "accountId") Long accountId,
             @RequestParam(name = "option", required = false, defaultValue = "0") Integer option,
@@ -49,6 +49,7 @@ public class AccountController {
             @RequestParam(name = "end", required = false)
                     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                     LocalDate end) {
+        User user = securityUtil.getCurrentUser();
 
         if (start == null) {
             start = LocalDate.now().minusMonths(1);
