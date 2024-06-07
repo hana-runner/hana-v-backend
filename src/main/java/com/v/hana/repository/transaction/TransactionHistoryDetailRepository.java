@@ -2,6 +2,7 @@ package com.v.hana.repository.transaction;
 
 import com.v.hana.common.annotation.MethodInfo;
 import com.v.hana.common.annotation.TypeInfo;
+import com.v.hana.dto.account.ExpensePerInterest;
 import com.v.hana.dto.interest.UserInterestTransactionDto;
 import com.v.hana.entity.transaction.TransactionHistoryDetail;
 import java.time.LocalDate;
@@ -72,4 +73,21 @@ public interface TransactionHistoryDetailRepository
                     "SELECT SUM(amount) FROM transaction_history_details WHERE interest_id = :interestId AND created_at >= :start AND created_at <= :end",
             nativeQuery = true)
     Long sumAmountByInterestId(Long interestId, LocalDate start, LocalDate end);
+
+    @MethodInfo(name = "getExpensePerInterests", description = "카테고리 지출에 대한 관심사별 지출 합계를 조회합니다.")
+    @Query(value = "WITH temp AS (SELECT u.id as user_id, a.id as account_id, th.category_id, c.title as category_title, th.id, th.type, th.created_at " +
+            "FROM transaction_histories th " +
+            "JOIN categories c ON c.id = th.category_id " +
+            "    JOIN users u ON u.id = th.user_id" +
+            "    JOIN accounts a ON a.id = th.account_id" +
+            "    WHERE th.type = '출금')\n" +
+            "SELECT u.id as userId, temp.account_id as accountId, temp.category_title as categoryTitle, i.id as intersetId, thd.transaction_history_id as transactionHistoryId, i.title, i.color, " +
+            "SUM(thd.amount) OVER(PARTITION BY i.id, temp.category_id) as expense, thd.created_at as createdAt " +
+            "FROM transaction_history_details thd " +
+            "JOIN users u ON u.id = thd.user_id " +
+            "JOIN interests i ON i.id = thd.interest_id " +
+            "JOIN temp ON temp.id = thd.transaction_history_id " +
+            "WHERE u.id = :userId " +
+            "AND thd.created_at BETWEEN :start AND :end", nativeQuery = true)
+    ArrayList<ExpensePerInterest> getExpensePerInterests(Long userId, LocalDate start, LocalDate end);
 }

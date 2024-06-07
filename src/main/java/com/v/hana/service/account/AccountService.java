@@ -95,7 +95,7 @@ public class AccountService implements AccountUseCase {
                                 .accountType(command.getAccountType())
                                 .balance(command.getBalance())
                                 .build());
-        return AccountRegisterResponse.builder().id(savedAccount.getId()).build();
+        return AccountRegisterResponse.builder().build();
     }
 
     @MethodInfo(name = "getExpensePerCategories", description = "카테고리별 지출 합계를 조회합니다.")
