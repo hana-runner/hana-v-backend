@@ -36,5 +36,5 @@ jwt:
   access-token-expiration: ${ACCESS_TOKEN_EXPIRATION:300000}
   refresh-token-expiration: ${REFRESH_TOKEN_EXPIRATION:86400000}
 fcm:
-  google_application_credentials: ${FCM_GOOGLE_APPLICATION_CREDENTIALS}
-  url: ${FCM_URL}
+  google_application_credentials: hanav-3f6ee-firebase-adminsdk-2zr1j-876fa788ca.json
+  url: https://fcm.googleapis.com/v1/projects/hanav-3f6ee/messages:send
