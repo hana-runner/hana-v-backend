@@ -43,7 +43,8 @@ public class SecurityConfig {
                                                 "/v1/api/users/update/pw",
                                                 "/v1/api/users/find/username",
                                                 "/v1/api/emails/authcode",
-                                                "/v1/api/emails/check/authcode")
+                                                "/v1/api/emails/check/authcode",
+                                                "/v1/api/fcm/send")
                                         .permitAll()
                                         .anyRequest()
                                         .authenticated())

@@ -12,6 +12,12 @@ jobs:
       - name: 코드 체크아웃
         uses: actions/checkout@v3
 
+      - name: 구글 Credential 파일 추가
+        run: |
+          touch hanav-3f6ee-firebase-adminsdk-2zr1j-876fa788ca.json
+          echo "${{ secrets.FCM_GOOGLE_APPLICATION_CREDENTIALS_FILE }}" >> hanav-3f6ee-firebase-adminsdk-2zr1j-876fa788ca.json
+        working-directory: src/main/resources
+
       - name: JDK 17 설정
         uses: actions/setup-java@v3
         with:
