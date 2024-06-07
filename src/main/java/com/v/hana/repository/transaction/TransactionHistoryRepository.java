@@ -34,6 +34,7 @@ public interface TransactionHistoryRepository extends JpaRepository<TransactionH
             nativeQuery = true)
     void updateCategory(Long transactionHistoryId, Long categoryId);
 
+    @MethodInfo(name = "getExpensePerCategories", description = "카테고리별 지출 합계를 조회합니다.")
     @Query(
             value =
                     "SELECT th.account_id as accountId, th.category_id as categoryId, c.title, c.color, SUM(th.amount) as expense "
@@ -43,7 +44,7 @@ public interface TransactionHistoryRepository extends JpaRepository<TransactionH
                             + "JOIN accounts a ON a.id = th.account_id "
                             + "WHERE th.user_id = :userId "
                             + "AND th.type = '출금' "
-                            + "AND th.created_at BETWEEN :start AND :end "
+                            + "AND th.created_at >= :start AND th.created_at <= :end "
                             + "GROUP BY th.category_id",
             nativeQuery = true)
     ArrayList<ExpensePerCategory> getExpensePerCategories(

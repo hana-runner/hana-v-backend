@@ -5,6 +5,7 @@ import com.v.hana.command.transaction.ReadTransactionsCommand;
 import com.v.hana.command.transaction.UpdateTransactionHistoryDetailCommend;
 import com.v.hana.common.annotation.MethodInfo;
 import com.v.hana.common.annotation.TypeInfo;
+import com.v.hana.dto.account.ExpensePerInterest;
 import com.v.hana.dto.transaction.InterestDto;
 import com.v.hana.entity.transaction.TransactionHistory;
 import com.v.hana.entity.transaction.TransactionHistoryDetail;
@@ -91,6 +92,12 @@ public class TransactionHistoryDetailService implements TransactionHistoryDetail
     @Override
     public Long sumAmountByInterestId(Long interestId, LocalDate start, LocalDate end) {
         return transactionHistoryDetailRepository.sumAmountByInterestId(interestId, start, end);
+    }
+
+    @MethodInfo(name = "getExpensePerInterests", description = "카테고리 지출에 대한 관심사별 지출 합계를 조회합니다.")
+    @Override
+    public ArrayList<ExpensePerInterest> getExpensePerInterests(Long userId, LocalDate start, LocalDate end) {
+        return transactionHistoryDetailRepository.getExpensePerInterests(userId, start, end);
     }
 
     public TransactionHistoryDetailService(

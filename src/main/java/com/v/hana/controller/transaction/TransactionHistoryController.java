@@ -10,6 +10,8 @@ import com.v.hana.command.transaction.UpdateTransactionHistoryDetailCommend;
 import com.v.hana.common.annotation.MethodInfo;
 import com.v.hana.common.annotation.TypeInfo;
 import com.v.hana.common.exception.BaseExceptionResponse;
+import com.v.hana.dto.account.ExpensePerInterest;
+import com.v.hana.dto.account.ExpenseResponse;
 import com.v.hana.dto.interest.InterestDto;
 import com.v.hana.dto.transaction.*;
 import com.v.hana.entity.transaction.TransactionHistory;
@@ -24,10 +26,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -413,4 +418,29 @@ public class TransactionHistoryController {
                                         .collect(Collectors.toCollection(ArrayList::new)))
                         .build());
     }
+
+    @MethodInfo(name = "getExpensePerInterests", description = "카테고리 지출에 대한 관심사별 지출 합계를 조회합니다.")
+    @GetMapping("/transaction-history-details/expenses")
+    @CurrentUser
+    public ResponseEntity<ExpenseResponse> getExpensePerInterests(@RequestParam(name = "start", required = false)
+                                                        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                        LocalDate start,
+                                                                  @RequestParam(name = "end", required = false)
+                                                        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                        LocalDate end) {
+
+        if (start == null) {
+            start = LocalDate.now().minusMonths(1);
+            //            start = LocalDate.of(2024, 4, 5);
+        }
+
+        if (end == null) {
+            end = LocalDate.now().plusDays(1);
+            //            end = LocalDate.of(2024, 5, 5);
+        }
+        User currentUser = securityUtil.getCurrentUser();
+        ArrayList<ExpensePerInterest> expensePerInterests = transactionHistoryDetailUseCase.getExpensePerInterests(currentUser.getId(), start, end);
+        return ResponseEntity.ok(ExpenseResponse.builder().data(expensePerInterests).build());
+    }
+
 }
