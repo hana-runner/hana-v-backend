@@ -4,5 +4,4 @@ import com.v.hana.common.response.BaseResponse;
 import lombok.Builder;
 
 @Builder
-public class AccountDeleteResponse extends BaseResponse {
-}
+public class AccountDeleteResponse extends BaseResponse {}

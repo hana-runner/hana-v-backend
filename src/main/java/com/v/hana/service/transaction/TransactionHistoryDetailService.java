@@ -96,7 +96,8 @@ public class TransactionHistoryDetailService implements TransactionHistoryDetail
 
     @MethodInfo(name = "getExpensePerInterests", description = "카테고리 지출에 대한 관심사별 지출 합계를 조회합니다.")
     @Override
-    public ArrayList<ExpensePerInterest> getExpensePerInterests(Long userId, LocalDate start, LocalDate end) {
+    public ArrayList<ExpensePerInterest> getExpensePerInterests(
+            Long userId, LocalDate start, LocalDate end) {
         return transactionHistoryDetailRepository.getExpensePerInterests(userId, start, end);
     }
 

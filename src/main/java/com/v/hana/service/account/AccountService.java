@@ -13,11 +13,9 @@ import com.v.hana.repository.account.AccountApiRepository;
 import com.v.hana.repository.account.AccountRepository;
 import com.v.hana.repository.transaction.TransactionHistoryRepository;
 import com.v.hana.usecase.account.AccountUseCase;
-
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -89,12 +87,13 @@ public class AccountService implements AccountUseCase {
     @Override
     public AccountRegisterResponse registerAccount(RegisterAccountCommand command) {
         // 삭제했던 계좌 재등록
-        Optional<Account> optionalAccount = accountRepository.findByAccountNumber(command.getAccountNumber());
+        Optional<Account> optionalAccount =
+                accountRepository.findByAccountNumber(command.getAccountNumber());
         if (optionalAccount.isPresent()) {
             Account existingAccount = optionalAccount.get();
             // 계좌를 재활성화하고 필요한 경우 다른 필드를 업데이트
             accountRepository.updateIsDeleted(existingAccount.getId());
-//            return AccountRegisterResponse.builder().response(updated).build();
+            //            return AccountRegisterResponse.builder().response(updated).build();
         } else {
             accountRepository.save(
                     Account.builder()
@@ -124,11 +123,12 @@ public class AccountService implements AccountUseCase {
     @MethodInfo(name = "deleteAccountInfo", description = "등록된 계좌 정보를 삭제합니다.")
     @Override
     public AccountDeleteResponse deleteAccountInfo(Long accountId) {
-        accountRepository.findById(accountId).ifPresent(
-                account -> {
-                    accountRepository.delete(account);
-                }
-        );
+        accountRepository
+                .findById(accountId)
+                .ifPresent(
+                        account -> {
+                            accountRepository.delete(account);
+                        });
         return AccountDeleteResponse.builder().build();
     }
 }
