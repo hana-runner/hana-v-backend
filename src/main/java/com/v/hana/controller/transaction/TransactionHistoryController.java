@@ -9,6 +9,7 @@ import com.v.hana.command.transaction.UpdateTransactionHistoryCommand;
 import com.v.hana.command.transaction.UpdateTransactionHistoryDetailCommend;
 import com.v.hana.common.annotation.MethodInfo;
 import com.v.hana.common.annotation.TypeInfo;
+import com.v.hana.common.exception.BaseExceptionResponse;
 import com.v.hana.dto.interest.InterestDto;
 import com.v.hana.dto.transaction.*;
 import com.v.hana.entity.transaction.TransactionHistory;
@@ -17,6 +18,11 @@ import com.v.hana.entity.user.User;
 import com.v.hana.usecase.category.CategoryUseCase;
 import com.v.hana.usecase.transaction.TransactionHistoryDetailUseCase;
 import com.v.hana.usecase.transaction.TransactionHistoryUseCase;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
@@ -27,6 +33,7 @@ import org.springframework.web.bind.annotation.*;
 
 @TypeInfo(name = "TransactionHistoryController", description = "거래내역 컨트롤러 클래스")
 @RestController
+@Tag(name = "TransactionHistory", description = "거래 내역")
 @RequestMapping("v1/api")
 @RequiredArgsConstructor
 public class TransactionHistoryController {
@@ -36,6 +43,39 @@ public class TransactionHistoryController {
     private final SecurityUtil securityUtil;
 
     @MethodInfo(name = "transactionHistoryGet", description = "거래내역 목록을 조회합니다.")
+    @Operation(
+            summary = "거래내역 목록 조회",
+            description = "거래내역 목록을 조회합니다.",
+            responses = {
+                @ApiResponse(
+                        responseCode = "200",
+                        description = "거래내역 목록 조회 성공",
+                        content =
+                                @Content(
+                                        schema =
+                                                @Schema(
+                                                        implementation =
+                                                                TransactionHistoryGetResponse
+                                                                        .class))),
+                @ApiResponse(
+                        responseCode = "400",
+                        description = "거래내역 목록 조회 실패",
+                        content =
+                                @Content(
+                                        schema =
+                                                @Schema(
+                                                        implementation =
+                                                                BaseExceptionResponse.class))),
+                @ApiResponse(
+                        responseCode = "500",
+                        description = "서버 에러",
+                        content =
+                                @Content(
+                                        schema =
+                                                @Schema(
+                                                        implementation =
+                                                                BaseExceptionResponse.class)))
+            })
     @GetMapping("/transaction-histories/{transactionHistoryId}")
     @CurrentUser
     public ResponseEntity<TransactionHistoryGetResponse> transactionHistoriesGet(
@@ -122,6 +162,39 @@ public class TransactionHistoryController {
     }
 
     @MethodInfo(name = "transactionHistoryPut", description = "거래내역의 카테고리를 수정합니다.")
+    @Operation(
+            summary = "거래내역 수정",
+            description = "거래내역의 카테고리를 수정합니다.",
+            responses = {
+                @ApiResponse(
+                        responseCode = "200",
+                        description = "거래내역 수정 성공",
+                        content =
+                                @Content(
+                                        schema =
+                                                @Schema(
+                                                        implementation =
+                                                                TransactionHistoryPutResponse
+                                                                        .class))),
+                @ApiResponse(
+                        responseCode = "400",
+                        description = "거래내역 수정 실패",
+                        content =
+                                @Content(
+                                        schema =
+                                                @Schema(
+                                                        implementation =
+                                                                BaseExceptionResponse.class))),
+                @ApiResponse(
+                        responseCode = "500",
+                        description = "서버 에러",
+                        content =
+                                @Content(
+                                        schema =
+                                                @Schema(
+                                                        implementation =
+                                                                BaseExceptionResponse.class)))
+            })
     @PutMapping("/transaction-histories/{transactionHistoryId}")
     @CurrentUser
     public ResponseEntity<TransactionHistoryPutResponse> transactionHistoriesPut(
@@ -216,6 +289,39 @@ public class TransactionHistoryController {
     }
 
     @MethodInfo(name = "transactionHistoryDetailsPost", description = "거래내역 상세를 수정합니다.")
+    @Operation(
+            summary = "거래내역 상세 수정",
+            description = "거래내역 상세를 수정합니다.",
+            responses = {
+                @ApiResponse(
+                        responseCode = "200",
+                        description = "거래내역 상세 수정 성공",
+                        content =
+                                @Content(
+                                        schema =
+                                                @Schema(
+                                                        implementation =
+                                                                TransactionHistoryDetailsPostResponse
+                                                                        .class))),
+                @ApiResponse(
+                        responseCode = "400",
+                        description = "거래내역 상세 수정 실패",
+                        content =
+                                @Content(
+                                        schema =
+                                                @Schema(
+                                                        implementation =
+                                                                BaseExceptionResponse.class))),
+                @ApiResponse(
+                        responseCode = "500",
+                        description = "서버 에러",
+                        content =
+                                @Content(
+                                        schema =
+                                                @Schema(
+                                                        implementation =
+                                                                BaseExceptionResponse.class)))
+            })
     @PostMapping("/transaction-history-details/transaction-history/{transactionHistoryId}")
     @CurrentUser
     public ResponseEntity<TransactionHistoryDetailsPostResponse>
