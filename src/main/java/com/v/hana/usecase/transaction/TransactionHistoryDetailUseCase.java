@@ -23,5 +23,6 @@ public interface TransactionHistoryDetailUseCase {
 
     Long sumAmountByInterestId(Long interestId, LocalDate start, LocalDate end);
 
-    ArrayList<ExpensePerInterest> getExpensePerInterests(Long userId, LocalDate start, LocalDate end);
+    ArrayList<ExpensePerInterest> getExpensePerInterests(
+            Long userId, LocalDate start, LocalDate end);
 }

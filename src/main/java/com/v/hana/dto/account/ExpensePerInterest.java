@@ -16,5 +16,4 @@ public interface ExpensePerInterest {
     String getColor();
 
     Long getExpense();
-
 }

@@ -13,4 +13,6 @@ public interface AccountUseCase {
     AccountRegisterResponse registerAccount(RegisterAccountCommand command);
 
     AccountExpenseResponse getExpensePerCategories(GetExpenseCommand command);
+
+    AccountDeleteResponse deleteAccountInfo(Long accountId);
 }
