@@ -34,14 +34,16 @@ public class SecurityConfig {
                         authz ->
                                 authz.requestMatchers(
                                                 "/swagger-ui/**",
+                                                "/docs/**",
+                                                "/v3/api-docs/**",
                                                 "/v1/api/users/join",
-                                                "v1/api/users/login",
-                                                "v1/api/users/new_token",
-                                                "v1/api/users/check_dup",
-                                                "v1/api/users/update/pw",
-                                                "v1/api/users/find/username",
-                                                "v1/api/emails/authcode",
-                                                "v1/api/emails/check/authcode")
+                                                "/v1/api/users/login",
+                                                "/v1/api/users/new_token",
+                                                "/v1/api/users/check_dup",
+                                                "/v1/api/users/update/pw",
+                                                "/v1/api/users/find/username",
+                                                "/v1/api/emails/authcode",
+                                                "/v1/api/emails/check/authcode")
                                         .permitAll()
                                         .anyRequest()
                                         .authenticated())

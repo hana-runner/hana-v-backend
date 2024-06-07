@@ -1,8 +1,8 @@
 buildscript {
 	ext {
 		springBootVersion = '3.2.5'
-		restdocsApiSpecVersion = '0.17.1'
 		testContainerVersion = '1.19.5'
+		jwtVersion = '0.11.5'
 	}
 }
 
@@ -14,8 +14,6 @@ plugins {
 	id 'com.diffplug.spotless' version '6.25.0'
 	id 'jacoco'
 	id 'org.sonarqube' version "5.0.0.4638"
-	id 'com.epages.restdocs-api-spec' version "${restdocsApiSpecVersion}"
-	id 'org.hidetake.swagger.generator' version '2.18.2'
 }
 
 wrapper {
@@ -56,47 +54,23 @@ dependencies {
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version: springBootVersion
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: springBootVersion
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: springBootVersion
-	implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.0.2'
 	testRuntimeOnly group: 'org.junit.platform', name: 'junit-platform-launcher', version: '1.10.2'
 	compileOnly group: 'org.projectlombok', name: 'lombok', version: lombokVersion
 	runtimeOnly  group: 'com.mysql', name: 'mysql-connector-j', version: '8.4.0'
 	annotationProcessor group: 'org.projectlombok', name: 'lombok', version: lombokVersion
 	testCompileOnly group: 'org.projectlombok', name: 'lombok', version: lombokVersion
 	testAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: lombokVersion
-	testImplementation group: 'org.springframework.restdocs', name: 'spring-restdocs-mockmvc', version: '3.0.1'
-	testImplementation group: 'com.epages', name: 'restdocs-api-spec-mockmvc' , version: restdocsApiSpecVersion
-	implementation 'javax.mail:mail:1.4.7'
-	implementation 'org.springframework:spring-context-support:5.3.9'
-	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	// Spring Security
-	implementation 'org.springframework.boot:spring-boot-starter-security'
-
-	// JWT
-	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
-	implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
-	implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
-
-	// Testcontainers
+	implementation group: 'javax.mail', name: 'mail', version: '1.4.7'
+	implementation group: 'org.springframework', name: 'spring-context-support', version: '5.3.9'
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-redis', version: springBootVersion
+	developmentOnly group: 'org.springframework.boot', name: 'spring-boot-devtools', version: springBootVersion
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: springBootVersion
+	implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: jwtVersion
+	implementation group: 'io.jsonwebtoken', name: 'jjwt-impl', version: jwtVersion
+	implementation group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: jwtVersion
 	testImplementation group: 'org.testcontainers', name: 'testcontainers', version: testContainerVersion
 	testImplementation group: 'org.testcontainers', name: 'junit-jupiter', version: testContainerVersion
-}
-
-openapi3 {
-	server {
-		url = 'http://localhost:8080'
-	}
-	title = 'Hana V API'
-	description = 'Hana V API 서버에서 제공하는 API 명세서입니다.'
-	version = '1.0.0'
-	outputFileNamePrefix = 'hana-v-api'
-	format = 'json'
-
-	outputDirectory = 'build/resources/main/static/docs'
-}
-
-tasks.named('bootRun') {
-	dependsOn 'openapi3'
+	implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.3.0'
 }
 
 tasks.named('test') {
@@ -138,15 +112,6 @@ else
 fi
 """
 		"chmod +x .git/hooks/pre-commit".execute()
-	}
-}
-
-tasks.withType(GenerateSwaggerUI) {
-	dependsOn 'openapi3'
-
-	copy {
-		from 'build/resources/main/static/docs'
-		into 'src/main/resources/static/docs/'
 	}
 }
 
