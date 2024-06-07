@@ -3,7 +3,7 @@ name: 프로젝트 배포
 on:
   push:
     branches:
-      - '#64'
+      - 'dev'
 
 jobs:
   push:
