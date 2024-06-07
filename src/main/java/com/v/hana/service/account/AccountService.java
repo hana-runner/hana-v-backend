@@ -14,6 +14,7 @@ import com.v.hana.repository.account.AccountRepository;
 import com.v.hana.repository.transaction.TransactionHistoryRepository;
 import com.v.hana.usecase.account.AccountUseCase;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -108,5 +109,16 @@ public class AccountService implements AccountUseCase {
             throw new ExpenseNotFoundException();
         }
         return AccountExpenseResponse.builder().data(expensePerCategories).build();
+    }
+
+    @MethodInfo(name = "deleteAccountInfo", description = "등록된 계좌 정보를 삭제합니다.")
+    @Override
+    public AccountDeleteResponse deleteAccountInfo(Long accountId) {
+        accountRepository.findById(accountId).ifPresent(
+                account -> {
+                    accountRepository.delete(account);
+                }
+        );
+        return AccountDeleteResponse.builder().build();
     }
 }

@@ -312,4 +312,11 @@ public class AccountController {
 
         return ResponseEntity.ok(expensePerCategories);
     }
+
+    @MethodInfo(name = "deleteAccountInfo", description = "등록된 계좌 정보를 삭제합니다.")
+    @DeleteMapping("/account/{accountId}")
+    public ResponseEntity<AccountDeleteResponse> deleteAccountInfo(@PathVariable Long accountId) {
+
+        return ResponseEntity.ok(accountUseCase.deleteAccountInfo(accountId));
+    }
 }
