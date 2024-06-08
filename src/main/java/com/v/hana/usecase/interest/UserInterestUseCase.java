@@ -1,8 +1,12 @@
 package com.v.hana.usecase.interest;
 
+import com.v.hana.command.interest.AddUserInterestCommand;
 import com.v.hana.command.interest.GetUserInterestReportsCommand;
 import com.v.hana.command.interest.GetUserInterestTransactionsCommand;
 import com.v.hana.command.interest.GetUserInterestsCommand;
+import com.v.hana.command.interest.ModifyUserInterestCommand;
+import com.v.hana.common.response.PostSuccessResponse;
+import com.v.hana.common.response.PutSuccessResponse;
 import com.v.hana.dto.interest.UserInterestReportsResponse;
 import com.v.hana.dto.interest.UserInterestResponse;
 import com.v.hana.dto.interest.UserInterestTransactionsResponse;
@@ -14,4 +18,8 @@ public interface UserInterestUseCase {
             GetUserInterestTransactionsCommand command);
 
     UserInterestReportsResponse getUserInterestReports(GetUserInterestReportsCommand command);
+
+    PostSuccessResponse addUserInterest(AddUserInterestCommand command);
+
+    PutSuccessResponse modifyUserInterest(ModifyUserInterestCommand command);
 }

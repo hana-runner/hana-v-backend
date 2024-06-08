@@ -2,16 +2,27 @@ package com.v.hana.controller.interest;
 
 import com.v.hana.auth.annotation.CurrentUser;
 import com.v.hana.auth.util.user.SecurityUtil;
+import com.v.hana.command.interest.AddUserInterestCommand;
 import com.v.hana.command.interest.GetUserInterestReportsCommand;
 import com.v.hana.command.interest.GetUserInterestTransactionsCommand;
 import com.v.hana.command.interest.GetUserInterestsCommand;
+import com.v.hana.command.interest.ModifyUserInterestCommand;
 import com.v.hana.common.annotation.MethodInfo;
 import com.v.hana.common.annotation.TypeInfo;
 import com.v.hana.common.exception.BaseExceptionResponse;
+import com.v.hana.common.response.PostSuccessResponse;
+import com.v.hana.common.response.PutSuccessResponse;
 import com.v.hana.dto.interest.UserInterestReportsResponse;
 import com.v.hana.dto.interest.UserInterestResponse;
 import com.v.hana.dto.interest.UserInterestTransactionsResponse;
+import com.v.hana.entity.interest.Interest;
+import com.v.hana.entity.interest.UserInterest;
 import com.v.hana.entity.user.User;
+import com.v.hana.exception.interest.UserInterestDuplicatedException;
+import com.v.hana.exception.user.InvalidUserAccessException;
+import com.v.hana.repository.interest.InterestRepository;
+import com.v.hana.repository.interest.UserInterestRepository;
+import com.v.hana.service.interest.ImageService;
 import com.v.hana.usecase.interest.UserInterestUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -19,16 +30,22 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.ArrayList;
+import java.util.Optional;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @TypeInfo(name = "UserInterestController", description = "사용자 관심사 컨트롤러")
 @RestController
 @Tag(name = "UserInterest", description = "사용자 관심사")
 @RequestMapping("v1/api")
 public class UserInterestController {
-    private final UserInterestUseCase userInterestUseCase;
     private final SecurityUtil securityUtil;
+    private final ImageService imageUploadService;
+    private final InterestRepository interestRepository;
+    private final UserInterestRepository userInterestRepository;
+    private final UserInterestUseCase userInterestUseCase;
 
     @MethodInfo(name = "getUserInterests", description = "사용자 관심사 목록 가져오기")
     @Operation(
@@ -64,14 +81,14 @@ public class UserInterestController {
                                                         implementation =
                                                                 BaseExceptionResponse.class)))
             })
-    @GetMapping("/user-interests/{userId}")
+    @GetMapping("/user-interests")
     @CurrentUser
-    public ResponseEntity<UserInterestResponse> getUserInterests(@PathVariable Long userId) {
+    public ResponseEntity<UserInterestResponse> getUserInterests() {
         User user = securityUtil.getCurrentUser();
 
         UserInterestResponse interests =
                 userInterestUseCase.getUserInterests(
-                        GetUserInterestsCommand.builder().userId(userId).build());
+                        GetUserInterestsCommand.builder().userId(user.getId()).build());
         return ResponseEntity.ok(interests);
     }
 
@@ -118,21 +135,18 @@ public class UserInterestController {
     @GetMapping("/user-interests/transaction/{interestId}")
     @CurrentUser
     public ResponseEntity<UserInterestTransactionsResponse> getUserInterestTransaction(
-            @PathVariable Long interestId,
-            @RequestParam Long userId,
-            @RequestParam int year,
-            @RequestParam int month) {
+            @PathVariable Long interestId, @RequestParam int year, @RequestParam int month) {
         User user = securityUtil.getCurrentUser();
 
-        UserInterestTransactionsResponse transactions =
+        UserInterestTransactionsResponse interests =
                 userInterestUseCase.getUserInterestTransactions(
                         GetUserInterestTransactionsCommand.builder()
                                 .interestId(interestId)
-                                .userId(userId)
+                                .userId(user.getId())
                                 .year(year)
                                 .month(month)
                                 .build());
-        return ResponseEntity.ok(transactions);
+        return ResponseEntity.ok(interests);
     }
 
     @MethodInfo(name = "getUserInterestReports", description = "사용자 관심사별 거래 내역 리포트를 가져옵니다.")
@@ -195,9 +209,87 @@ public class UserInterestController {
         return ResponseEntity.ok(reports);
     }
 
+    @MethodInfo(name = "addUserInterests", description = "사용자 관심사 추가하기")
+    @PostMapping("/user-interests")
+    @CurrentUser
+    public ResponseEntity<PostSuccessResponse> addUserInterests(
+            @RequestParam("interestId") Long interestId,
+            @RequestParam("subtitle") String subtitle,
+            @RequestParam("image") MultipartFile image) {
+
+        // 토큰 검사
+        User user = securityUtil.getCurrentUser();
+
+        // 등록된 사용자 관심사가 있는지 확인
+        ArrayList<UserInterest> userInterest =
+                userInterestRepository.findByInterestIdAndUserId(interestId, user.getId());
+        if (!userInterest.isEmpty()) throw new UserInterestDuplicatedException();
+
+        String fileUrl;
+        if (image.isEmpty()) {
+            fileUrl = imageUploadService.getDefaultImage();
+        } else {
+            fileUrl = imageUploadService.getImageUrl(image);
+        }
+
+        Optional<Interest> interest = interestRepository.findById(interestId);
+        if (interest.isEmpty()) throw new InvalidUserAccessException();
+
+        userInterestUseCase.addUserInterest(
+                AddUserInterestCommand.builder()
+                        .user(user)
+                        .interest(interest.get())
+                        .subtitle(subtitle)
+                        .image(fileUrl)
+                        .build());
+
+        return ResponseEntity.ok(PostSuccessResponse.builder().build());
+    }
+
+    @MethodInfo(name = "modifyUserInterests", description = "사용자 관심사 수정하기")
+    @PutMapping("/user-interests")
+    @CurrentUser
+    public ResponseEntity<PutSuccessResponse> modifyUserInterests(
+            @RequestParam("interestId") Long interestId,
+            @RequestParam("subtitle") String subtitle,
+            @RequestParam("image") MultipartFile image) {
+
+        // jwt 토큰 복호화
+        User user = securityUtil.getCurrentUser();
+
+        Interest interest =
+                interestRepository
+                        .findById(interestId)
+                        .orElseThrow(InvalidUserAccessException::new);
+
+        String fileUrl =
+                image.isEmpty()
+                        ? userInterestRepository.findImageUrlByUserIdAndInterestId(
+                                user.getId(), interest.getId())
+                        : imageUploadService.getImageUrl(image);
+
+        userInterestUseCase.modifyUserInterest(
+                ModifyUserInterestCommand.builder()
+                        .user(user)
+                        .interest(interest)
+                        .subtitle(subtitle)
+                        .image(fileUrl)
+                        .build());
+
+        return ResponseEntity.ok(PutSuccessResponse.builder().build());
+    }
+
     public UserInterestController(
-            UserInterestUseCase userInterestUseCase, SecurityUtil securityUtil) {
-        this.userInterestUseCase = userInterestUseCase;
+            SecurityUtil securityUtil,
+            ImageService imageUploadService,
+            InterestRepository interestRepository,
+            UserInterestRepository userInterestRepository,
+            UserInterestUseCase userInterestUseCase,
+            SecurityUtil securityUtil1) {
         this.securityUtil = securityUtil;
+        this.imageUploadService = imageUploadService;
+        this.interestRepository = interestRepository;
+        this.userInterestRepository = userInterestRepository;
+        this.userInterestUseCase = userInterestUseCase;
     }
 }

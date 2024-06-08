@@ -38,3 +38,12 @@ jwt:
 fcm:
   google_application_credentials: hanav-3f6ee-firebase-adminsdk-2zr1j-876fa788ca.json
   url: https://fcm.googleapis.com/v1/projects/hanav-3f6ee/messages:send
+cloud:
+  aws:
+    s3:
+      bucket: ${S3_REGION}
+    stack.auto: false
+    region.static: ${S3_REGION}
+    credentials:
+      accessKey: ${S3_ACCESS_KEY}
+      secretKey: ${S3_SECRET_KEY}

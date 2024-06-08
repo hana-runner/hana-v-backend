@@ -1,12 +1,17 @@
 package com.v.hana.service.interest;
 
+import com.v.hana.command.interest.AddUserInterestCommand;
 import com.v.hana.command.interest.GetUserInterestReportsCommand;
 import com.v.hana.command.interest.GetUserInterestTransactionsCommand;
 import com.v.hana.command.interest.GetUserInterestsCommand;
+import com.v.hana.command.interest.ModifyUserInterestCommand;
 import com.v.hana.common.annotation.MethodInfo;
 import com.v.hana.common.annotation.TypeInfo;
+import com.v.hana.common.response.PostSuccessResponse;
+import com.v.hana.common.response.PutSuccessResponse;
 import com.v.hana.dto.interest.*;
 import com.v.hana.entity.interest.Interest;
+import com.v.hana.entity.interest.UserInterest;
 import com.v.hana.event.interest.SumAmountEvent;
 import com.v.hana.event.interest.SumAmountEventListener;
 import com.v.hana.repository.interest.InterestRepository;
@@ -21,6 +26,7 @@ import org.springframework.stereotype.Service;
 @TypeInfo(name = "UserInterestService", description = "사용자 관심사 서비스")
 @Service
 public class UserInterestService implements UserInterestUseCase {
+
     private final InterestRepository interestRepository;
 
     private final UserInterestRepository userInterestRepository;
@@ -41,13 +47,16 @@ public class UserInterestService implements UserInterestUseCase {
                                         userInterest -> {
                                             Interest interest =
                                                     interestRepository
-                                                            .findById(userInterest.getInterestId())
+                                                            .findById(
+                                                                    userInterest
+                                                                            .getInterest()
+                                                                            .getId())
                                                             .orElseThrow(
                                                                     () ->
                                                                             new RuntimeException(
                                                                                     "Interest not found"));
                                             return UserInterestDto.builder()
-                                                    .interestId(userInterest.getInterestId())
+                                                    .interestId(userInterest.getInterest().getId())
                                                     .title(interest.getTitle())
                                                     .subtitle(userInterest.getSubtitle())
                                                     .imageUrl(userInterest.getImageUrl())
@@ -98,6 +107,32 @@ public class UserInterestService implements UserInterestUseCase {
                         .year(getUserInterestReportsCommand.getYear())
                         .month(getUserInterestReportsCommand.getMonth())
                         .build());
+    }
+
+    @MethodInfo(name = "addUserInterest", description = "사용자 관심사를 추가합니다.")
+    @Override
+    public PostSuccessResponse addUserInterest(AddUserInterestCommand command) {
+
+        UserInterest userInterest =
+                UserInterest.builder()
+                        .user(command.getUser())
+                        .interest(command.getInterest())
+                        .subtitle(command.getSubtitle())
+                        .imageUrl(command.getImage())
+                        .build();
+        userInterestRepository.save(userInterest);
+        return PostSuccessResponse.builder().build();
+    }
+
+    @MethodInfo(name = "modifyUserInterest", description = "사용자 관심사를 수정합니다.")
+    @Override
+    public PutSuccessResponse modifyUserInterest(ModifyUserInterestCommand command) {
+        userInterestRepository.updateUserInterest(
+                command.getUser().getId(),
+                command.getInterest().getId(),
+                command.getSubtitle(),
+                command.getImage());
+        return PutSuccessResponse.builder().build();
     }
 
     public UserInterestService(
