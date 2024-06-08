@@ -7,16 +7,11 @@ import lombok.Getter;
 
 @Getter
 public class UserGetResponse extends BaseResponse {
-    private String username;
-    private String email;
-    private LocalDate birthday;
-    private int gender;
+    private final UserInfoDto data;
 
     @Builder
-    public UserGetResponse(String username, String email, LocalDate birthday, int gender) {
-        this.username = username;
-        this.email = email;
-        this.birthday = birthday;
-        this.gender = gender;
+    public UserGetResponse(
+            String username, String email, LocalDate birthday, int gender, UserInfoDto data) {
+        this.data = data;
     }
 }

@@ -438,10 +438,13 @@ public class UserController {
         User user = securityUtil.getCurrentUser();
         return ResponseEntity.ok(
                 UserGetResponse.builder()
-                        .username(user.getUsername())
-                        .email(user.getEmail())
-                        .birthday(user.getBirthday())
-                        .gender(user.getGender().ordinal())
+                        .data(
+                                UserInfoDto.builder()
+                                        .username(user.getUsername())
+                                        .email(user.getEmail())
+                                        .birthday(user.getBirthday())
+                                        .gender(user.getGender().getValue())
+                                        .build())
                         .build());
     }
 
