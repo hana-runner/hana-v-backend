@@ -11,9 +11,9 @@ public interface ExpensePerInterest {
 
     Long getTransactionHistoryId();
 
-    String getTitle();
+    String getInterestTitle();
 
-    String getColor();
+    String getInterestColor();
 
     Long getExpense();
 }

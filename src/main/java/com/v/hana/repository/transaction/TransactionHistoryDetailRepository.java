@@ -83,7 +83,7 @@ public interface TransactionHistoryDetailRepository
                             + "    JOIN users u ON u.id = th.user_id"
                             + "    JOIN accounts a ON a.id = th.account_id"
                             + "    WHERE th.type = '출금')\n"
-                            + "SELECT u.id as userId, temp.account_id as accountId, temp.category_title as categoryTitle, i.id as intersetId, thd.transaction_history_id as transactionHistoryId, i.title, i.color, "
+                            + "SELECT u.id as userId, temp.account_id as accountId, temp.category_title as categoryTitle, i.id as interestId, thd.transaction_history_id as transactionHistoryId, i.title as interestTitle, i.color as interestColor, "
                             + "SUM(thd.amount) OVER(PARTITION BY i.id, temp.category_id) as expense, thd.created_at as createdAt "
                             + "FROM transaction_history_details thd "
                             + "JOIN users u ON u.id = thd.user_id "
