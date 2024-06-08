@@ -419,6 +419,34 @@ public class TransactionHistoryController {
     }
 
     @MethodInfo(name = "getExpensePerInterests", description = "카테고리 지출에 대한 관심사별 지출 합계를 조회합니다.")
+    @Operation(
+            summary = "카테고리 지출에 대한 관심사별 지출 합계 조회",
+            description = "카테고리 지출에 대한 관심사별 지출 합계를 조회합니다.",
+            responses = {
+                @ApiResponse(
+                        responseCode = "200",
+                        description = "카테고리 지출에 대한 관심사별 지출 합계 조회 성공",
+                        content =
+                                @Content(schema = @Schema(implementation = ExpenseResponse.class))),
+                @ApiResponse(
+                        responseCode = "400",
+                        description = "카테고리 지출에 대한 관심사별 지출 합계 조회 실패",
+                        content =
+                                @Content(
+                                        schema =
+                                                @Schema(
+                                                        implementation =
+                                                                BaseExceptionResponse.class))),
+                @ApiResponse(
+                        responseCode = "500",
+                        description = "서버 에러",
+                        content =
+                                @Content(
+                                        schema =
+                                                @Schema(
+                                                        implementation =
+                                                                BaseExceptionResponse.class)))
+            })
     @GetMapping("/transaction-history-details/expenses")
     @CurrentUser
     public ResponseEntity<ExpenseResponse> getExpensePerInterests(
