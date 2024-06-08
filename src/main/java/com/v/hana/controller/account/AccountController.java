@@ -312,6 +312,38 @@ public class AccountController {
     }
 
     @MethodInfo(name = "deleteAccountInfo", description = "등록된 계좌 정보를 삭제합니다.")
+    @Operation(
+            summary = "계좌 정보 삭제",
+            description = "등록된 계좌 정보를 삭제합니다.",
+            responses = {
+                @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                        responseCode = "200",
+                        description = "계좌 정보 삭제 성공",
+                        content = {
+                            @io.swagger.v3.oas.annotations.media.Content(
+                                    schema =
+                                            @io.swagger.v3.oas.annotations.media.Schema(
+                                                    implementation = AccountDeleteResponse.class))
+                        }),
+                @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                        responseCode = "400",
+                        description = "계좌 정보 삭제 실패",
+                        content = {
+                            @io.swagger.v3.oas.annotations.media.Content(
+                                    schema =
+                                            @io.swagger.v3.oas.annotations.media.Schema(
+                                                    implementation = AccountDeleteResponse.class))
+                        }),
+                @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                        responseCode = "500",
+                        description = "서버 에러",
+                        content = {
+                            @io.swagger.v3.oas.annotations.media.Content(
+                                    schema =
+                                            @io.swagger.v3.oas.annotations.media.Schema(
+                                                    implementation = AccountDeleteResponse.class))
+                        })
+            })
     @DeleteMapping("/account/{accountId}")
     public ResponseEntity<AccountDeleteResponse> deleteAccountInfo(@PathVariable Long accountId) {
 
