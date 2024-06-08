@@ -78,6 +78,11 @@ dependencies {
 	//FCM
 	implementation 'com.google.firebase:firebase-admin:9.2.0'           // Google Firebase Admin
 	implementation 'com.fasterxml.jackson.core:jackson-core:2.16.1'     // Jackson Data Bin
+	// Testcontainers
+	testImplementation group: 'org.testcontainers', name: 'testcontainers', version: testContainerVersion
+	testImplementation group: 'org.testcontainers', name: 'junit-jupiter', version: testContainerVersion
+	// S3
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 }
 
 tasks.named('test') {
