@@ -11,7 +11,8 @@ public class AddUserInterestRequest {
     private final MultipartFile image;
 
     @Builder
-    public AddUserInterestRequest(Long interestId, String title, String description, MultipartFile image) {
+    public AddUserInterestRequest(
+            Long interestId, String title, String description, MultipartFile image) {
         this.interestId = interestId;
         this.title = title;
         this.description = description;

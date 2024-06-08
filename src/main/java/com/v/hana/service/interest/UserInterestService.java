@@ -1,8 +1,7 @@
 package com.v.hana.service.interest;
 
-import com.v.hana.command.interest.GetUserInterestReportsCommand;
-import com.v.hana.auth.util.user.SecurityUtil;
 import com.v.hana.command.interest.AddUserInterestCommand;
+import com.v.hana.command.interest.GetUserInterestReportsCommand;
 import com.v.hana.command.interest.GetUserInterestTransactionsCommand;
 import com.v.hana.command.interest.GetUserInterestsCommand;
 import com.v.hana.command.interest.ModifyUserInterestCommand;
@@ -12,9 +11,9 @@ import com.v.hana.common.response.PostSuccessResponse;
 import com.v.hana.common.response.PutSuccessResponse;
 import com.v.hana.dto.interest.*;
 import com.v.hana.entity.interest.Interest;
+import com.v.hana.entity.interest.UserInterest;
 import com.v.hana.event.interest.SumAmountEvent;
 import com.v.hana.event.interest.SumAmountEventListener;
-import com.v.hana.entity.interest.UserInterest;
 import com.v.hana.repository.interest.InterestRepository;
 import com.v.hana.repository.interest.UserInterestRepository;
 import com.v.hana.repository.transaction.TransactionHistoryDetailRepository;
@@ -22,7 +21,6 @@ import com.v.hana.repository.transaction.TransactionHistoryRepository;
 import com.v.hana.usecase.interest.UserInterestUseCase;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
-
 import org.springframework.stereotype.Service;
 
 @TypeInfo(name = "UserInterestService", description = "사용자 관심사 서비스")
@@ -49,7 +47,10 @@ public class UserInterestService implements UserInterestUseCase {
                                         userInterest -> {
                                             Interest interest =
                                                     interestRepository
-                                                            .findById(userInterest.getInterest().getId())
+                                                            .findById(
+                                                                    userInterest
+                                                                            .getInterest()
+                                                                            .getId())
                                                             .orElseThrow(
                                                                     () ->
                                                                             new RuntimeException(
@@ -112,12 +113,13 @@ public class UserInterestService implements UserInterestUseCase {
     @Override
     public PostSuccessResponse addUserInterest(AddUserInterestCommand command) {
 
-        UserInterest userInterest = UserInterest.builder()
-                .user(command.getUser())
-                .interest(command.getInterest())
-                .subtitle(command.getSubtitle())
-                .imageUrl(command.getImage())
-                .build();
+        UserInterest userInterest =
+                UserInterest.builder()
+                        .user(command.getUser())
+                        .interest(command.getInterest())
+                        .subtitle(command.getSubtitle())
+                        .imageUrl(command.getImage())
+                        .build();
         userInterestRepository.save(userInterest);
         return PostSuccessResponse.builder().build();
     }
@@ -125,7 +127,11 @@ public class UserInterestService implements UserInterestUseCase {
     @MethodInfo(name = "modifyUserInterest", description = "사용자 관심사를 수정합니다.")
     @Override
     public PutSuccessResponse modifyUserInterest(ModifyUserInterestCommand command) {
-        userInterestRepository.updateUserInterest(command.getUser().getId(), command.getInterest().getId(), command.getSubtitle(), command.getImage());
+        userInterestRepository.updateUserInterest(
+                command.getUser().getId(),
+                command.getInterest().getId(),
+                command.getSubtitle(),
+                command.getImage());
         return PutSuccessResponse.builder().build();
     }
 
@@ -142,4 +148,3 @@ public class UserInterestService implements UserInterestUseCase {
         this.sumAmountEventListener = sumAmountEventListener;
     }
 }
-

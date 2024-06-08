@@ -8,5 +8,4 @@ public class ImageException extends BaseCodeException {
     public ImageException() {
         super(ImageHttpCode.IMAGE__UPLOAD_FAILED);
     }
-
 }

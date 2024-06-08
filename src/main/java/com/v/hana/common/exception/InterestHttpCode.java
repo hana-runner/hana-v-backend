@@ -12,7 +12,7 @@ public enum InterestHttpCode implements BaseHttpCode {
     private final String message;
 
     @Override
-    public BaseHttpReason getHttpReason(){
+    public BaseHttpReason getHttpReason() {
         return BaseHttpReason.builder().httpStatus(httpStatus).code(code).message(message).build();
     }
 
@@ -22,4 +22,3 @@ public enum InterestHttpCode implements BaseHttpCode {
         this.message = message;
     }
 }
-

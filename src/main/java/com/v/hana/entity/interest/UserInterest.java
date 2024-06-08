@@ -4,7 +4,6 @@ import com.v.hana.common.annotation.TypeInfo;
 import com.v.hana.entity.user.User;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @TypeInfo(name = "UserInterest", description = "사용자 관심사 엔티티 클래스")
 @Entity
