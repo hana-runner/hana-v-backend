@@ -82,6 +82,7 @@ public class UserInterestController {
                                                                 BaseExceptionResponse.class)))
             })
     @GetMapping("/user-interests")
+    @CurrentUser
     public ResponseEntity<UserInterestResponse> getUserInterests() {
         User user = securityUtil.getCurrentUser();
 
@@ -132,6 +133,7 @@ public class UserInterestController {
                                                                 BaseExceptionResponse.class)))
             })
     @GetMapping("/user-interests/transaction/{interestId}")
+    @CurrentUser
     public ResponseEntity<UserInterestTransactionsResponse> getUserInterestTransaction(
             @PathVariable Long interestId, @RequestParam int year, @RequestParam int month) {
         User user = securityUtil.getCurrentUser();
@@ -209,6 +211,7 @@ public class UserInterestController {
 
     @MethodInfo(name = "addUserInterests", description = "사용자 관심사 추가하기")
     @PostMapping("/user-interests")
+    @CurrentUser
     public ResponseEntity<PostSuccessResponse> addUserInterests(
             @RequestParam("interestId") Long interestId,
             @RequestParam("subtitle") String subtitle,
@@ -245,6 +248,7 @@ public class UserInterestController {
 
     @MethodInfo(name = "modifyUserInterests", description = "사용자 관심사 수정하기")
     @PutMapping("/user-interests")
+    @CurrentUser
     public ResponseEntity<PutSuccessResponse> modifyUserInterests(
             @RequestParam("interestId") Long interestId,
             @RequestParam("subtitle") String subtitle,
