@@ -12,5 +12,6 @@ import org.springframework.stereotype.Repository;
 public interface InterestRepository extends JpaRepository<Interest, Long> {
     @Query("SELECT i FROM Interest i WHERE i.id IN :ids")
     ArrayList<Interest> findAllById(ArrayList<Long> ids);
+
     ArrayList<Interest> findTitleAndColorAndById(Long id);
 }

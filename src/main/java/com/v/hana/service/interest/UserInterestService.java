@@ -79,11 +79,14 @@ public class UserInterestService implements UserInterestUseCase {
                                 command.getYear(),
                                 command.getMonth());
 
-        ArrayList<Interest> interestInfo = interestRepository.findTitleAndColorAndById(command.getInterestId());
+        ArrayList<Interest> interestInfo =
+                interestRepository.findTitleAndColorAndById(command.getInterestId());
 
         Long totalSpent =
-                transactionHistoryRepository.findUserSpendingByDate(
-                        command.getUserId(), command.getYear(), command.getMonth()).orElse(0L);
+                transactionHistoryRepository
+                        .findUserSpendingByDate(
+                                command.getUserId(), command.getYear(), command.getMonth())
+                        .orElse(0L);
 
         int interestTotalSpent =
                 transactions.stream()
