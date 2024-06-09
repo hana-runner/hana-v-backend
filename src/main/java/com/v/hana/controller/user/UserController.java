@@ -440,6 +440,7 @@ public class UserController {
                 UserGetResponse.builder()
                         .data(
                                 UserInfoDto.builder()
+                                        .name(user.getName())
                                         .username(user.getUsername())
                                         .email(user.getEmail())
                                         .birthday(user.getBirthday())
