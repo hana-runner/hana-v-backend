@@ -9,7 +9,6 @@ import com.v.hana.dto.account.ExpensePerInterest;
 import com.v.hana.dto.transaction.InterestDto;
 import com.v.hana.entity.transaction.TransactionHistory;
 import com.v.hana.entity.transaction.TransactionHistoryDetail;
-import com.v.hana.exception.transaction.TransactionIdNotFoundException;
 import com.v.hana.repository.interest.InterestRepository;
 import com.v.hana.repository.transaction.TransactionHistoryDetailRepository;
 import com.v.hana.repository.transaction.TransactionHistoryRepository;
@@ -37,7 +36,7 @@ public class TransactionHistoryDetailService implements TransactionHistoryDetail
                 transactionHistoryDetailRepository.findAllByTransactionHistoryId(command.getId());
 
         if (transactionHistoryDetails.isEmpty()) {
-            throw new TransactionIdNotFoundException();
+            return new ArrayList<>();
         }
 
         return transactionHistoryDetails;
