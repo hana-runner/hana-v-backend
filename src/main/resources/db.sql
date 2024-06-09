@@ -42,7 +42,9 @@ CREATE TABLE IF NOT EXISTS `interests` (
 
 CREATE TABLE IF NOT EXISTS `cards` (
                             `id` bigint PRIMARY KEY AUTO_INCREMENT COMMENT '카드 ID',
-                            `name` varchar(255) NOT NULL unique COMMENT '카드 이름'
+                            `name` varchar(255) NOT NULL unique COMMENT '카드 이름',
+                            `description` varchar(255) NULL COMMENT '카드 설명',
+                            `image` varchar(255) NOT NULL COMMENT '카드 이미지 URL'
 ) COMMENT '카드 테이블';
 
 CREATE TABLE IF NOT EXISTS `cards_benefits` (
