@@ -78,9 +78,16 @@ public class UserInterestService implements UserInterestUseCase {
                                 command.getInterestId(),
                                 command.getYear(),
                                 command.getMonth());
+
+        ArrayList<Interest> interestInfo =
+                interestRepository.findTitleAndColorAndById(command.getInterestId());
+
         Long totalSpent =
-                transactionHistoryRepository.findUserSpendingByDate(
-                        command.getUserId(), command.getYear(), command.getMonth());
+                transactionHistoryRepository
+                        .findUserSpendingByDate(
+                                command.getUserId(), command.getYear(), command.getMonth())
+                        .orElse(0L);
+
         int interestTotalSpent =
                 transactions.stream()
                         .mapToInt(transaction -> transaction.getAmount().intValue())
@@ -91,6 +98,8 @@ public class UserInterestService implements UserInterestUseCase {
                         .transaction(transactions)
                         .totalSpent(totalSpent)
                         .interestTotalSpent(interestTotalSpent)
+                        .title(interestInfo.get(0).getTitle())
+                        .color(interestInfo.get(0).getColor())
                         .build();
 
         return UserInterestTransactionsResponse.builder().data(userInterestTransactionsDto).build();

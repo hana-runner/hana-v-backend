@@ -6,6 +6,7 @@ import com.v.hana.dto.account.ExpensePerCategory;
 import com.v.hana.entity.transaction.TransactionHistory;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Optional;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -22,7 +23,7 @@ public interface TransactionHistoryRepository extends JpaRepository<TransactionH
                             + "FROM transaction_histories "
                             + "WHERE user_id = :userId AND YEAR(created_at) = :year AND MONTH(created_at) = :month",
             nativeQuery = true)
-    Long findUserSpendingByDate(Long userId, int year, int month);
+    Optional<Long> findUserSpendingByDate(Long userId, int year, int month);
 
     ArrayList<TransactionHistory> findAll(Sort sort);
 
