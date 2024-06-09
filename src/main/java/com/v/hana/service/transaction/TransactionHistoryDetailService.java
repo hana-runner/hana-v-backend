@@ -15,7 +15,6 @@ import com.v.hana.repository.transaction.TransactionHistoryRepository;
 import com.v.hana.usecase.transaction.TransactionHistoryDetailUseCase;
 import jakarta.transaction.Transactional;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import org.springframework.stereotype.Service;
 
@@ -68,9 +67,7 @@ public class TransactionHistoryDetailService implements TransactionHistoryDetail
                     interestDto.getDescription(),
                     interestDto.getAmount(),
                     interestDto.getId(),
-                    transactionHistory.getUser().getId(),
-                    LocalDateTime.now().toString(),
-                    LocalDateTime.now().toString());
+                    transactionHistory.getUser().getId());
         }
 
         return transactionHistoryDetailRepository.findAllByTransactionHistoryId(

@@ -46,16 +46,14 @@ public interface TransactionHistoryDetailRepository
     @Modifying
     @Query(
             value =
-                    "INSERT INTO transaction_history_details (transaction_history_id, description, amount, interest_id, user_id, created_at, updated_at, is_deleted) VALUES (:transactionHistoryId, :description, :amount, :interestId, :userId, :createdAt, :updatedAt, 0)",
+                    "INSERT INTO transaction_history_details (transaction_history_id, description, amount, interest_id, user_id) VALUES (:transactionHistoryId, :description, :amount, :interestId, :userId)",
             nativeQuery = true)
     void insertTransactionHistoryDetail(
             @Param("transactionHistoryId") Long transactionHistoryId,
             @Param("description") String description,
             @Param("amount") Long amount,
             @Param("interestId") Long interestId,
-            @Param("userId") Long userId,
-            @Param("createdAt") String createdAt,
-            @Param("updatedAt") String updatedAt);
+            @Param("userId") Long userId);
 
     @MethodInfo(
             name = "sumAmountByUserIdAndInterestId",
