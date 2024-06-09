@@ -2,6 +2,7 @@ package com.v.hana.event.interest;
 
 import com.v.hana.common.annotation.MethodInfo;
 import com.v.hana.common.annotation.TypeInfo;
+import com.v.hana.dto.interest.MyMouthDto;
 import com.v.hana.dto.interest.UserInterestReportsDto;
 import com.v.hana.dto.interest.UserInterestReportsResponse;
 import com.v.hana.usecase.transaction.TransactionHistoryDetailUseCase;
@@ -48,7 +49,7 @@ public class SumAmountEventListener {
             peerAverage = 0L;
         }
 
-        ArrayList<Long> myMonth = new ArrayList<>();
+        ArrayList<MyMouthDto> myMonth = new ArrayList<>();
 
         for (int i = 0; i < 6; i++) {
             LocalDate monthStart = end.minusMonths(i).withDayOfMonth(1);
@@ -62,9 +63,15 @@ public class SumAmountEventListener {
                 sumAmount = 0L;
             }
 
-            myMonth.add(sumAmount);
+            myMonth.add(
+                    MyMouthDto.builder()
+                            .year(monthStart.getYear())
+                            .month(monthStart.getMonthValue())
+                            .amount(sumAmount)
+                            .build());
         }
 
+        LocalDate finalEnd = end;
         return UserInterestReportsResponse.builder()
                 .data(
                         UserInterestReportsDto.builder()
