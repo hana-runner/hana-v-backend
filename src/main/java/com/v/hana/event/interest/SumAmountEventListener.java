@@ -2,6 +2,7 @@ package com.v.hana.event.interest;
 
 import com.v.hana.common.annotation.MethodInfo;
 import com.v.hana.common.annotation.TypeInfo;
+import com.v.hana.dto.interest.UserInterestReportsDto;
 import com.v.hana.dto.interest.UserInterestReportsResponse;
 import com.v.hana.usecase.transaction.TransactionHistoryDetailUseCase;
 import java.time.LocalDate;
@@ -53,9 +54,12 @@ public class SumAmountEventListener {
         }
 
         return UserInterestReportsResponse.builder()
-                .myMouth(myMouth)
-                .myAverage(myAverage / 6)
-                .peerAverage(peerAverage / 6)
+                .data(
+                        UserInterestReportsDto.builder()
+                                .myMouth(myMouth)
+                                .myAverage(myAverage / 6)
+                                .peerAverage(peerAverage / 6)
+                                .build())
                 .build();
     }
 
