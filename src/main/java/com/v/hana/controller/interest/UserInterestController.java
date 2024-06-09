@@ -155,7 +155,6 @@ public class UserInterestController {
             description = "사용자의 관심사별 거래 내역 리포트를 가져옵니다.",
             parameters = {
                 @Parameter(name = "interestId", description = "관심사 ID", required = true),
-                @Parameter(name = "userId", description = "사용자 ID", required = true),
                 @Parameter(name = "year", description = "년도", required = true),
                 @Parameter(name = "month", description = "월", required = true)
             },
@@ -192,17 +191,14 @@ public class UserInterestController {
     @GetMapping("/user-interests/report/{interestId}")
     @CurrentUser
     public ResponseEntity<UserInterestReportsResponse> getUserInterestReports(
-            @PathVariable Long interestId,
-            @RequestParam Long userId,
-            @RequestParam int year,
-            @RequestParam int month) {
+            @PathVariable Long interestId, @RequestParam int year, @RequestParam int month) {
         User user = securityUtil.getCurrentUser();
 
         UserInterestReportsResponse reports =
                 userInterestUseCase.getUserInterestReports(
                         GetUserInterestReportsCommand.builder()
                                 .interestId(interestId)
-                                .userId(userId)
+                                .userId(user.getId())
                                 .year(year)
                                 .month(month)
                                 .build());
