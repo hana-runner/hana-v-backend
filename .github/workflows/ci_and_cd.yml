@@ -63,6 +63,10 @@ jobs:
           echo "ENV JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}" >> dockerfile.temp
           echo "ENV REFRESH_TOKEN_EXPIRATION=${{ secrets.REFRESH_TOKEN_EXPIRATION }}" >> dockerfile.temp
           echo "ENV ACCESS_TOKEN_EXPIRATION=${{ secrets.ACCESS_TOKEN_EXPIRATION }}" >> dockerfile.temp
+          echo "ENV ACCESS_TOKEN_EXPIRATION=${{ secrets.S3_ACCESS_KEY }}" >> dockerfile.temp
+          echo "ENV ACCESS_TOKEN_EXPIRATION=${{ secrets.S3_SECRET_KEY }}" >> dockerfile.temp
+          echo "ENV ACCESS_TOKEN_EXPIRATION=${{ secrets.S3_REGION }}" >> dockerfile.temp
+          echo "ENV ACCESS_TOKEN_EXPIRATION=${{ secrets.S3_BUCKET_NAME }}" >> dockerfile.temp
           
           mv dockerfile.temp dockerfile
 
