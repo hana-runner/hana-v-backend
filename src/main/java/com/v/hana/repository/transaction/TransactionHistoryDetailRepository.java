@@ -5,8 +5,10 @@ import com.v.hana.common.annotation.TypeInfo;
 import com.v.hana.dto.account.ExpensePerInterest;
 import com.v.hana.dto.interest.UserInterestTransactionDto;
 import com.v.hana.entity.transaction.TransactionHistoryDetail;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -29,8 +31,8 @@ public interface TransactionHistoryDetailRepository
                             + "WHERE thd.user_id = :userId AND thd.interest_id = :interestId AND YEAR(th.created_at) = :year AND MONTH(th.created_at) = :month",
             nativeQuery = true)
     ArrayList<UserInterestTransactionDto>
-            findTransactionDetailsByUserIdAndInterestIdAndYearAndMonth(
-                    Long userId, Long interestId, int year, int month);
+    findTransactionDetailsByUserIdAndInterestIdAndYearAndMonth(
+            Long userId, Long interestId, int year, int month);
 
     @MethodInfo(name = "findAll", description = "거래내역 상세 목록을 조회합니다.")
     ArrayList<TransactionHistoryDetail> findAll();
@@ -84,13 +86,14 @@ public interface TransactionHistoryDetailRepository
                             + "    JOIN accounts a ON a.id = th.account_id"
                             + "    WHERE th.type = '출금')\n"
                             + "SELECT u.id as userId, temp.account_id as accountId, temp.category_title as categoryTitle, i.id as interestId, thd.transaction_history_id as transactionHistoryId, i.title as interestTitle, i.color as interestColor, "
-                            + "SUM(thd.amount) OVER(PARTITION BY i.id, temp.category_id) as expense, temp.created_at as createdAt "
+                            + "SUM(thd.amount) as expense, temp.created_at as createdAt "
                             + "FROM transaction_history_details thd "
                             + "JOIN users u ON u.id = thd.user_id "
                             + "JOIN interests i ON i.id = thd.interest_id "
                             + "JOIN temp ON temp.id = thd.transaction_history_id "
                             + "WHERE u.id = :userId "
-                            + "AND temp.created_at >= :start AND temp.created_at <= :end",
+                            + "AND temp.created_at >= :start AND temp.created_at <= :end "
+                            + "GROUP BY i.id, temp.category_id",
             nativeQuery = true)
     ArrayList<ExpensePerInterest> getExpensePerInterests(
             Long userId, LocalDate start, LocalDate end);
