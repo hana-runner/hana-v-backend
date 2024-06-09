@@ -2,6 +2,7 @@ package com.v.hana.controller.interest;
 
 import com.v.hana.auth.annotation.CurrentUser;
 import com.v.hana.auth.util.user.SecurityUtil;
+import com.v.hana.command.card.GetUserInterestCardsCommand;
 import com.v.hana.command.interest.AddUserInterestCommand;
 import com.v.hana.command.interest.GetUserInterestReportsCommand;
 import com.v.hana.command.interest.GetUserInterestTransactionsCommand;
@@ -12,6 +13,7 @@ import com.v.hana.common.annotation.TypeInfo;
 import com.v.hana.common.exception.BaseExceptionResponse;
 import com.v.hana.common.response.PostSuccessResponse;
 import com.v.hana.common.response.PutSuccessResponse;
+import com.v.hana.dto.card.CardInterestResponse;
 import com.v.hana.dto.interest.UserInterestReportsResponse;
 import com.v.hana.dto.interest.UserInterestResponse;
 import com.v.hana.dto.interest.UserInterestTransactionsResponse;
@@ -23,6 +25,7 @@ import com.v.hana.exception.user.InvalidUserAccessException;
 import com.v.hana.repository.interest.InterestRepository;
 import com.v.hana.repository.interest.UserInterestRepository;
 import com.v.hana.service.interest.ImageService;
+import com.v.hana.usecase.card.CardInterestUseCase;
 import com.v.hana.usecase.interest.UserInterestUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -46,6 +49,7 @@ public class UserInterestController {
     private final InterestRepository interestRepository;
     private final UserInterestRepository userInterestRepository;
     private final UserInterestUseCase userInterestUseCase;
+    private final CardInterestUseCase cardInterestUseCase;
 
     @MethodInfo(name = "getUserInterests", description = "사용자 관심사 목록 가져오기")
     @Operation(
@@ -205,6 +209,18 @@ public class UserInterestController {
         return ResponseEntity.ok(reports);
     }
 
+    @MethodInfo(name = "getUserInterestCards", description = "사용자 관심사별 카드 목록을 가져옵니다.")
+    @GetMapping("/user-interests/cards/{interestId}")
+    @CurrentUser
+    public ResponseEntity<CardInterestResponse> getUserInterestCards(
+            @PathVariable Long interestId) {
+        User user = securityUtil.getCurrentUser();
+
+        return ResponseEntity.ok(
+                cardInterestUseCase.getCardInterest(
+                        GetUserInterestCardsCommand.builder().interestId(interestId).build()));
+    }
+
     @MethodInfo(name = "addUserInterests", description = "사용자 관심사 추가하기")
     @PostMapping("/user-interests")
     @CurrentUser
@@ -281,11 +297,12 @@ public class UserInterestController {
             InterestRepository interestRepository,
             UserInterestRepository userInterestRepository,
             UserInterestUseCase userInterestUseCase,
-            SecurityUtil securityUtil1) {
+            CardInterestUseCase cardInterestUseCase) {
         this.securityUtil = securityUtil;
         this.imageUploadService = imageUploadService;
         this.interestRepository = interestRepository;
         this.userInterestRepository = userInterestRepository;
         this.userInterestUseCase = userInterestUseCase;
+        this.cardInterestUseCase = cardInterestUseCase;
     }
 }
