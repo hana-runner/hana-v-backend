@@ -210,6 +210,41 @@ public class UserInterestController {
     }
 
     @MethodInfo(name = "getUserInterestCards", description = "사용자 관심사별 카드 목록을 가져옵니다.")
+    @Operation(
+            summary = "사용자 관심사별 카드 목록 가져오기",
+            description = "사용자의 관심사별 카드 목록을 가져옵니다.",
+            parameters = {
+                @Parameter(name = "interestId", description = "관심사 ID", required = true),
+            },
+            responses = {
+                @ApiResponse(
+                        responseCode = "200",
+                        description = "사용자 관심사별 카드 목록 가져오기 성공",
+                        content =
+                                @Content(
+                                        schema =
+                                                @Schema(
+                                                        implementation =
+                                                                CardInterestResponse.class))),
+                @ApiResponse(
+                        responseCode = "400",
+                        description = "사용자 관심사별 카드 목록 가져오기 실패",
+                        content =
+                                @Content(
+                                        schema =
+                                                @Schema(
+                                                        implementation =
+                                                                BaseExceptionResponse.class))),
+                @ApiResponse(
+                        responseCode = "500",
+                        description = "서버 에러",
+                        content =
+                                @Content(
+                                        schema =
+                                                @Schema(
+                                                        implementation =
+                                                                BaseExceptionResponse.class)))
+            })
     @GetMapping("/user-interests/cards/{interestId}")
     @CurrentUser
     public ResponseEntity<CardInterestResponse> getUserInterestCards(

@@ -46,23 +46,22 @@ public interface TransactionHistoryDetailRepository
     @Modifying
     @Query(
             value =
-                    "INSERT INTO transaction_history_details (transaction_history_id, description, amount, interest_id, user_id, created_at, updated_at, is_deleted) VALUES (:transactionHistoryId, :description, :amount, :interestId, :userId, :createdAt, :updatedAt, 0)",
+                    "INSERT INTO transaction_history_details (transaction_history_id, description, amount, interest_id, user_id) VALUES (:transactionHistoryId, :description, :amount, :interestId, :userId)",
             nativeQuery = true)
     void insertTransactionHistoryDetail(
             @Param("transactionHistoryId") Long transactionHistoryId,
             @Param("description") String description,
             @Param("amount") Long amount,
             @Param("interestId") Long interestId,
-            @Param("userId") Long userId,
-            @Param("createdAt") String createdAt,
-            @Param("updatedAt") String updatedAt);
+            @Param("userId") Long userId);
 
     @MethodInfo(
             name = "sumAmountByUserIdAndInterestId",
             description = "유저 ID와 관심사 ID로 거래내역 상세의 금액을 합산합니다.")
     @Query(
             value =
-                    "SELECT SUM(amount) FROM transaction_history_details WHERE user_id = :userId AND interest_id = :interestId AND created_at >= :start AND created_at <= :end",
+                    "SELECT SUM(transaction_history_details.amount) FROM transaction_history_details JOIN transaction_histories ON transaction_history_details.transaction_history_id = transaction_histories.id"
+                            + " WHERE transaction_history_details.user_id = :userId AND interest_id = :interestId AND created_at >= :start AND created_at <= :end",
             nativeQuery = true)
     Long sumAmountByUserIdAndInterestId(
             Long userId, Long interestId, LocalDate start, LocalDate end);
@@ -70,7 +69,8 @@ public interface TransactionHistoryDetailRepository
     @MethodInfo(name = "sumAmountByInterestId", description = "관심사 ID로 거래내역 상세의 금액을 합산합니다.")
     @Query(
             value =
-                    "SELECT SUM(amount) FROM transaction_history_details WHERE interest_id = :interestId AND created_at >= :start AND created_at <= :end",
+                    "SELECT SUM(transaction_history_details.amount) FROM transaction_history_details JOIN transaction_histories ON transaction_history_details.transaction_history_id = transaction_histories.id"
+                            + " WHERE interest_id = :interestId AND created_at >= :start AND created_at <= :end",
             nativeQuery = true)
     Long sumAmountByInterestId(Long interestId, LocalDate start, LocalDate end);
 

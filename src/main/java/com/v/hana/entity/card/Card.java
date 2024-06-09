@@ -21,16 +21,12 @@ public class Card {
     @Column(name = "name", nullable = false, length = 50)
     private String name;
 
-    @Column(name = "description", nullable = false, length = 50)
-    private String description;
-
-    @Column(name = "image", nullable = false, length = 255)
+    @Column(name = "image", nullable = false)
     private String image;
 
     @Builder
-    public Card(String name, String description, String image) {
+    public Card(String name, String image) {
         this.name = name;
-        this.description = description;
         this.image = image;
     }
 }

@@ -68,9 +68,7 @@ public class TransactionHistoryDetailService implements TransactionHistoryDetail
                     interestDto.getDescription(),
                     interestDto.getAmount(),
                     interestDto.getId(),
-                    transactionHistory.getUser().getId(),
-                    LocalDateTime.now().toString(),
-                    LocalDateTime.now().toString());
+                    transactionHistory.getUser().getId());
         }
 
         return transactionHistoryDetailRepository.findAllByTransactionHistoryId(
