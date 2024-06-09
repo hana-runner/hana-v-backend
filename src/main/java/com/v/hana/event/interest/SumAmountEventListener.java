@@ -36,7 +36,7 @@ public class SumAmountEventListener {
                 transactionHistoryDetailUseCase.sumAmountByInterestId(
                         sumAmountEvent.getInterestId(), start, end);
 
-        ArrayList<Long> myMouth = new ArrayList<>();
+        ArrayList<Long> myMonth = new ArrayList<>();
 
         for (int i = 1; i <= 6; i++) {
             start = end.minusMonths(i).withDayOfMonth(1);
@@ -50,13 +50,13 @@ public class SumAmountEventListener {
                 sumAmount = 0L;
             }
 
-            myMouth.add(sumAmount);
+            myMonth.add(sumAmount);
         }
 
         return UserInterestReportsResponse.builder()
                 .data(
                         UserInterestReportsDto.builder()
-                                .myMouth(myMouth)
+                                .myMonth(myMonth)
                                 .myAverage(myAverage / 6)
                                 .peerAverage(peerAverage / 6)
                                 .build())
