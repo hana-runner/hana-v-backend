@@ -257,6 +257,43 @@ public class UserInterestController {
     }
 
     @MethodInfo(name = "addUserInterests", description = "사용자 관심사 추가하기")
+    @Operation(
+            summary = "사용자 관심사 추가하기",
+            description = "사용자의 관심사를 추가합니다.",
+            parameters = {
+                @Parameter(name = "interestId", description = "관심사 ID", required = true),
+                @Parameter(name = "subtitle", description = "부제목", required = true),
+                @Parameter(name = "image", description = "이미지", required = true)
+            },
+            responses = {
+                @ApiResponse(
+                        responseCode = "200",
+                        description = "사용자 관심사 추가하기 성공",
+                        content =
+                                @Content(
+                                        schema =
+                                                @Schema(
+                                                        implementation =
+                                                                PostSuccessResponse.class))),
+                @ApiResponse(
+                        responseCode = "400",
+                        description = "사용자 관심사 추가하기 실패",
+                        content =
+                                @Content(
+                                        schema =
+                                                @Schema(
+                                                        implementation =
+                                                                BaseExceptionResponse.class))),
+                @ApiResponse(
+                        responseCode = "500",
+                        description = "서버 에러",
+                        content =
+                                @Content(
+                                        schema =
+                                                @Schema(
+                                                        implementation =
+                                                                BaseExceptionResponse.class)))
+            })
     @PostMapping("/user-interests")
     @CurrentUser
     public ResponseEntity<PostSuccessResponse> addUserInterests(
@@ -294,6 +331,43 @@ public class UserInterestController {
     }
 
     @MethodInfo(name = "modifyUserInterests", description = "사용자 관심사 수정하기")
+    @Operation(
+            summary = "사용자 관심사 수정하기",
+            description = "사용자의 관심사를 수정합니다.",
+            parameters = {
+                @Parameter(name = "interestId", description = "관심사 ID", required = true),
+                @Parameter(name = "subtitle", description = "부제목", required = true),
+                @Parameter(name = "image", description = "이미지", required = true)
+            },
+            responses = {
+                @ApiResponse(
+                        responseCode = "200",
+                        description = "사용자 관심사 수정하기 성공",
+                        content =
+                                @Content(
+                                        schema =
+                                                @Schema(
+                                                        implementation =
+                                                                PutSuccessResponse.class))),
+                @ApiResponse(
+                        responseCode = "400",
+                        description = "사용자 관심사 수정하기 실패",
+                        content =
+                                @Content(
+                                        schema =
+                                                @Schema(
+                                                        implementation =
+                                                                BaseExceptionResponse.class))),
+                @ApiResponse(
+                        responseCode = "500",
+                        description = "서버 에러",
+                        content =
+                                @Content(
+                                        schema =
+                                                @Schema(
+                                                        implementation =
+                                                                BaseExceptionResponse.class)))
+            })
     @PutMapping("/user-interests")
     @CurrentUser
     public ResponseEntity<PutSuccessResponse> modifyUserInterests(

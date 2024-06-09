@@ -501,6 +501,50 @@ public class UserController {
         return ResponseEntity.ok(PostSuccessResponse.builder().build());
     }
 
+    @Operation(
+            summary = "사용자 알림 수신 변경",
+            description = "사용자 알림 수신 여부를 변경합니다.",
+            method = "PUT",
+            requestBody =
+                    @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                            description = "알림 수신 변경 정보",
+                            required = true,
+                            content =
+                                    @Content(
+                                            schema =
+                                                    @Schema(
+                                                            implementation =
+                                                                    UpdateIsReceieveAlarmRequest
+                                                                            .class))),
+            responses = {
+                @ApiResponse(
+                        responseCode = "200",
+                        description = "알림 수신 변경 성공",
+                        content =
+                                @Content(
+                                        schema =
+                                                @Schema(
+                                                        implementation =
+                                                                PostSuccessResponse.class))),
+                @ApiResponse(
+                        responseCode = "400",
+                        description = "알림 수신 변경 실패",
+                        content =
+                                @Content(
+                                        schema =
+                                                @Schema(
+                                                        implementation =
+                                                                BaseExceptionResponse.class))),
+                @ApiResponse(
+                        responseCode = "500",
+                        description = "서버 에러",
+                        content =
+                                @Content(
+                                        schema =
+                                                @Schema(
+                                                        implementation =
+                                                                BaseExceptionResponse.class)))
+            })
     @PutMapping("/users/update/is_receieve_alarm")
     @CurrentUser
     public ResponseEntity<PostSuccessResponse> updateIsReceieveAlarm(
@@ -511,6 +555,50 @@ public class UserController {
         return ResponseEntity.ok(PostSuccessResponse.builder().build());
     }
 
+    @Operation(
+            summary = "사용자 디바이스 토큰 변경",
+            description = "사용자 디바이스 토큰을 변경합니다.",
+            method = "POST",
+            requestBody =
+                    @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                            description = "디바이스 토큰 변경 정보",
+                            required = true,
+                            content =
+                                    @Content(
+                                            schema =
+                                                    @Schema(
+                                                            implementation =
+                                                                    UpdateDeviceTokenRequest
+                                                                            .class))),
+            responses = {
+                @ApiResponse(
+                        responseCode = "200",
+                        description = "디바이스 토큰 변경 성공",
+                        content =
+                                @Content(
+                                        schema =
+                                                @Schema(
+                                                        implementation =
+                                                                PostSuccessResponse.class))),
+                @ApiResponse(
+                        responseCode = "400",
+                        description = "디바이스 토큰 변경 실패",
+                        content =
+                                @Content(
+                                        schema =
+                                                @Schema(
+                                                        implementation =
+                                                                BaseExceptionResponse.class))),
+                @ApiResponse(
+                        responseCode = "500",
+                        description = "서버 에러",
+                        content =
+                                @Content(
+                                        schema =
+                                                @Schema(
+                                                        implementation =
+                                                                BaseExceptionResponse.class)))
+            })
     @PostMapping("/users/alarm/device_token")
     @CurrentUser
     public ResponseEntity<PostSuccessResponse> updateDeviceToken(
@@ -521,6 +609,39 @@ public class UserController {
         return ResponseEntity.ok(PostSuccessResponse.builder().build());
     }
 
+    @Operation(
+            summary = "사용자 알림 조회",
+            description = "사용자 알림을 조회합니다.",
+            method = "GET",
+            responses = {
+                @ApiResponse(
+                        responseCode = "200",
+                        description = "알림 조회 성공",
+                        content =
+                                @Content(
+                                        schema =
+                                                @Schema(
+                                                        implementation =
+                                                                GetSuccessResponse.class))),
+                @ApiResponse(
+                        responseCode = "400",
+                        description = "알림 조회 실패",
+                        content =
+                                @Content(
+                                        schema =
+                                                @Schema(
+                                                        implementation =
+                                                                BaseExceptionResponse.class))),
+                @ApiResponse(
+                        responseCode = "500",
+                        description = "서버 에러",
+                        content =
+                                @Content(
+                                        schema =
+                                                @Schema(
+                                                        implementation =
+                                                                BaseExceptionResponse.class)))
+            })
     @GetMapping("/users/alarms")
     @CurrentUser
     public ResponseEntity<GetSuccessResponse<Object>> getUserAlarms() {
@@ -533,6 +654,39 @@ public class UserController {
                         .build());
     }
 
+    @Operation(
+            summary = "사용자 알림 삭제",
+            description = "사용자 알림을 삭제합니다.",
+            method = "DELETE",
+            responses = {
+                @ApiResponse(
+                        responseCode = "200",
+                        description = "알림 삭제 성공",
+                        content =
+                                @Content(
+                                        schema =
+                                                @Schema(
+                                                        implementation =
+                                                                DeleteSuccessResponse.class))),
+                @ApiResponse(
+                        responseCode = "400",
+                        description = "알림 삭제 실패",
+                        content =
+                                @Content(
+                                        schema =
+                                                @Schema(
+                                                        implementation =
+                                                                BaseExceptionResponse.class))),
+                @ApiResponse(
+                        responseCode = "500",
+                        description = "서버 에러",
+                        content =
+                                @Content(
+                                        schema =
+                                                @Schema(
+                                                        implementation =
+                                                                BaseExceptionResponse.class)))
+            })
     @DeleteMapping("/users/alarms")
     @Transactional
     @CurrentUser
