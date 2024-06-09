@@ -24,7 +24,7 @@ public class Card {
     @Column(name = "description", nullable = false, length = 50)
     private String description;
 
-    @Column(name = "image", nullable = false, length = 255)
+    @Column(name = "image", nullable = false)
     private String image;
 
     @Builder

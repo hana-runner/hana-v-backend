@@ -100,8 +100,6 @@ CREATE TABLE IF NOT EXISTS `transaction_history_details` (
                             `interest_id` bigint NOT NULL COMMENT '관심사 ID',
                             `description` varchar(255) NOT NULL COMMENT '설명',
                             `amount` bigint NOT NULL COMMENT '금액',
-                            `created_at` datetime NOT NULL COMMENT '생성 일시',
-                            `updated_at` datetime NOT NULL COMMENT '수정 일시',
                             `is_deleted` boolean NOT NULL COMMENT '삭제 여부',
                             CONSTRAINT fk_users_to_thd FOREIGN KEY (user_id) REFERENCES users(id),
                             CONSTRAINT fk_interests_to_thd FOREIGN KEY (interest_id) REFERENCES interests(id),
