@@ -12,6 +12,8 @@ import org.springframework.stereotype.Repository;
 @TypeInfo(name = "CardInterestRepository", description = "카드 관심사 레포지토리 인터페이스")
 @Repository
 public interface CardInterestRepository extends JpaRepository<CardInterest, Long> {
-    @Query("SELECT c FROM CardInterest c JOIN c.card WHERE c.interest.id = :interestId")
+    @Query(
+            value = "SELECT c.card FROM CardInterest c WHERE c.interest.id = :interestId",
+            nativeQuery = false)
     ArrayList<Card> findByInterestId(@Param("interestId") Long interestId);
 }
