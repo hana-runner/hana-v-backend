@@ -5,10 +5,8 @@ import com.v.hana.common.annotation.TypeInfo;
 import com.v.hana.dto.account.ExpensePerInterest;
 import com.v.hana.dto.interest.UserInterestTransactionDto;
 import com.v.hana.entity.transaction.TransactionHistoryDetail;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -31,8 +29,8 @@ public interface TransactionHistoryDetailRepository
                             + "WHERE thd.user_id = :userId AND thd.interest_id = :interestId AND YEAR(th.created_at) = :year AND MONTH(th.created_at) = :month",
             nativeQuery = true)
     ArrayList<UserInterestTransactionDto>
-    findTransactionDetailsByUserIdAndInterestIdAndYearAndMonth(
-            Long userId, Long interestId, int year, int month);
+            findTransactionDetailsByUserIdAndInterestIdAndYearAndMonth(
+                    Long userId, Long interestId, int year, int month);
 
     @MethodInfo(name = "findAll", description = "거래내역 상세 목록을 조회합니다.")
     ArrayList<TransactionHistoryDetail> findAll();
