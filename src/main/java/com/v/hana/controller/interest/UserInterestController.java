@@ -437,7 +437,8 @@ public class UserInterestController {
     @MethodInfo(name = "deleteUserInterests", description = "사용자 관심사 삭제하기")
     @DeleteMapping("/user-interests/{interestId}")
     @CurrentUser
-    public ResponseEntity<DeleteSuccessResponse> deleteUserInterests(@PathVariable Long interestId) {
+    public ResponseEntity<DeleteSuccessResponse> deleteUserInterests(
+            @PathVariable Long interestId) {
         // 거래 내역 상세 삭제, 사용자 관심사 삭제
         User user = securityUtil.getCurrentUser();
         userInterestService.deleteUserInterestAndTransactionHistoryDetail(user.getId(), interestId);
@@ -445,7 +446,14 @@ public class UserInterestController {
         return ResponseEntity.ok(DeleteSuccessResponse.builder().build());
     }
 
-    public UserInterestController(SecurityUtil securityUtil, ImageService imageUploadService, UserInterestService userInterestService, InterestRepository interestRepository, UserInterestRepository userInterestRepository, UserInterestUseCase userInterestUseCase, CardInterestUseCase cardInterestUseCase) {
+    public UserInterestController(
+            SecurityUtil securityUtil,
+            ImageService imageUploadService,
+            UserInterestService userInterestService,
+            InterestRepository interestRepository,
+            UserInterestRepository userInterestRepository,
+            UserInterestUseCase userInterestUseCase,
+            CardInterestUseCase cardInterestUseCase) {
         this.securityUtil = securityUtil;
         this.imageUploadService = imageUploadService;
         this.userInterestService = userInterestService;

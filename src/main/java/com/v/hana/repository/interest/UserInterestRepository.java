@@ -38,6 +38,8 @@ public interface UserInterestRepository extends JpaRepository<UserInterest, Long
     @MethodInfo(name = "deleteByUserIdAndInterestId", description = "사용자 관심사를 삭제합니다.")
     @Modifying
     @Transactional
-    @Query("DELETE FROM UserInterest thd WHERE thd.user.id = :userId AND thd.interest.id = :interestId")
-    void deleteByUserIdAndInterestId(@Param("userId") Long userId, @Param("interestId") Long interestId);
+    @Query(
+            "DELETE FROM UserInterest thd WHERE thd.user.id = :userId AND thd.interest.id = :interestId")
+    void deleteByUserIdAndInterestId(
+            @Param("userId") Long userId, @Param("interestId") Long interestId);
 }

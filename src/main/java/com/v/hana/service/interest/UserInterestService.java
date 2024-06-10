@@ -23,7 +23,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @TypeInfo(name = "UserInterestService", description = "사용자 관심사 서비스")
 @Service
@@ -255,7 +254,10 @@ public class UserInterestService implements UserInterestUseCase {
                                 userId, interestId, begin, finish, start, end))
                 .build();
     }
-    @MethodInfo(name = "deleteUserInterestAndTransactionHistoryDetail", description = "사용자 관심사를 삭제합니다.")
+
+    @MethodInfo(
+            name = "deleteUserInterestAndTransactionHistoryDetail",
+            description = "사용자 관심사를 삭제합니다.")
     public void deleteUserInterestAndTransactionHistoryDetail(Long userId, Long interestId) {
         transactionHistoryDetailRepository.deleteByUserIdAndInterestId(userId, interestId);
         userInterestRepository.deleteByUserIdAndInterestId(userId, interestId);
