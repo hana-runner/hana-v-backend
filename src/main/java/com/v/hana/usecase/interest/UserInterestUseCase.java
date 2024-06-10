@@ -26,5 +26,5 @@ public interface UserInterestUseCase {
     PutSuccessResponse modifyUserInterest(ModifyUserInterestCommand command);
 
     UserCompareResponse getComparison(
-            Long userId, Long interestId, int age, LocalDate start, LocalDate end);
+            Long userId, Long interestId, int age, int year, int month);
 }

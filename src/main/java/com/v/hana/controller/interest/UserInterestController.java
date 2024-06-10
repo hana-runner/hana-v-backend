@@ -411,25 +411,15 @@ public class UserInterestController {
     @GetMapping("/user-interests/compare/{interestId}")
     public ResponseEntity<UserCompareResponse> getComparison(
             @PathVariable Long interestId,
-            @RequestParam(name = "start", required = false)
-                    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-                    LocalDate start,
-            @RequestParam(name = "end", required = false)
-                    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-                    LocalDate end) {
-        if (start == null) {
-            start = LocalDate.now().minusMonths(1);
-        }
+            @RequestParam int year,
+            @RequestParam int month) {
 
-        if (end == null) {
-            end = LocalDate.now().plusDays(1);
-        }
         User currentUser = securityUtil.getCurrentUser();
 
         int age = Period.between(currentUser.getBirthday(), LocalDate.now()).getYears();
 
         UserCompareResponse comparison =
-                userInterestUseCase.getComparison(currentUser.getId(), interestId, age, start, end);
+                userInterestUseCase.getComparison(currentUser.getId(), interestId, age, year, month);
 
         return ResponseEntity.ok(comparison);
     }
