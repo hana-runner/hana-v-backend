@@ -40,7 +40,6 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.Optional;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -410,16 +409,15 @@ public class UserInterestController {
     @MethodInfo(name = "getComparison", description = "관심사별 카테고리 지출 비교 정보를 조회합니다.")
     @GetMapping("/user-interests/compare/{interestId}")
     public ResponseEntity<UserCompareResponse> getComparison(
-            @PathVariable Long interestId,
-            @RequestParam int year,
-            @RequestParam int month) {
+            @PathVariable Long interestId, @RequestParam int year, @RequestParam int month) {
 
         User currentUser = securityUtil.getCurrentUser();
 
         int age = Period.between(currentUser.getBirthday(), LocalDate.now()).getYears();
 
         UserCompareResponse comparison =
-                userInterestUseCase.getComparison(currentUser.getId(), interestId, age, year, month);
+                userInterestUseCase.getComparison(
+                        currentUser.getId(), interestId, age, year, month);
 
         return ResponseEntity.ok(comparison);
     }

@@ -11,7 +11,6 @@ import com.v.hana.dto.interest.UserCompareResponse;
 import com.v.hana.dto.interest.UserInterestReportsResponse;
 import com.v.hana.dto.interest.UserInterestResponse;
 import com.v.hana.dto.interest.UserInterestTransactionsResponse;
-import java.time.LocalDate;
 
 public interface UserInterestUseCase {
     UserInterestResponse getUserInterests(GetUserInterestsCommand command);
@@ -25,6 +24,5 @@ public interface UserInterestUseCase {
 
     PutSuccessResponse modifyUserInterest(ModifyUserInterestCommand command);
 
-    UserCompareResponse getComparison(
-            Long userId, Long interestId, int age, int year, int month);
+    UserCompareResponse getComparison(Long userId, Long interestId, int age, int year, int month);
 }

@@ -19,7 +19,6 @@ import com.v.hana.repository.interest.UserInterestRepository;
 import com.v.hana.repository.transaction.TransactionHistoryDetailRepository;
 import com.v.hana.repository.transaction.TransactionHistoryRepository;
 import com.v.hana.usecase.interest.UserInterestUseCase;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
