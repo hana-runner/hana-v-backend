@@ -33,6 +33,6 @@ public class ImageService {
     }
 
     public String getDefaultImage() {
-        return amazonS3Client.getUrl("hanav", "default.jpg").toString();
+        return amazonS3Client.getUrl(bucket, "default.jpg").toString();
     }
 }
