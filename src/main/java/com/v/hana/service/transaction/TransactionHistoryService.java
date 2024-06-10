@@ -11,7 +11,6 @@ import com.v.hana.repository.transaction.TransactionHistoryRepository;
 import com.v.hana.usecase.transaction.TransactionHistoryUseCase;
 import jakarta.transaction.Transactional;
 import java.util.ArrayList;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @TypeInfo(name = "TransactionHistoryService", description = "거래내역 서비스 클래스")
@@ -41,10 +40,19 @@ public class TransactionHistoryService implements TransactionHistoryUseCase {
     @Override
     public ArrayList<TransactionHistory> readTransactionHistory(
             ReadTransactionsCommand readTransactionsCommand) {
-        return transactionHistoryRepository.findAll(
-                readTransactionsCommand.getSort()
-                        ? Sort.by("createdAt").descending()
-                        : Sort.by("createdAt").ascending());
+        if (readTransactionsCommand.getSort()) {
+            return transactionHistoryRepository
+                    .findTransactionHistoriesByAccountIdAndDateRangeOrderByDESC(
+                            readTransactionsCommand.getAccount().getId(),
+                            readTransactionsCommand.getStart().toString(),
+                            readTransactionsCommand.getEnd().toString());
+        } else {
+            return transactionHistoryRepository
+                    .findTransactionHistoriesByAccountIdAndDateRangeOrderByASC(
+                            readTransactionsCommand.getAccount().getId(),
+                            readTransactionsCommand.getStart().toString(),
+                            readTransactionsCommand.getEnd().toString());
+        }
     }
 
     public TransactionHistoryService(TransactionHistoryRepository transactionHistoryRepository) {

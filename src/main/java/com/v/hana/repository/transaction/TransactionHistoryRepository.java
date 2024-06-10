@@ -7,10 +7,10 @@ import com.v.hana.entity.transaction.TransactionHistory;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Optional;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @TypeInfo(name = "TransactionHistoryRepository", description = "거래내역 레포지토리 클래스")
@@ -25,7 +25,33 @@ public interface TransactionHistoryRepository extends JpaRepository<TransactionH
             nativeQuery = true)
     Optional<Long> findUserSpendingByDate(Long userId, int year, int month);
 
-    ArrayList<TransactionHistory> findAll(Sort sort);
+    @Query(
+            value =
+                    "SELECT th.* "
+                            + "FROM hanaVdb.transaction_histories th "
+                            + "WHERE th.account_id = :accountId "
+                            + "AND th.created_at >= :startDate "
+                            + "AND th.created_at <= :endDate "
+                            + "ORDER BY th.created_at DESC",
+            nativeQuery = true)
+    ArrayList<TransactionHistory> findTransactionHistoriesByAccountIdAndDateRangeOrderByDESC(
+            @Param("accountId") Long accountId,
+            @Param("startDate") String startDate,
+            @Param("endDate") String endDate);
+
+    @Query(
+            value =
+                    "SELECT th.* "
+                            + "FROM hanaVdb.transaction_histories th "
+                            + "WHERE th.account_id = :accountId "
+                            + "AND th.created_at >= :startDate "
+                            + "AND th.created_at <= :endDate "
+                            + "ORDER BY th.created_at",
+            nativeQuery = true)
+    ArrayList<TransactionHistory> findTransactionHistoriesByAccountIdAndDateRangeOrderByASC(
+            @Param("accountId") Long accountId,
+            @Param("startDate") String startDate,
+            @Param("endDate") String endDate);
 
     @MethodInfo(name = "updateCategory", description = "거래내역 카테고리를 수정합니다.")
     @Modifying

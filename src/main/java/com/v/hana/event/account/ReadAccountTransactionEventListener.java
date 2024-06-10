@@ -63,27 +63,6 @@ public class ReadAccountTransactionEventListener {
             return AccountTransactionGetResponse.builder()
                     .data(
                             transactionHistories.stream()
-                                    .filter(
-                                            transactionHistory ->
-                                                    transactionHistory
-                                                            .getAccount()
-                                                            .getId()
-                                                            .equals(
-                                                                    readAccountTransactionEvent
-                                                                            .getAccount()
-                                                                            .getId()))
-                                    .filter(
-                                            transactionHistory ->
-                                                    transactionHistory
-                                                                    .getCreatedAt()
-                                                                    .isAfter(
-                                                                            readAccountTransactionEvent
-                                                                                    .getStart())
-                                                            && transactionHistory
-                                                                    .getCreatedAt()
-                                                                    .isBefore(
-                                                                            readAccountTransactionEvent
-                                                                                    .getEnd()))
                                     .map(
                                             transactionHistory ->
                                                     TransactionHistoryDto.builder()
@@ -129,6 +108,9 @@ public class ReadAccountTransactionEventListener {
                                                                                     transactionHistoryDetail ->
                                                                                             TransactionHistoryDetailDto
                                                                                                     .builder()
+                                                                                                    .id(
+                                                                                                            transactionHistoryDetail
+                                                                                                                    .getId())
                                                                                                     .interest(
                                                                                                             InterestDto
                                                                                                                     .builder()
@@ -170,28 +152,7 @@ public class ReadAccountTransactionEventListener {
                             transactionHistories.stream()
                                     .filter(
                                             transactionHistory ->
-                                                    transactionHistory
-                                                            .getAccount()
-                                                            .getId()
-                                                            .equals(
-                                                                    readAccountTransactionEvent
-                                                                            .getAccount()
-                                                                            .getId()))
-                                    .filter(
-                                            transactionHistory ->
                                                     transactionHistory.getType().equals("입금"))
-                                    .filter(
-                                            transactionHistory ->
-                                                    transactionHistory
-                                                                    .getCreatedAt()
-                                                                    .isAfter(
-                                                                            readAccountTransactionEvent
-                                                                                    .getStart())
-                                                            && transactionHistory
-                                                                    .getCreatedAt()
-                                                                    .isBefore(
-                                                                            readAccountTransactionEvent
-                                                                                    .getEnd()))
                                     .map(
                                             transactionHistory ->
                                                     TransactionHistoryDto.builder()
@@ -237,6 +198,9 @@ public class ReadAccountTransactionEventListener {
                                                                                     transactionHistoryDetail ->
                                                                                             TransactionHistoryDetailDto
                                                                                                     .builder()
+                                                                                                    .id(
+                                                                                                            transactionHistoryDetail
+                                                                                                                    .getId())
                                                                                                     .interest(
                                                                                                             InterestDto
                                                                                                                     .builder()
@@ -278,28 +242,7 @@ public class ReadAccountTransactionEventListener {
                             transactionHistories.stream()
                                     .filter(
                                             transactionHistory ->
-                                                    transactionHistory
-                                                            .getAccount()
-                                                            .getId()
-                                                            .equals(
-                                                                    readAccountTransactionEvent
-                                                                            .getAccount()
-                                                                            .getId()))
-                                    .filter(
-                                            transactionHistory ->
                                                     transactionHistory.getType().equals("출금"))
-                                    .filter(
-                                            transactionHistory ->
-                                                    transactionHistory
-                                                                    .getCreatedAt()
-                                                                    .isAfter(
-                                                                            readAccountTransactionEvent
-                                                                                    .getStart())
-                                                            && transactionHistory
-                                                                    .getCreatedAt()
-                                                                    .isBefore(
-                                                                            readAccountTransactionEvent
-                                                                                    .getEnd()))
                                     .map(
                                             transactionHistory ->
                                                     TransactionHistoryDto.builder()
@@ -345,6 +288,9 @@ public class ReadAccountTransactionEventListener {
                                                                                     transactionHistoryDetail ->
                                                                                             TransactionHistoryDetailDto
                                                                                                     .builder()
+                                                                                                    .id(
+                                                                                                            transactionHistoryDetail
+                                                                                                                    .getId())
                                                                                                     .interest(
                                                                                                             InterestDto
                                                                                                                     .builder()

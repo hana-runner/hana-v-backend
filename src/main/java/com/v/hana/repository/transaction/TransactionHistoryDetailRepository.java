@@ -32,8 +32,37 @@ public interface TransactionHistoryDetailRepository
             findTransactionDetailsByUserIdAndInterestIdAndYearAndMonth(
                     Long userId, Long interestId, int year, int month);
 
-    @MethodInfo(name = "findAll", description = "거래내역 상세 목록을 조회합니다.")
-    ArrayList<TransactionHistoryDetail> findAll();
+    @Query(
+            value =
+                    "SELECT thd.* "
+                            + "FROM hanaVdb.transaction_history_details thd "
+                            + "JOIN hanaVdb.transaction_histories th ON thd.transaction_history_id = th.id "
+                            + "WHERE th.account_id = :accountId "
+                            + "AND th.created_at >= :startDate "
+                            + "AND th.created_at <= :endDate "
+                            + "ORDER BY th.created_at DESC",
+            nativeQuery = true)
+    ArrayList<TransactionHistoryDetail>
+            findTransactionHistoryDetailsByAccountIdAndDateRangeOrderByDESC(
+                    @Param("accountId") Long accountId,
+                    @Param("startDate") String startDate,
+                    @Param("endDate") String endDate);
+
+    @Query(
+            value =
+                    "SELECT thd.* "
+                            + "FROM hanaVdb.transaction_history_details thd "
+                            + "JOIN hanaVdb.transaction_histories th ON thd.transaction_history_id = th.id "
+                            + "WHERE th.account_id = :accountId "
+                            + "AND th.created_at >= :startDate "
+                            + "AND th.created_at <= :endDate "
+                            + "ORDER BY th.created_at",
+            nativeQuery = true)
+    ArrayList<TransactionHistoryDetail>
+            findTransactionHistoryDetailsByAccountIdAndDateRangeOrderByASC(
+                    @Param("accountId") Long accountId,
+                    @Param("startDate") String startDate,
+                    @Param("endDate") String endDate);
 
     @MethodInfo(name = "deleteAllById", description = "거래내역 상세 ID로 거래내역 상세 목록을 삭제합니다.")
     @Modifying

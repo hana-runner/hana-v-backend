@@ -45,7 +45,19 @@ public class TransactionHistoryDetailService implements TransactionHistoryDetail
     @Override
     public ArrayList<TransactionHistoryDetail> readTransactionHistoryDetails(
             ReadTransactionsCommand readTransactionsCommand) {
-        return transactionHistoryDetailRepository.findAll();
+        if (readTransactionsCommand.getSort()) {
+            return transactionHistoryDetailRepository
+                    .findTransactionHistoryDetailsByAccountIdAndDateRangeOrderByDESC(
+                            readTransactionsCommand.getAccount().getId(),
+                            readTransactionsCommand.getStart().toString(),
+                            readTransactionsCommand.getEnd().toString());
+        } else {
+            return transactionHistoryDetailRepository
+                    .findTransactionHistoryDetailsByAccountIdAndDateRangeOrderByASC(
+                            readTransactionsCommand.getAccount().getId(),
+                            readTransactionsCommand.getStart().toString(),
+                            readTransactionsCommand.getEnd().toString());
+        }
     }
 
     @MethodInfo(name = "updateTransactionHistoryDetails", description = "거래내역 상세 목록을 수정합니다.")
