@@ -7,9 +7,11 @@ import com.v.hana.command.interest.GetUserInterestsCommand;
 import com.v.hana.command.interest.ModifyUserInterestCommand;
 import com.v.hana.common.response.PostSuccessResponse;
 import com.v.hana.common.response.PutSuccessResponse;
+import com.v.hana.dto.interest.UserCompareResponse;
 import com.v.hana.dto.interest.UserInterestReportsResponse;
 import com.v.hana.dto.interest.UserInterestResponse;
 import com.v.hana.dto.interest.UserInterestTransactionsResponse;
+import java.time.LocalDate;
 
 public interface UserInterestUseCase {
     UserInterestResponse getUserInterests(GetUserInterestsCommand command);
@@ -22,4 +24,7 @@ public interface UserInterestUseCase {
     PostSuccessResponse addUserInterest(AddUserInterestCommand command);
 
     PutSuccessResponse modifyUserInterest(ModifyUserInterestCommand command);
+
+    UserCompareResponse getComparison(
+            Long userId, Long interestId, int age, LocalDate start, LocalDate end);
 }

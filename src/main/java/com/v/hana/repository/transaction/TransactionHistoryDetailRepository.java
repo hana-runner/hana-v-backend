@@ -3,6 +3,7 @@ package com.v.hana.repository.transaction;
 import com.v.hana.common.annotation.MethodInfo;
 import com.v.hana.common.annotation.TypeInfo;
 import com.v.hana.dto.account.ExpensePerInterest;
+import com.v.hana.dto.interest.UserComparison;
 import com.v.hana.dto.interest.UserInterestTransactionDto;
 import com.v.hana.entity.transaction.TransactionHistoryDetail;
 import java.time.LocalDate;
@@ -124,4 +125,24 @@ public interface TransactionHistoryDetailRepository
             nativeQuery = true)
     ArrayList<ExpensePerInterest> getExpensePerInterests(
             Long userId, LocalDate start, LocalDate end);
+
+    @MethodInfo(name = "getComparison", description = "관심사별 카테고리 지출 비교 정보를 조회합니다.")
+    @Query(
+            value =
+                    "SELECT thd.interest_id AS interestId, i.title AS interestTitle, c.title AS categoryTitle, th.category_id AS categoryId, "
+                            + "SUM(thd.amount) OVER(PARTITION BY th.category_id, thd.interest_id) AS expense,"
+                            + "ROUND(AVG(thd.amount) OVER(PARTITION BY th.category_id, thd.interest_id), 0) AS average,"
+                            + "(thd.amount - ROUND(AVG(thd.amount) OVER(PARTITION BY th.category_id, thd.interest_id), 0)) AS difference\n"
+                            + "FROM transaction_history_details thd\n"
+                            + "JOIN transaction_histories th ON th.id = thd.transaction_history_id\n"
+                            + "JOIN interests i ON thd.interest_id = i.id\n"
+                            + "JOIN categories c ON th.category_id = c.id\n"
+                            + "WHERE thd.user_id in (SELECT u.id FROM users u WHERE TIMESTAMPDIFF(YEAR, u.birthday, CURDATE()) BETWEEN :begin AND :finish AND u.gender = 1) \n"
+                            + "AND thd.interest_id in (SELECT ui.interest_id FROM user_interests ui WHERE ui.user_id = :userId) \n"
+                            + "AND th.type = '출금' "
+                            + "AND thd.interest_id = :interestId "
+                            + "AND th.created_at >= :start AND th.created_at <= :end",
+            nativeQuery = true)
+    ArrayList<UserComparison> getComparison(
+            Long userId, Long interestId, int begin, int finish, LocalDate start, LocalDate end);
 }

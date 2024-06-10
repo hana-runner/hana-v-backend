@@ -14,6 +14,7 @@ import com.v.hana.common.exception.BaseExceptionResponse;
 import com.v.hana.common.response.PostSuccessResponse;
 import com.v.hana.common.response.PutSuccessResponse;
 import com.v.hana.dto.card.CardInterestResponse;
+import com.v.hana.dto.interest.UserCompareResponse;
 import com.v.hana.dto.interest.UserInterestReportsResponse;
 import com.v.hana.dto.interest.UserInterestResponse;
 import com.v.hana.dto.interest.UserInterestTransactionsResponse;
@@ -33,8 +34,11 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.Optional;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -398,6 +402,33 @@ public class UserInterestController {
                         .build());
 
         return ResponseEntity.ok(PutSuccessResponse.builder().build());
+    }
+
+    @MethodInfo(name = "getComparison", description = "관심사별 카테고리 지출 비교 정보를 조회합니다.")
+    @GetMapping("/user-interests/compare/{interestId}")
+    public ResponseEntity<UserCompareResponse> getComparison(
+            @PathVariable Long interestId,
+            @RequestParam(name = "start", required = false)
+                    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                    LocalDate start,
+            @RequestParam(name = "end", required = false)
+                    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                    LocalDate end) {
+        if (start == null) {
+            start = LocalDate.now().minusMonths(1);
+        }
+
+        if (end == null) {
+            end = LocalDate.now().plusDays(1);
+        }
+        User currentUser = securityUtil.getCurrentUser();
+
+        int age = Period.between(currentUser.getBirthday(), LocalDate.now()).getYears();
+
+        UserCompareResponse comparison =
+                userInterestUseCase.getComparison(currentUser.getId(), interestId, age, start, end);
+
+        return ResponseEntity.ok(comparison);
     }
 
     public UserInterestController(
