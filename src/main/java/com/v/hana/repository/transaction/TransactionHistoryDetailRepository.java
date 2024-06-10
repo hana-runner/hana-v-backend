@@ -147,7 +147,13 @@ public interface TransactionHistoryDetailRepository
                             + "ORDER BY expense DESC",
             nativeQuery = true)
     ArrayList<UserComparison> getComparison(
-            Long userId, Long interestId, int begin, int finish, int year, int month, Gender gender);
+            Long userId,
+            Long interestId,
+            int begin,
+            int finish,
+            int year,
+            int month,
+            Gender gender);
 
     @MethodInfo(name = "deleteByUserIdAndInterestId", description = "사용자 관심사를 삭제합니다.")
     @Modifying

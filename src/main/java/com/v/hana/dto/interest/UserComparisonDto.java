@@ -16,7 +16,15 @@ public class UserComparisonDto {
     private final Gender gender;
 
     @Builder
-    public UserComparisonDto(Long interestId, Long categoryId, String interestTitle, String categoryTitle, Long expense, Long average, Long difference, Gender gender) {
+    public UserComparisonDto(
+            Long interestId,
+            Long categoryId,
+            String interestTitle,
+            String categoryTitle,
+            Long expense,
+            Long average,
+            Long difference,
+            Gender gender) {
         this.interestId = interestId;
         this.categoryId = categoryId;
         this.interestTitle = interestTitle;

@@ -1,7 +1,5 @@
 package com.v.hana.dto.interest;
 
-import com.v.hana.common.constant.Gender;
-
 public interface UserComparison {
     Long getInterestId();
 
@@ -16,5 +14,4 @@ public interface UserComparison {
     Long getAverage();
 
     Long getDifference();
-
 }

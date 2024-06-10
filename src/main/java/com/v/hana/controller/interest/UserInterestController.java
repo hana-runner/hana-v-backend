@@ -416,12 +416,8 @@ public class UserInterestController {
         int age = Period.between(currentUser.getBirthday(), LocalDate.now()).getYears();
 
         UserCompareResponse comparison =
-<<<<<<< Updated upstream
                 userInterestUseCase.getComparison(
-                        currentUser.getId(), interestId, age, year, month);
-=======
-                userInterestUseCase.getComparison(currentUser.getId(), interestId, age, year, month, currentUser.getGender());
->>>>>>> Stashed changes
+                        currentUser.getId(), interestId, age, year, month, currentUser.getGender());
 
         return ResponseEntity.ok(comparison);
     }

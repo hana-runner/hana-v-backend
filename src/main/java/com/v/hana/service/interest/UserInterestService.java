@@ -20,10 +20,6 @@ import com.v.hana.repository.interest.UserInterestRepository;
 import com.v.hana.repository.transaction.TransactionHistoryDetailRepository;
 import com.v.hana.repository.transaction.TransactionHistoryRepository;
 import com.v.hana.usecase.interest.UserInterestUseCase;
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
@@ -284,18 +280,22 @@ public class UserInterestService implements UserInterestUseCase {
             }
         }
 
-        ArrayList<UserComparisonDto> comparisonData = transactionHistoryDetailRepository
-                .getComparison(userId, interestId, begin, finish, year, month, gender).stream()
-                .map(userComparison -> UserComparisonDto.builder()
-                        .average(userComparison.getAverage())
-                        .categoryTitle(userComparison.getCategoryTitle())
-                        .categoryId(userComparison.getCategoryId())
-                        .expense(userComparison.getExpense())
-                        .interestTitle(userComparison.getInterestTitle())
-                        .difference(userComparison.getDifference())
-                        .gender(gender)
-                        .build())
-                .collect(Collectors.toCollection(ArrayList::new));
+        ArrayList<UserComparisonDto> comparisonData =
+                transactionHistoryDetailRepository
+                        .getComparison(userId, interestId, begin, finish, year, month, gender)
+                        .stream()
+                        .map(
+                                userComparison ->
+                                        UserComparisonDto.builder()
+                                                .average(userComparison.getAverage())
+                                                .categoryTitle(userComparison.getCategoryTitle())
+                                                .categoryId(userComparison.getCategoryId())
+                                                .expense(userComparison.getExpense())
+                                                .interestTitle(userComparison.getInterestTitle())
+                                                .difference(userComparison.getDifference())
+                                                .gender(gender)
+                                                .build())
+                        .collect(Collectors.toCollection(ArrayList::new));
 
         return UserCompareResponse.builder().data(comparisonData).build();
     }

@@ -25,10 +25,6 @@ public interface UserInterestUseCase {
 
     PutSuccessResponse modifyUserInterest(ModifyUserInterestCommand command);
 
-<<<<<<< Updated upstream
-    UserCompareResponse getComparison(Long userId, Long interestId, int age, int year, int month);
-=======
     UserCompareResponse getComparison(
             Long userId, Long interestId, int age, int year, int month, Gender gender);
->>>>>>> Stashed changes
 }

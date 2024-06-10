@@ -9,8 +9,6 @@ import lombok.Getter;
 public class UserCompareResponse extends BaseResponse {
     private final ArrayList<UserComparisonDto> data;
 
-
-
     @Builder
     public UserCompareResponse(ArrayList<UserComparisonDto> data) {
         this.data = data;
