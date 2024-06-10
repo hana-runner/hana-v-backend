@@ -255,6 +255,14 @@ public class UserInterestService implements UserInterestUseCase {
                 .build();
     }
 
+    @MethodInfo(
+            name = "deleteUserInterestAndTransactionHistoryDetail",
+            description = "사용자 관심사를 삭제합니다.")
+    public void deleteUserInterestAndTransactionHistoryDetail(Long userId, Long interestId) {
+        transactionHistoryDetailRepository.deleteByUserIdAndInterestId(userId, interestId);
+        userInterestRepository.deleteByUserIdAndInterestId(userId, interestId);
+    }
+
     public UserInterestService(
             InterestRepository interestRepository,
             UserInterestRepository userInterestRepository,
