@@ -142,10 +142,11 @@ public interface TransactionHistoryDetailRepository
                             + "AND thd.interest_id in (SELECT ui.interest_id FROM user_interests ui WHERE ui.user_id = :userId) \n"
                             + "AND th.type = '출금' "
                             + "AND thd.interest_id = :interestId "
-                            + "AND th.created_at >= :start AND th.created_at <= :end",
+                            + "AND YEAR(th.created_at) = :year AND MONTH(th.created_at) = :month " +
+                            "ORDER BY expense DESC",
             nativeQuery = true)
     ArrayList<UserComparison> getComparison(
-            Long userId, Long interestId, int begin, int finish, LocalDate start, LocalDate end);
+            Long userId, Long interestId, int begin, int finish, int year, int month);
 
     @MethodInfo(name = "deleteByUserIdAndInterestId", description = "사용자 관심사를 삭제합니다.")
     @Modifying

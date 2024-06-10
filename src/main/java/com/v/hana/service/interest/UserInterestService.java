@@ -148,7 +148,7 @@ public class UserInterestService implements UserInterestUseCase {
     @MethodInfo(name = "getComparison", description = "관심사별 카테고리 지출 비교 정보를 조회합니다.")
     @Override
     public UserCompareResponse getComparison(
-            Long userId, Long interestId, int age, LocalDate start, LocalDate end) {
+            Long userId, Long interestId, int age, int year, int month) {
 
         int begin = 0;
         int finish = 0;
@@ -251,7 +251,7 @@ public class UserInterestService implements UserInterestUseCase {
         return UserCompareResponse.builder()
                 .data(
                         transactionHistoryDetailRepository.getComparison(
-                                userId, interestId, begin, finish, start, end))
+                                userId, interestId, begin, finish, year, month))
                 .build();
     }
 
