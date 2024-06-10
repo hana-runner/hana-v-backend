@@ -13,6 +13,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @TypeInfo(name = "TransactionHistoryDetailRepository", description = "거래내역 상세 레포지토리 인터페이스")
 @Repository
@@ -145,4 +146,9 @@ public interface TransactionHistoryDetailRepository
             nativeQuery = true)
     ArrayList<UserComparison> getComparison(
             Long userId, Long interestId, int begin, int finish, LocalDate start, LocalDate end);
+    @MethodInfo(name = "deleteByUserIdAndInterestId", description = "사용자 관심사를 삭제합니다.")
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM TransactionHistoryDetail thd WHERE thd.user.id = :userId AND thd.interest.id = :interestId")
+    void deleteByUserIdAndInterestId(@Param("userId") Long userId, @Param("interestId") Long interestId);
 }

@@ -11,6 +11,7 @@ import com.v.hana.command.interest.ModifyUserInterestCommand;
 import com.v.hana.common.annotation.MethodInfo;
 import com.v.hana.common.annotation.TypeInfo;
 import com.v.hana.common.exception.BaseExceptionResponse;
+import com.v.hana.common.response.DeleteSuccessResponse;
 import com.v.hana.common.response.PostSuccessResponse;
 import com.v.hana.common.response.PutSuccessResponse;
 import com.v.hana.dto.card.CardInterestResponse;
@@ -26,6 +27,7 @@ import com.v.hana.exception.user.InvalidUserAccessException;
 import com.v.hana.repository.interest.InterestRepository;
 import com.v.hana.repository.interest.UserInterestRepository;
 import com.v.hana.service.interest.ImageService;
+import com.v.hana.service.interest.UserInterestService;
 import com.v.hana.usecase.card.CardInterestUseCase;
 import com.v.hana.usecase.interest.UserInterestUseCase;
 import io.swagger.v3.oas.annotations.Operation;
@@ -50,6 +52,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserInterestController {
     private final SecurityUtil securityUtil;
     private final ImageService imageUploadService;
+    private final UserInterestService userInterestService;
     private final InterestRepository interestRepository;
     private final UserInterestRepository userInterestRepository;
     private final UserInterestUseCase userInterestUseCase;
@@ -431,15 +434,21 @@ public class UserInterestController {
         return ResponseEntity.ok(comparison);
     }
 
-    public UserInterestController(
-            SecurityUtil securityUtil,
-            ImageService imageUploadService,
-            InterestRepository interestRepository,
-            UserInterestRepository userInterestRepository,
-            UserInterestUseCase userInterestUseCase,
-            CardInterestUseCase cardInterestUseCase) {
+    @MethodInfo(name = "deleteUserInterests", description = "사용자 관심사 삭제하기")
+    @DeleteMapping("/user-interests/{interestId}")
+    @CurrentUser
+    public ResponseEntity<DeleteSuccessResponse> deleteUserInterests(@PathVariable Long interestId) {
+        // 거래 내역 상세 삭제, 사용자 관심사 삭제
+        User user = securityUtil.getCurrentUser();
+        userInterestService.deleteUserInterestAndTransactionHistoryDetail(user.getId(), interestId);
+
+        return ResponseEntity.ok(DeleteSuccessResponse.builder().build());
+    }
+
+    public UserInterestController(SecurityUtil securityUtil, ImageService imageUploadService, UserInterestService userInterestService, InterestRepository interestRepository, UserInterestRepository userInterestRepository, UserInterestUseCase userInterestUseCase, CardInterestUseCase cardInterestUseCase) {
         this.securityUtil = securityUtil;
         this.imageUploadService = imageUploadService;
+        this.userInterestService = userInterestService;
         this.interestRepository = interestRepository;
         this.userInterestRepository = userInterestRepository;
         this.userInterestUseCase = userInterestUseCase;

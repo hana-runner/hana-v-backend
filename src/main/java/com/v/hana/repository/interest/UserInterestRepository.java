@@ -1,5 +1,6 @@
 package com.v.hana.repository.interest;
 
+import com.v.hana.common.annotation.MethodInfo;
 import com.v.hana.common.annotation.TypeInfo;
 import com.v.hana.entity.interest.UserInterest;
 import java.util.ArrayList;
@@ -33,4 +34,10 @@ public interface UserInterestRepository extends JpaRepository<UserInterest, Long
             @Param("interestId") Long interestId,
             @Param("subtitle") String subtitle,
             @Param("imageUrl") String imageUrl);
+
+    @MethodInfo(name = "deleteByUserIdAndInterestId", description = "사용자 관심사를 삭제합니다.")
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM UserInterest thd WHERE thd.user.id = :userId AND thd.interest.id = :interestId")
+    void deleteByUserIdAndInterestId(@Param("userId") Long userId, @Param("interestId") Long interestId);
 }
