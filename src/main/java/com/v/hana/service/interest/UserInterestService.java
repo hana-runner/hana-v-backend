@@ -291,6 +291,7 @@ public class UserInterestService implements UserInterestUseCase {
                                                 .categoryTitle(userComparison.getCategoryTitle())
                                                 .categoryId(userComparison.getCategoryId())
                                                 .expense(userComparison.getExpense())
+                                                .interestId(userComparison.getInterestId())
                                                 .interestTitle(userComparison.getInterestTitle())
                                                 .difference(userComparison.getDifference())
                                                 .gender(gender)
