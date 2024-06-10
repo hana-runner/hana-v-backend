@@ -14,6 +14,7 @@ import com.v.hana.common.exception.BaseExceptionResponse;
 import com.v.hana.common.response.PostSuccessResponse;
 import com.v.hana.common.response.PutSuccessResponse;
 import com.v.hana.dto.card.CardInterestResponse;
+import com.v.hana.dto.interest.UserCompareResponse;
 import com.v.hana.dto.interest.UserInterestReportsResponse;
 import com.v.hana.dto.interest.UserInterestResponse;
 import com.v.hana.dto.interest.UserInterestTransactionsResponse;
@@ -33,8 +34,13 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.Optional;
+
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -57,33 +63,33 @@ public class UserInterestController {
             description = "사용자의 관심사 목록을 가져옵니다.",
             parameters = {@Parameter(name = "userId", description = "사용자 ID", required = true)},
             responses = {
-                @ApiResponse(
-                        responseCode = "200",
-                        description = "사용자 관심사 목록 가져오기 성공",
-                        content =
-                                @Content(
-                                        schema =
-                                                @Schema(
-                                                        implementation =
-                                                                UserInterestResponse.class))),
-                @ApiResponse(
-                        responseCode = "400",
-                        description = "사용자 관심사 목록 가져오기 실패",
-                        content =
-                                @Content(
-                                        schema =
-                                                @Schema(
-                                                        implementation =
-                                                                BaseExceptionResponse.class))),
-                @ApiResponse(
-                        responseCode = "500",
-                        description = "서버 에러",
-                        content =
-                                @Content(
-                                        schema =
-                                                @Schema(
-                                                        implementation =
-                                                                BaseExceptionResponse.class)))
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "사용자 관심사 목록 가져오기 성공",
+                            content =
+                            @Content(
+                                    schema =
+                                    @Schema(
+                                            implementation =
+                                                    UserInterestResponse.class))),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "사용자 관심사 목록 가져오기 실패",
+                            content =
+                            @Content(
+                                    schema =
+                                    @Schema(
+                                            implementation =
+                                                    BaseExceptionResponse.class))),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "서버 에러",
+                            content =
+                            @Content(
+                                    schema =
+                                    @Schema(
+                                            implementation =
+                                                    BaseExceptionResponse.class)))
             })
     @GetMapping("/user-interests")
     @CurrentUser
@@ -101,40 +107,40 @@ public class UserInterestController {
             summary = "사용자 관심사별 거래 내역 가져오기",
             description = "사용자의 관심사별 거래 내역을 가져옵니다.",
             parameters = {
-                @Parameter(name = "interestId", description = "관심사 ID", required = true),
-                @Parameter(name = "userId", description = "사용자 ID", required = true),
-                @Parameter(name = "year", description = "년도", required = true),
-                @Parameter(name = "month", description = "월", required = true)
+                    @Parameter(name = "interestId", description = "관심사 ID", required = true),
+                    @Parameter(name = "userId", description = "사용자 ID", required = true),
+                    @Parameter(name = "year", description = "년도", required = true),
+                    @Parameter(name = "month", description = "월", required = true)
             },
             responses = {
-                @ApiResponse(
-                        responseCode = "200",
-                        description = "사용자 관심사별 거래 내역 가져오기 성공",
-                        content =
-                                @Content(
-                                        schema =
-                                                @Schema(
-                                                        implementation =
-                                                                UserInterestTransactionsResponse
-                                                                        .class))),
-                @ApiResponse(
-                        responseCode = "400",
-                        description = "사용자 관심사별 거래 내역 가져오기 실패",
-                        content =
-                                @Content(
-                                        schema =
-                                                @Schema(
-                                                        implementation =
-                                                                BaseExceptionResponse.class))),
-                @ApiResponse(
-                        responseCode = "500",
-                        description = "서버 에러",
-                        content =
-                                @Content(
-                                        schema =
-                                                @Schema(
-                                                        implementation =
-                                                                BaseExceptionResponse.class)))
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "사용자 관심사별 거래 내역 가져오기 성공",
+                            content =
+                            @Content(
+                                    schema =
+                                    @Schema(
+                                            implementation =
+                                                    UserInterestTransactionsResponse
+                                                            .class))),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "사용자 관심사별 거래 내역 가져오기 실패",
+                            content =
+                            @Content(
+                                    schema =
+                                    @Schema(
+                                            implementation =
+                                                    BaseExceptionResponse.class))),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "서버 에러",
+                            content =
+                            @Content(
+                                    schema =
+                                    @Schema(
+                                            implementation =
+                                                    BaseExceptionResponse.class)))
             })
     @GetMapping("/user-interests/transaction/{interestId}")
     @CurrentUser
@@ -158,39 +164,39 @@ public class UserInterestController {
             summary = "사용자 관심사별 거래 내역 리포트 가져오기",
             description = "사용자의 관심사별 거래 내역 리포트를 가져옵니다.",
             parameters = {
-                @Parameter(name = "interestId", description = "관심사 ID", required = true),
-                @Parameter(name = "year", description = "년도", required = true),
-                @Parameter(name = "month", description = "월", required = true)
+                    @Parameter(name = "interestId", description = "관심사 ID", required = true),
+                    @Parameter(name = "year", description = "년도", required = true),
+                    @Parameter(name = "month", description = "월", required = true)
             },
             responses = {
-                @ApiResponse(
-                        responseCode = "200",
-                        description = "사용자 관심사별 거래 내역 리포트 가져오기 성공",
-                        content =
-                                @Content(
-                                        schema =
-                                                @Schema(
-                                                        implementation =
-                                                                UserInterestReportsResponse
-                                                                        .class))),
-                @ApiResponse(
-                        responseCode = "400",
-                        description = "사용자 관심사별 거래 내역 리포트 가져오기 실패",
-                        content =
-                                @Content(
-                                        schema =
-                                                @Schema(
-                                                        implementation =
-                                                                BaseExceptionResponse.class))),
-                @ApiResponse(
-                        responseCode = "500",
-                        description = "서버 에러",
-                        content =
-                                @Content(
-                                        schema =
-                                                @Schema(
-                                                        implementation =
-                                                                BaseExceptionResponse.class)))
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "사용자 관심사별 거래 내역 리포트 가져오기 성공",
+                            content =
+                            @Content(
+                                    schema =
+                                    @Schema(
+                                            implementation =
+                                                    UserInterestReportsResponse
+                                                            .class))),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "사용자 관심사별 거래 내역 리포트 가져오기 실패",
+                            content =
+                            @Content(
+                                    schema =
+                                    @Schema(
+                                            implementation =
+                                                    BaseExceptionResponse.class))),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "서버 에러",
+                            content =
+                            @Content(
+                                    schema =
+                                    @Schema(
+                                            implementation =
+                                                    BaseExceptionResponse.class)))
             })
     @GetMapping("/user-interests/report/{interestId}")
     @CurrentUser
@@ -214,36 +220,36 @@ public class UserInterestController {
             summary = "사용자 관심사별 카드 목록 가져오기",
             description = "사용자의 관심사별 카드 목록을 가져옵니다.",
             parameters = {
-                @Parameter(name = "interestId", description = "관심사 ID", required = true),
+                    @Parameter(name = "interestId", description = "관심사 ID", required = true),
             },
             responses = {
-                @ApiResponse(
-                        responseCode = "200",
-                        description = "사용자 관심사별 카드 목록 가져오기 성공",
-                        content =
-                                @Content(
-                                        schema =
-                                                @Schema(
-                                                        implementation =
-                                                                CardInterestResponse.class))),
-                @ApiResponse(
-                        responseCode = "400",
-                        description = "사용자 관심사별 카드 목록 가져오기 실패",
-                        content =
-                                @Content(
-                                        schema =
-                                                @Schema(
-                                                        implementation =
-                                                                BaseExceptionResponse.class))),
-                @ApiResponse(
-                        responseCode = "500",
-                        description = "서버 에러",
-                        content =
-                                @Content(
-                                        schema =
-                                                @Schema(
-                                                        implementation =
-                                                                BaseExceptionResponse.class)))
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "사용자 관심사별 카드 목록 가져오기 성공",
+                            content =
+                            @Content(
+                                    schema =
+                                    @Schema(
+                                            implementation =
+                                                    CardInterestResponse.class))),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "사용자 관심사별 카드 목록 가져오기 실패",
+                            content =
+                            @Content(
+                                    schema =
+                                    @Schema(
+                                            implementation =
+                                                    BaseExceptionResponse.class))),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "서버 에러",
+                            content =
+                            @Content(
+                                    schema =
+                                    @Schema(
+                                            implementation =
+                                                    BaseExceptionResponse.class)))
             })
     @GetMapping("/user-interests/cards/{interestId}")
     @CurrentUser
@@ -261,38 +267,38 @@ public class UserInterestController {
             summary = "사용자 관심사 추가하기",
             description = "사용자의 관심사를 추가합니다.",
             parameters = {
-                @Parameter(name = "interestId", description = "관심사 ID", required = true),
-                @Parameter(name = "subtitle", description = "부제목", required = true),
-                @Parameter(name = "image", description = "이미지", required = true)
+                    @Parameter(name = "interestId", description = "관심사 ID", required = true),
+                    @Parameter(name = "subtitle", description = "부제목", required = true),
+                    @Parameter(name = "image", description = "이미지", required = true)
             },
             responses = {
-                @ApiResponse(
-                        responseCode = "200",
-                        description = "사용자 관심사 추가하기 성공",
-                        content =
-                                @Content(
-                                        schema =
-                                                @Schema(
-                                                        implementation =
-                                                                PostSuccessResponse.class))),
-                @ApiResponse(
-                        responseCode = "400",
-                        description = "사용자 관심사 추가하기 실패",
-                        content =
-                                @Content(
-                                        schema =
-                                                @Schema(
-                                                        implementation =
-                                                                BaseExceptionResponse.class))),
-                @ApiResponse(
-                        responseCode = "500",
-                        description = "서버 에러",
-                        content =
-                                @Content(
-                                        schema =
-                                                @Schema(
-                                                        implementation =
-                                                                BaseExceptionResponse.class)))
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "사용자 관심사 추가하기 성공",
+                            content =
+                            @Content(
+                                    schema =
+                                    @Schema(
+                                            implementation =
+                                                    PostSuccessResponse.class))),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "사용자 관심사 추가하기 실패",
+                            content =
+                            @Content(
+                                    schema =
+                                    @Schema(
+                                            implementation =
+                                                    BaseExceptionResponse.class))),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "서버 에러",
+                            content =
+                            @Content(
+                                    schema =
+                                    @Schema(
+                                            implementation =
+                                                    BaseExceptionResponse.class)))
             })
     @PostMapping("/user-interests")
     @CurrentUser
@@ -335,38 +341,38 @@ public class UserInterestController {
             summary = "사용자 관심사 수정하기",
             description = "사용자의 관심사를 수정합니다.",
             parameters = {
-                @Parameter(name = "interestId", description = "관심사 ID", required = true),
-                @Parameter(name = "subtitle", description = "부제목", required = true),
-                @Parameter(name = "image", description = "이미지", required = true)
+                    @Parameter(name = "interestId", description = "관심사 ID", required = true),
+                    @Parameter(name = "subtitle", description = "부제목", required = true),
+                    @Parameter(name = "image", description = "이미지", required = true)
             },
             responses = {
-                @ApiResponse(
-                        responseCode = "200",
-                        description = "사용자 관심사 수정하기 성공",
-                        content =
-                                @Content(
-                                        schema =
-                                                @Schema(
-                                                        implementation =
-                                                                PutSuccessResponse.class))),
-                @ApiResponse(
-                        responseCode = "400",
-                        description = "사용자 관심사 수정하기 실패",
-                        content =
-                                @Content(
-                                        schema =
-                                                @Schema(
-                                                        implementation =
-                                                                BaseExceptionResponse.class))),
-                @ApiResponse(
-                        responseCode = "500",
-                        description = "서버 에러",
-                        content =
-                                @Content(
-                                        schema =
-                                                @Schema(
-                                                        implementation =
-                                                                BaseExceptionResponse.class)))
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "사용자 관심사 수정하기 성공",
+                            content =
+                            @Content(
+                                    schema =
+                                    @Schema(
+                                            implementation =
+                                                    PutSuccessResponse.class))),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "사용자 관심사 수정하기 실패",
+                            content =
+                            @Content(
+                                    schema =
+                                    @Schema(
+                                            implementation =
+                                                    BaseExceptionResponse.class))),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "서버 에러",
+                            content =
+                            @Content(
+                                    schema =
+                                    @Schema(
+                                            implementation =
+                                                    BaseExceptionResponse.class)))
             })
     @PutMapping("/user-interests")
     @CurrentUser
@@ -386,7 +392,7 @@ public class UserInterestController {
         String fileUrl =
                 image.isEmpty()
                         ? userInterestRepository.findImageUrlByUserIdAndInterestId(
-                                user.getId(), interest.getId())
+                        user.getId(), interest.getId())
                         : imageUploadService.getImageUrl(image);
 
         userInterestUseCase.modifyUserInterest(
@@ -399,6 +405,32 @@ public class UserInterestController {
 
         return ResponseEntity.ok(PutSuccessResponse.builder().build());
     }
+
+    @MethodInfo(name = "getComparison", description = "관심사별 카테고리 지출 비교 정보를 조회합니다.")
+    @GetMapping("/user-interests/compare/{interestId}")
+    public ResponseEntity<UserCompareResponse> getComparison(@PathVariable Long interestId, @RequestParam(name = "start", required = false)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    LocalDate start,
+                                           @RequestParam(name = "end", required = false)
+                                           @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                           LocalDate end) {
+        if (start == null) {
+            start = LocalDate.now().minusMonths(1);
+
+        }
+
+        if (end == null) {
+            end = LocalDate.now().plusDays(1);
+        }
+        User currentUser = securityUtil.getCurrentUser();
+
+        int age = Period.between(currentUser.getBirthday(), LocalDate.now()).getYears();
+
+        UserCompareResponse comparison = userInterestUseCase.getComparison(currentUser.getId(), interestId, age, start, end);
+
+        return ResponseEntity.ok(comparison);
+    }
+
 
     public UserInterestController(
             SecurityUtil securityUtil,
