@@ -5,6 +5,7 @@ import com.v.hana.command.interest.GetUserInterestReportsCommand;
 import com.v.hana.command.interest.GetUserInterestTransactionsCommand;
 import com.v.hana.command.interest.GetUserInterestsCommand;
 import com.v.hana.command.interest.ModifyUserInterestCommand;
+import com.v.hana.common.constant.Gender;
 import com.v.hana.common.response.PostSuccessResponse;
 import com.v.hana.common.response.PutSuccessResponse;
 import com.v.hana.dto.interest.UserCompareResponse;
@@ -24,5 +25,6 @@ public interface UserInterestUseCase {
 
     PutSuccessResponse modifyUserInterest(ModifyUserInterestCommand command);
 
-    UserCompareResponse getComparison(Long userId, Long interestId, int age, int year, int month);
+    UserCompareResponse getComparison(
+            Long userId, Long interestId, int age, int year, int month, Gender gender);
 }

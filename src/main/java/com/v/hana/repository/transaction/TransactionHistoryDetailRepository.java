@@ -2,6 +2,7 @@ package com.v.hana.repository.transaction;
 
 import com.v.hana.common.annotation.MethodInfo;
 import com.v.hana.common.annotation.TypeInfo;
+import com.v.hana.common.constant.Gender;
 import com.v.hana.dto.account.ExpensePerInterest;
 import com.v.hana.dto.interest.UserComparison;
 import com.v.hana.dto.interest.UserInterestTransactionDto;
@@ -138,7 +139,7 @@ public interface TransactionHistoryDetailRepository
                             + "JOIN transaction_histories th ON th.id = thd.transaction_history_id\n"
                             + "JOIN interests i ON thd.interest_id = i.id\n"
                             + "JOIN categories c ON th.category_id = c.id\n"
-                            + "WHERE thd.user_id in (SELECT u.id FROM users u WHERE TIMESTAMPDIFF(YEAR, u.birthday, CURDATE()) BETWEEN :begin AND :finish AND u.gender = 1) \n"
+                            + "WHERE thd.user_id in (SELECT u.id FROM users u WHERE TIMESTAMPDIFF(YEAR, u.birthday, CURDATE()) BETWEEN :begin AND :finish AND u.gender = :gender) \n"
                             + "AND thd.interest_id in (SELECT ui.interest_id FROM user_interests ui WHERE ui.user_id = :userId) \n"
                             + "AND th.type = '출금' "
                             + "AND thd.interest_id = :interestId "
@@ -146,7 +147,13 @@ public interface TransactionHistoryDetailRepository
                             + "ORDER BY expense DESC",
             nativeQuery = true)
     ArrayList<UserComparison> getComparison(
-            Long userId, Long interestId, int begin, int finish, int year, int month);
+            Long userId,
+            Long interestId,
+            int begin,
+            int finish,
+            int year,
+            int month,
+            Gender gender);
 
     @MethodInfo(name = "deleteByUserIdAndInterestId", description = "사용자 관심사를 삭제합니다.")
     @Modifying

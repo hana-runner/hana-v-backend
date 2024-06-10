@@ -7,6 +7,7 @@ import com.v.hana.command.interest.GetUserInterestsCommand;
 import com.v.hana.command.interest.ModifyUserInterestCommand;
 import com.v.hana.common.annotation.MethodInfo;
 import com.v.hana.common.annotation.TypeInfo;
+import com.v.hana.common.constant.Gender;
 import com.v.hana.common.response.PostSuccessResponse;
 import com.v.hana.common.response.PutSuccessResponse;
 import com.v.hana.dto.interest.*;
@@ -147,111 +148,156 @@ public class UserInterestService implements UserInterestUseCase {
     @MethodInfo(name = "getComparison", description = "관심사별 카테고리 지출 비교 정보를 조회합니다.")
     @Override
     public UserCompareResponse getComparison(
-            Long userId, Long interestId, int age, int year, int month) {
+            Long userId, Long interestId, int age, int year, int month, Gender gender) {
 
-        int begin = 0;
-        int finish = 0;
+        int begin;
+        int finish;
 
-        if (age >= 0 && age <= 3) {
-            begin = 0;
-            finish = 3;
-        } else if (age >= 4 && age <= 6) {
-            begin = 4;
-            finish = 6;
-        } else if (age >= 7 && age <= 9) {
-            begin = 7;
-            finish = 9;
-        } else if (age >= 10 && age <= 13) {
-            begin = 10;
-            finish = 13;
-        } else if (age >= 14 && age <= 16) {
-            begin = 14;
-            finish = 16;
-        } else if (age >= 17 && age <= 19) {
-            begin = 17;
-            finish = 19;
-        } else if (age >= 20 && age <= 23) {
-            begin = 20;
-            finish = 23;
-        } else if (age >= 24 && age <= 26) {
-            begin = 24;
-            finish = 26;
-        } else if (age >= 27 && age <= 29) {
-            begin = 27;
-            finish = 29;
-        } else if (age >= 30 && age <= 33) {
-            begin = 30;
-            finish = 33;
-        } else if (age >= 34 && age <= 36) {
-            begin = 34;
-            finish = 36;
-        } else if (age >= 37 && age <= 39) {
-            begin = 37;
-            finish = 39;
-        } else if (age >= 40 && age <= 43) {
-            begin = 40;
-            finish = 43;
-        } else if (age >= 44 && age <= 46) {
-            begin = 44;
-            finish = 46;
-        } else if (age >= 47 && age <= 49) {
-            begin = 47;
-            finish = 49;
-        } else if (age >= 50 && age <= 53) {
-            begin = 50;
-            finish = 53;
-        } else if (age >= 54 && age <= 56) {
-            begin = 54;
-            finish = 56;
-        } else if (age >= 57 && age <= 59) {
-            begin = 57;
-            finish = 59;
-        } else if (age >= 60 && age <= 63) {
-            begin = 60;
-            finish = 63;
-        } else if (age >= 64 && age <= 66) {
-            begin = 64;
-            finish = 66;
-        } else if (age >= 67 && age <= 69) {
-            begin = 67;
-            finish = 69;
-        } else if (age >= 70 && age <= 73) {
-            begin = 70;
-            finish = 73;
-        } else if (age >= 74 && age <= 76) {
-            begin = 74;
-            finish = 76;
-        } else if (age >= 77 && age <= 79) {
-            begin = 77;
-            finish = 79;
-        } else if (age >= 80 && age <= 83) {
-            begin = 80;
-            finish = 83;
-        } else if (age >= 84 && age <= 86) {
-            begin = 84;
-            finish = 86;
-        } else if (age >= 87 && age <= 89) {
-            begin = 87;
-            finish = 89;
-        } else if (age >= 90 && age <= 93) {
-            begin = 90;
-            finish = 93;
-        } else if (age >= 94 && age <= 96) {
-            begin = 94;
-            finish = 96;
-        } else if (age >= 97 && age <= 99) {
-            begin = 97;
-            finish = 99;
-        } else {
-            begin = 100;
-            finish = 103;
+        switch (age / 3) {
+            case 0 -> {
+                begin = 0;
+                finish = 3;
+            }
+            case 1 -> {
+                begin = 4;
+                finish = 6;
+            }
+            case 2 -> {
+                begin = 7;
+                finish = 9;
+            }
+            case 3 -> {
+                begin = 10;
+                finish = 13;
+            }
+            case 4 -> {
+                begin = 14;
+                finish = 16;
+            }
+            case 5 -> {
+                begin = 17;
+                finish = 19;
+            }
+            case 6 -> {
+                begin = 20;
+                finish = 23;
+            }
+            case 7 -> {
+                begin = 24;
+                finish = 26;
+            }
+            case 8 -> {
+                begin = 27;
+                finish = 29;
+            }
+            case 9 -> {
+                begin = 30;
+                finish = 33;
+            }
+            case 10 -> {
+                begin = 34;
+                finish = 36;
+            }
+            case 11 -> {
+                begin = 37;
+                finish = 39;
+            }
+            case 12 -> {
+                begin = 40;
+                finish = 43;
+            }
+            case 13 -> {
+                begin = 44;
+                finish = 46;
+            }
+            case 14 -> {
+                begin = 47;
+                finish = 49;
+            }
+            case 15 -> {
+                begin = 50;
+                finish = 53;
+            }
+            case 16 -> {
+                begin = 54;
+                finish = 56;
+            }
+            case 17 -> {
+                begin = 57;
+                finish = 59;
+            }
+            case 18 -> {
+                begin = 60;
+                finish = 63;
+            }
+            case 19 -> {
+                begin = 64;
+                finish = 66;
+            }
+            case 20 -> {
+                begin = 67;
+                finish = 69;
+            }
+            case 21 -> {
+                begin = 70;
+                finish = 73;
+            }
+            case 22 -> {
+                begin = 74;
+                finish = 76;
+            }
+            case 23 -> {
+                begin = 77;
+                finish = 79;
+            }
+            case 24 -> {
+                begin = 80;
+                finish = 83;
+            }
+            case 25 -> {
+                begin = 84;
+                finish = 86;
+            }
+            case 26 -> {
+                begin = 87;
+                finish = 89;
+            }
+            case 27 -> {
+                begin = 90;
+                finish = 93;
+            }
+            case 28 -> {
+                begin = 94;
+                finish = 96;
+            }
+            case 29 -> {
+                begin = 97;
+                finish = 99;
+            }
+            default -> {
+                begin = 100;
+                finish = 103;
+            }
         }
 
-        return UserCompareResponse.builder()
-                .data(
-                        transactionHistoryDetailRepository.getComparison(
-                                userId, interestId, begin, finish, year, month))
-                .build();
+        ArrayList<UserComparisonDto> comparisonData =
+                transactionHistoryDetailRepository
+                        .getComparison(userId, interestId, begin, finish, year, month, gender)
+                        .stream()
+                        .map(
+                                userComparison ->
+                                        UserComparisonDto.builder()
+                                                .average(userComparison.getAverage())
+                                                .categoryTitle(userComparison.getCategoryTitle())
+                                                .categoryId(userComparison.getCategoryId())
+                                                .expense(userComparison.getExpense())
+                                                .interestTitle(userComparison.getInterestTitle())
+                                                .difference(userComparison.getDifference())
+                                                .gender(gender)
+                                                .build())
+                        .collect(Collectors.toCollection(ArrayList::new));
+
+        return UserCompareResponse.builder().data(comparisonData).build();
     }
 
     @MethodInfo(

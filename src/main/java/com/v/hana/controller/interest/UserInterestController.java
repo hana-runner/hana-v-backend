@@ -417,7 +417,7 @@ public class UserInterestController {
 
         UserCompareResponse comparison =
                 userInterestUseCase.getComparison(
-                        currentUser.getId(), interestId, age, year, month);
+                        currentUser.getId(), interestId, age, year, month, currentUser.getGender());
 
         return ResponseEntity.ok(comparison);
     }
