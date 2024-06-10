@@ -19,11 +19,9 @@ import com.v.hana.repository.interest.UserInterestRepository;
 import com.v.hana.repository.transaction.TransactionHistoryDetailRepository;
 import com.v.hana.repository.transaction.TransactionHistoryRepository;
 import com.v.hana.usecase.interest.UserInterestUseCase;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
-
 import org.springframework.stereotype.Service;
 
 @TypeInfo(name = "UserInterestService", description = "사용자 관심사 서비스")
@@ -149,7 +147,8 @@ public class UserInterestService implements UserInterestUseCase {
 
     @MethodInfo(name = "getComparison", description = "관심사별 카테고리 지출 비교 정보를 조회합니다.")
     @Override
-    public UserCompareResponse getComparison(Long userId, Long interestId, int age, LocalDate start, LocalDate end) {
+    public UserCompareResponse getComparison(
+            Long userId, Long interestId, int age, LocalDate start, LocalDate end) {
 
         int begin = 0;
         int finish = 0;
@@ -249,7 +248,11 @@ public class UserInterestService implements UserInterestUseCase {
             finish = 103;
         }
 
-        return UserCompareResponse.builder().data(transactionHistoryDetailRepository.getComparison(userId, interestId, begin, finish, start, end)).build();
+        return UserCompareResponse.builder()
+                .data(
+                        transactionHistoryDetailRepository.getComparison(
+                                userId, interestId, begin, finish, start, end))
+                .build();
     }
 
     public UserInterestService(
