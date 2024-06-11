@@ -7,8 +7,8 @@ public interface UserInterestConsumption {
     String getInterestTitle();
 
     Long getCategoryId();
+
     String getCategoryTitle();
 
     Long getExpense();
-
 }

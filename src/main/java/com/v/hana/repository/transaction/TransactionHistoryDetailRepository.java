@@ -12,7 +12,6 @@ import com.v.hana.entity.transaction.TransactionHistoryDetail;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -159,35 +158,51 @@ public interface TransactionHistoryDetailRepository
             int month,
             Gender gender);
 
-    @MethodInfo(name = "getMonthlyInterestConsumption" , description = "관심사별 카테고리 지출 합계를 조회합니다.")
-    @Query(value = "SELECT thd.interest_id AS interestId, i.title AS interestTitle, c.title AS categoryTitle, th.category_id AS categoryId, " +
-            "SUM(thd.amount) OVER(PARTITION BY th.category_id) AS expense " +
-            "FROM transaction_history_details thd " +
-            "JOIN transaction_histories th ON th.id = thd.transaction_history_id " +
-            "JOIN interests i ON thd.interest_id = i.id " +
-            "JOIN categories c ON th.category_id = c.id " +
-            "WHERE thd.user_id = :userId " +
-            "AND th.action = '출금' " +
-            "AND thd.interest_id = :interestId " +
-            "AND YEAR(th.created_at) = :year AND MONTH(th.created_at) = :month " +
-            "ORDER BY categoryId", nativeQuery = true)
-     ArrayList<UserInterestConsumption> getMonthlyInterestConsumption(Long userId, Long interestId, int year, int month);
+    @MethodInfo(name = "getMonthlyInterestConsumption", description = "관심사별 카테고리 지출 합계를 조회합니다.")
+    @Query(
+            value =
+                    "SELECT thd.interest_id AS interestId, i.title AS interestTitle, c.title AS categoryTitle, th.category_id AS categoryId, "
+                            + "SUM(thd.amount) OVER(PARTITION BY th.category_id) AS expense "
+                            + "FROM transaction_history_details thd "
+                            + "JOIN transaction_histories th ON th.id = thd.transaction_history_id "
+                            + "JOIN interests i ON thd.interest_id = i.id "
+                            + "JOIN categories c ON th.category_id = c.id "
+                            + "WHERE thd.user_id = :userId "
+                            + "AND th.action = '출금' "
+                            + "AND thd.interest_id = :interestId "
+                            + "AND YEAR(th.created_at) = :year AND MONTH(th.created_at) = :month "
+                            + "ORDER BY categoryId",
+            nativeQuery = true)
+    ArrayList<UserInterestConsumption> getMonthlyInterestConsumption(
+            Long userId, Long interestId, int year, int month);
 
-    @MethodInfo(name = "getCategoryAvg", description = "관심사별 transaction_history_details또래의 카테고리 평균 지출을 조회합니다.")
-    @Query(value = "SELECT th.category_id AS categoryId, " +
-            "ROUND(AVG(thd.amount), 0) AS average " +
-            "FROM transaction_history_details thd " +
-            "JOIN transaction_histories th ON th.id = thd.transaction_history_id " +
-            "JOIN interests i ON thd.interest_id = i.id " +
-            "JOIN categories c ON th.category_id = c.id " +
-            "WHERE thd.user_id in (SELECT u.id FROM users u WHERE TIMESTAMPDIFF(YEAR, u.birthday, CURDATE()) BETWEEN :begin AND :finish AND u.gender = :gender) " +
-            "AND th.action = '출금' " +
-            "AND thd.interest_id = :interestId " +
-            "AND YEAR(th.created_at) = :year AND MONTH(th.created_at) = :month " +
-            "AND th.category_id IN (:categoryIds) " +
-            "GROUP BY th.category_id " +
-            "ORDER BY categoryId", nativeQuery = true)
-    ArrayList<UserInterestAvg> getCategoryAvg(Long interestId, int begin, int finish, Gender gender, int year, int month, List<Integer> categoryIds);
+    @MethodInfo(
+            name = "getCategoryAvg",
+            description = "관심사별 transaction_history_details또래의 카테고리 평균 지출을 조회합니다.")
+    @Query(
+            value =
+                    "SELECT th.category_id AS categoryId, "
+                            + "ROUND(AVG(thd.amount), 0) AS average "
+                            + "FROM transaction_history_details thd "
+                            + "JOIN transaction_histories th ON th.id = thd.transaction_history_id "
+                            + "JOIN interests i ON thd.interest_id = i.id "
+                            + "JOIN categories c ON th.category_id = c.id "
+                            + "WHERE thd.user_id in (SELECT u.id FROM users u WHERE TIMESTAMPDIFF(YEAR, u.birthday, CURDATE()) BETWEEN :begin AND :finish AND u.gender = :gender) "
+                            + "AND th.action = '출금' "
+                            + "AND thd.interest_id = :interestId "
+                            + "AND YEAR(th.created_at) = :year AND MONTH(th.created_at) = :month "
+                            + "AND th.category_id IN (:categoryIds) "
+                            + "GROUP BY th.category_id "
+                            + "ORDER BY categoryId",
+            nativeQuery = true)
+    ArrayList<UserInterestAvg> getCategoryAvg(
+            Long interestId,
+            int begin,
+            int finish,
+            Gender gender,
+            int year,
+            int month,
+            List<Integer> categoryIds);
 
     @MethodInfo(name = "deleteByUserIdAndInterestId", description = "사용자 관심사를 삭제합니다.")
     @Modifying
