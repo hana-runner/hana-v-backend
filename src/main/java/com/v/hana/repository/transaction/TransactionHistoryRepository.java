@@ -72,7 +72,8 @@ public interface TransactionHistoryRepository extends JpaRepository<TransactionH
                             + "WHERE th.user_id = :userId "
                             + "AND th.type = '출금' "
                             + "AND th.created_at >= :start AND th.created_at <= :end "
-                            + "GROUP BY th.category_id",
+                            + "GROUP BY th.category_id " +
+                            "ORDER BY expense DESC",
             nativeQuery = true)
     ArrayList<ExpensePerCategory> getExpensePerCategories(
             Long userId, LocalDate start, LocalDate end);
