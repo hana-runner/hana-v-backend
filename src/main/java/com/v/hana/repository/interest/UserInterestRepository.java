@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 @TypeInfo(name = "UserInterestRepository", description = "예시 서비스 클래스")
 @Repository
 public interface UserInterestRepository extends JpaRepository<UserInterest, Long> {
-    ArrayList<UserInterest> findByUserId(Long userId);
+    ArrayList<UserInterest> findByUserIdOrderById(Long userId);
 
     ArrayList<UserInterest> findByInterestIdAndUserId(Long interestId, Long userId);
 

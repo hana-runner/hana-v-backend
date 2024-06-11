@@ -29,7 +29,7 @@ public interface TransactionHistoryDetailRepository
                             + "FROM transaction_history_details thd "
                             + "JOIN transaction_histories th ON thd.transaction_history_id = th.id "
                             + "JOIN accounts a ON th.account_id = a.id "
-                            + "WHERE thd.user_id = :userId AND thd.interest_id = :interestId AND YEAR(th.created_at) = :year AND MONTH(th.created_at) = :month",
+                            + "WHERE thd.user_id = :userId AND thd.interest_id = :interestId AND YEAR(th.created_at) = :year AND MONTH(th.created_at) = :month AND type = '출금' ",
             nativeQuery = true)
     ArrayList<UserInterestTransactionDto>
             findTransactionDetailsByUserIdAndInterestIdAndYearAndMonth(
