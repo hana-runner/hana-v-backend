@@ -43,7 +43,7 @@ public class UserInterestService implements UserInterestUseCase {
     public UserInterestResponse getUserInterests(GetUserInterestsCommand command) {
         return UserInterestResponse.builder()
                 .data(
-                        userInterestRepository.findByUserId(command.getUserId()).stream()
+                        userInterestRepository.findByUserIdOrderById(command.getUserId()).stream()
                                 .map(
                                         userInterest -> {
                                             Interest interest =
