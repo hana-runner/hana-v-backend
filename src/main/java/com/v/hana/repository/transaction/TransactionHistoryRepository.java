@@ -70,7 +70,7 @@ public interface TransactionHistoryRepository extends JpaRepository<TransactionH
                             + "JOIN users u ON u.id = th.user_id "
                             + "JOIN accounts a ON a.id = th.account_id "
                             + "WHERE th.user_id = :userId "
-                            + "AND th.type = '출금' "
+                            + "AND th.action = '출금' "
                             + "AND th.created_at >= :start AND th.created_at <= :end "
                             + "GROUP BY th.category_id "
                             + "ORDER BY expense DESC",

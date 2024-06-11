@@ -21,6 +21,7 @@ import com.v.hana.repository.transaction.TransactionHistoryDetailRepository;
 import com.v.hana.repository.transaction.TransactionHistoryRepository;
 import com.v.hana.usecase.interest.UserInterestUseCase;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
@@ -280,23 +281,39 @@ public class UserInterestService implements UserInterestUseCase {
             }
         }
 
-        ArrayList<UserComparisonDto> comparisonData =
-                transactionHistoryDetailRepository
-                        .getComparison(userId, interestId, begin, finish, year, month, gender)
-                        .stream()
-                        .map(
-                                userComparison ->
-                                        UserComparisonDto.builder()
-                                                .average(userComparison.getAverage())
-                                                .categoryTitle(userComparison.getCategoryTitle())
-                                                .categoryId(userComparison.getCategoryId())
-                                                .expense(userComparison.getExpense())
-                                                .interestId(userComparison.getInterestId())
-                                                .interestTitle(userComparison.getInterestTitle())
-                                                .difference(userComparison.getDifference())
-                                                .gender(gender)
-                                                .build())
-                        .collect(Collectors.toCollection(ArrayList::new));
+//        ArrayList<UserComparisonDto> comparisonData = null;
+        ArrayList<UserInterestConsumption> monthlyInterestConsumption = transactionHistoryDetailRepository.getMonthlyInterestConsumption(userId, interestId, year, month);
+        List<Integer> categoryIds = monthlyInterestConsumption.stream()
+                .map(UserInterestConsumption::getCategoryId)
+                .map(Long::intValue)
+                .distinct()
+                .toList();
+        ArrayList<UserInterestAvg> categoryAvg = transactionHistoryDetailRepository.getCategoryAvg(interestId, begin, finish, gender, year, month, categoryIds);
+
+
+        ArrayList<UserComparisonDto> comparisonData = new ArrayList<>();
+        for (UserInterestConsumption consumption : monthlyInterestConsumption) {
+            Long average = categoryAvg.stream()
+                    .filter(avg -> avg.getCategoryId().equals(consumption.getCategoryId()))
+                    .map(UserInterestAvg::getAverage)
+                    .findFirst()
+                    .orElse(0L);
+
+            Long difference = consumption.getExpense() - average;
+
+            UserComparisonDto dto = UserComparisonDto.builder()
+                    .interestId(consumption.getInterestId())
+                    .categoryId(consumption.getCategoryId())
+                    .interestTitle(consumption.getInterestTitle())
+                    .categoryTitle(consumption.getCategoryTitle())
+                    .expense(consumption.getExpense())
+                    .average(average)
+                    .difference(difference)
+                    .gender(gender)
+                    .build();
+
+            comparisonData.add(dto);
+        }
 
         return UserCompareResponse.builder().data(comparisonData).build();
     }
