@@ -152,7 +152,7 @@ public class ReadAccountTransactionEventListener {
                             transactionHistories.stream()
                                     .filter(
                                             transactionHistory ->
-                                                    transactionHistory.getType().equals("입금"))
+                                                    transactionHistory.getAction().equals("입금"))
                                     .map(
                                             transactionHistory ->
                                                     TransactionHistoryDto.builder()
@@ -242,7 +242,7 @@ public class ReadAccountTransactionEventListener {
                             transactionHistories.stream()
                                     .filter(
                                             transactionHistory ->
-                                                    transactionHistory.getType().equals("출금"))
+                                                    transactionHistory.getAction().equals("출금"))
                                     .map(
                                             transactionHistory ->
                                                     TransactionHistoryDto.builder()
